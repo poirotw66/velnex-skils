@@ -2,7 +2,7 @@
 
 ## 開發流程：AI 驅動、Human 審查
 
-本專案採用 AI 主導開發、Human 負責審查的模式。所有程式碼變更都必須經過結構化的流程。
+本專案採用 AI-Driven Development Flow。所有程式碼變更都必須經過結構化的六階段流程。
 
 ### 六階段流程
 
@@ -10,39 +10,35 @@
 Phase 0: PRD → Phase 1: Spec → Phase 2: Develop → Phase 3: Verify → Phase 4: Review → Phase 5: Close
 ```
 
-| Phase | 名稱 | 主導者 | 關鍵產出 |
-|-------|------|--------|---------|
-| 0 | PRD | Human + AI | `docs/prd-NNN.md` |
-| 1 | Spec | Human + AI → Review | `docs/features/*.feature` + `docs/specs/NNN/spec.md` |
-| 2 | Develop | **AI 主導** | 測試 + 程式碼（per-task TDD） |
-| 3 | Verify | **自動化** | Verification Report |
-| 4 | Review | Human + AI | Review 回饋 |
-| 5 | Close | Human + AI | Checklist 完成 |
+### Skills（跨專案）
+
+| Phase | Skill | 說明 |
+|-------|-------|------|
+| — | `/ai-dev-flow` | 流程總覽、phase routing |
+| 0 | `/prd` | 產品探索、PRD 撰寫 |
+| 1 | `/spec` | Example Mapping → .feature → spec.md |
+| 2 | `/develop` | 逐任務 TDD（RED → GREEN → REFACTOR） |
+| 3 | `/verify` | 六階段自動化驗證 |
+| 4 | `/code-review` | 兩階段程式碼審查 |
+| 5 | `/close` | 完成檢查清單 |
+
+搭配 `/bdd`（BDD 方法論）和 `/tdd`（TDD 方法論）skills 使用。
 
 ### Human 介入點（僅三個）
 
-1. **Phase 0 結束**：PRD approve
-2. **Phase 1 結束**：Spec + Feature review approve
-3. **Phase 4**：Final review approve
+1. **Phase 0 → 1**：PRD approve
+2. **Phase 1 → 2**：Spec + Feature review approve
+3. **Phase 4 → 5**：Final review approve
 
-Phase 2→3 由 AI 自主驅動，Human 不需介入，除非 AI escalate。
+Phase 2→3→4 由 AI 自主驅動。
 
 ## 核心原則
 
-### 1. 行為先於設計
-先寫 `.feature`（系統該怎麼表現），再寫 `spec.md`（技術上怎麼做到）。不要在還不清楚行為的時候做技術決策。
-
-### 2. TDD 硬性約束
-沒有失敗的測試，不寫 production code。這不是建議，是約束。
-
-### 3. 逐任務開發
-每個任務 2-5 分鐘粒度，每個任務獨立走完 RED → GREEN → REFACTOR。不要一次寫完所有測試再實作。
-
-### 4. Spec 先行
-不寫 spec 不寫 code。即使是「小改動」，也至少要有輕量 spec。
-
-### 5. 最多重試 3 次
-AI 嘗試 3 次仍失敗 → 產出失敗報告 → escalate 給 Human。不要無限重試。
+1. **行為先於設計** — Discovery → .feature → spec.md
+2. **TDD 硬性約束** — 沒有失敗測試就不寫 production code
+3. **逐任務開發** — 每任務 2-5 分鐘粒度
+4. **Spec 先行** — 沒有 approved spec 不寫程式
+5. **最多重試 3 次** — 超過就 escalate 給 Human
 
 ## 文件結構
 
@@ -69,33 +65,11 @@ guideline/                           ← 開發規範
 
 | 文件 | 回答什麼 | 順序 |
 |------|---------|------|
-| `prd-NNN.md` | WHY + WHAT（為什麼做、做什麼） | ① 最先 |
-| `features/*.feature` | 系統應該怎麼表現（行為規格） | ② 中間 |
-| `specs/NNN/spec.md` | HOW（怎麼做到，技術設計） | ③ 最後 |
+| `prd-NNN.md` | WHY + WHAT | ① 最先 |
+| `features/*.feature` | HOW it behaves | ② 中間 |
+| `specs/NNN/spec.md` | HOW to build | ③ 最後 |
 
-features 和 specs 是 **多對多** 關係。一個 `.feature` 可被多個 spec 實作；一個 spec 可實作多個 `.feature` 的場景。
-
-## Agent 使用
-
-| Agent | 用途 | 工具限制 |
-|-------|------|---------|
-| `spec-writer` | Phase 0-1：PRD、.feature、spec.md | 完整 |
-| `reviewer` | Phase 1, 4：規格審查、程式碼審查 | 完整 |
-| `test-writer` | Phase 2：從 .feature 生成測試（RED） | 完整 |
-| `implementer` | Phase 2：讓測試通過（GREEN） | 完整 |
-| `verifier` | Phase 3：六階段自動化驗證 | 僅 Bash + Read |
-| `security-reviewer` | Phase 3-4：安全掃描 | 僅 Read |
-
-## Slash Commands
-
-| Command | Phase | 用途 |
-|---------|-------|------|
-| `/prd` | 0 | 建立 PRD |
-| `/spec` | 1 | 執行 Phase 1（Discovery → .feature → spec.md） |
-| `/develop` | 2 | 執行 Phase 2（逐任務 TDD） |
-| `/verify` | 3 | 執行 Phase 3（六階段驗證） |
-| `/review` | 4 | 執行 Phase 4（程式碼審查） |
-| `/close` | 5 | 執行 Phase 5（完成 Checklist） |
+features 和 specs 是**多對多**關係。
 
 ## 技術慣例
 
