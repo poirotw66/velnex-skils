@@ -36,6 +36,22 @@ async function retryOperation<T>(
 ): Promise<T> { /* YAGNI */ }
 ```
 
+## Verify GREEN — MANDATORY
+
+實作後**必須執行**，不能跳過：
+
+```bash
+npm test path/to/test.test.ts
+```
+
+確認：
+- Test **passes**
+- Other tests **still pass**
+- Output pristine（no errors, warnings）
+
+**Test fails?** Fix code, not test.
+**Other tests fail?** Fix now.
+
 ## REFACTOR Stage Rules
 
 Only after tests are green:

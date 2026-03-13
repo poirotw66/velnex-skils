@@ -11,7 +11,21 @@ metadata:
 # Phase 2 — Develop 逐任務 TDD 開發
 
 按 spec.md 任務清單，逐任務執行 TDD，直到所有任務完成。
-搭配 `/tdd` skill 的 Iron Law 和 Red-Green-Refactor 知識。
+
+## Outside-In 開發策略
+
+從外層行為測試驅動到內層實作：
+
+```
+.feature Scenario (驗收測試)
+  └─▶ 外層測試 (Controller/API)
+        └─▶ 內層測試 (Service/Domain)
+              └─▶ 實作程式碼
+```
+
+- **BDD** 回答「要建什麼？」— .feature scenario 定義外層行為
+- **TDD** 回答「怎麼建？」— RED/GREEN/REFACTOR 實現內層邏輯
+- 從 .feature scenario 開始，逐層往內推進，需要內層邏輯時切換到 TDD 循環
 
 ## Prerequisites
 
@@ -123,6 +137,23 @@ npm test -- --related  # 執行相關測試
   - b. Human 手動修復
   - c. 調整 spec / task 拆分
   - d. 標記 blocked，跳過
+
+## TDD Exceptions
+
+以下情境可不走 TDD，但需 Human 確認：
+
+- Throwaway prototypes（探索性原型，用完即丟）
+- Generated code（自動產生的程式碼）
+- Configuration files（純設定檔）
+
+## When Stuck
+
+| 問題 | 解法 |
+|------|------|
+| 不知道怎麼測 | 先寫你期望的 API 長什麼樣，從 assertion 開始寫 |
+| 測試太複雜 | 設計太複雜，簡化介面 |
+| 什麼都要 mock | 耦合太高，用 dependency injection |
+| 測試 setup 很大 | 抽 helper。還是複雜？簡化設計 |
 
 ## Exit Criteria
 

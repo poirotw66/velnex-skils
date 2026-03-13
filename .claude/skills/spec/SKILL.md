@@ -11,7 +11,7 @@ metadata:
 
 # Phase 1 — Spec 規格與設計
 
-從需求出發，透過 BDD Discovery 建立共識，產出 .feature 行為規格與 spec.md 技術設計。
+從需求出發，透過三視角探索與 BDD Discovery 建立共識，產出 .feature 行為規格與 spec.md 技術設計。
 
 ## Hard Gate
 
@@ -21,14 +21,28 @@ metadata:
 ## Workflow
 
 ```
-Step 1           Step 2          Step 3          Step 4
-Example      →   Write       →   Write       →   Review
-Mapping          .feature         spec.md         (Auto + Human)
+Step 0          Step 1           Step 2          Step 3          Step 4
+三視角      →   Example      →   Write       →   Write       →   Review
+探索             Mapping          .feature         spec.md         (Auto + Human)
 ```
+
+### Step 0: 三視角探索
+
+在 Example Mapping 之前，先從三個角度檢視功能，確保不遺漏：
+
+| 視角 | 核心問題 |
+|------|----------|
+| **業務** | 解決什麼問題？價值是什麼？業務規則？ |
+| **開發** | 怎麼實作？技術限制？邊界案例？ |
+| **測試** | 什麼會出錯？遺漏了什麼？怎麼驗證？ |
+
+流程：業務方描述需求 → 三視角輪流提問、挑戰假設 → 用具體範例回答 → 記錄範例和疑問
+
+三視角探索的產出直接輸入 Example Mapping。
 
 ### Step 1: Example Mapping
 
-使用四色卡片法探索需求（搭配 `/bdd` skill 的 Discovery 知識）：
+使用四色卡片法將探索結果結構化：
 
 | 顏色 | 代表 | 說明 |
 |------|------|------|

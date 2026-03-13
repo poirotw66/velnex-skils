@@ -22,7 +22,6 @@ Phase 0: PRD → Phase 1: Spec → Phase 2: Develop → Phase 3: Verify → Phas
 | 4 | `/code-review` | 兩階段程式碼審查 |
 | 5 | `/close` | 完成檢查清單 |
 
-搭配 `/bdd`（BDD 方法論）和 `/tdd`（TDD 方法論）skills 使用。
 
 ### Human 介入點（僅三個）
 

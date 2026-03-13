@@ -76,6 +76,33 @@ After running the test, verify:
 
 **Default is Unit test** unless the task explicitly involves cross-module interaction.
 
+## Verify RED — MANDATORY
+
+寫完測試後**必須執行**，不能跳過：
+
+```bash
+npm test path/to/test.test.ts
+```
+
+確認：
+- Test **fails**（不是 errors）
+- Failure message 是預期的
+- 失敗原因是功能不存在（不是 typo）
+
+**Test passes?** 你在測既有行為，修改測試。
+**Test errors?** 修正 error，重跑直到正確地失敗。
+
+## Red Flags — 出現任一項就停下來
+
+- 寫了 production code 才寫 test
+- Test 直接通過
+- 無法解釋為什麼 test 失敗
+- 想著「就這次跳過 TDD」
+- 「先保留當 reference」
+- 「這個太簡單不用測」
+
+**出現以上任何一個 → 刪掉 code，從 test 開始。**
+
 ## Output
 
 Report the following:
