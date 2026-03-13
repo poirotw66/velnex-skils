@@ -1,5 +1,5 @@
 ---
-name: close
+name: vif-close
 description: >-
   Phase 5 - Development completion and wrap-up. Trigger on: "close", "完成",
   "收尾", "結案", "wrap up", "finish", "done", "closing checklist",

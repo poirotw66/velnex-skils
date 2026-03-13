@@ -1,5 +1,5 @@
 ---
-name: verify
+name: vif-verify
 description: >-
   Phase 3 - Six-stage automated verification pipeline. Trigger on: "verify",
   "驗證", "verification", "pipeline", "驗證流水線", "跑驗證", "品質檢查",

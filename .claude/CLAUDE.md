@@ -10,17 +10,17 @@
 Phase 0: PRD → Phase 1: Spec → Phase 2: Develop → Phase 3: Verify → Phase 4: Review → Phase 5: Close
 ```
 
-### Skills（跨專案）
+### Skills（vif plugin）
 
 | Phase | Skill | 說明 |
 |-------|-------|------|
-| — | `/ai-dev-flow` | 流程總覽、phase routing |
-| 0 | `/prd` | 產品探索、PRD 撰寫 |
-| 1 | `/spec` | Example Mapping → .feature → spec.md |
-| 2 | `/develop` | 逐任務 TDD（RED → GREEN → REFACTOR） |
-| 3 | `/verify` | 六階段自動化驗證 |
-| 4 | `/code-review` | 兩階段程式碼審查 |
-| 5 | `/close` | 完成檢查清單 |
+| — | `/vif-flow` | 流程總覽、phase routing |
+| 0 | `/vif-prd` | 產品探索、PRD 撰寫 |
+| 1 | `/vif-spec` | Example Mapping → .feature → spec.md |
+| 2 | `/vif-develop` | 逐任務 TDD（RED → GREEN → REFACTOR） |
+| 3 | `/vif-verify` | 六階段自動化驗證 |
+| 4 | `/vif-review` | 兩階段程式碼審查 |
+| 5 | `/vif-close` | 完成檢查清單 |
 
 
 ### Human 介入點（僅三個）

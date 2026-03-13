@@ -1,0 +1,17 @@
+{
+  "name": "velnex",
+  "owner": {
+    "name": "Vito"
+  },
+  "metadata": {
+    "description": "AI-Driven Development Flow marketplace",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "vif",
+      "source": "./plugins/vif",
+      "description": "Vito AI Flow — Six-phase AI-driven development flow with TDD, BDD, and structured review"
+    }
+  ]
+}

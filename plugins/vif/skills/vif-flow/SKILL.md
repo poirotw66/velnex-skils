@@ -1,5 +1,5 @@
 ---
-name: ai-dev-flow
+name: vif-flow
 description: >-
   AI-driven development flow orchestration. Trigger on: "dev flow", "開發流程",
   "phase", "階段", "新功能", "new feature", "ai-driven", "AI 開發",

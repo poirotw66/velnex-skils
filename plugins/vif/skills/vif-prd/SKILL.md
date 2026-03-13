@@ -1,5 +1,5 @@
 ---
-name: prd
+name: vif-prd
 description: >-
   Phase 0 - Product Requirements Document. Trigger on: "PRD", "產品需求",
   "product requirement", "問題定義", "需求文件", "要做什麼", "why build",

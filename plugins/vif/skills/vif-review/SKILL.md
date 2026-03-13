@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: vif-review
 description: >-
   Phase 4 - Two-stage code review (spec compliance + code quality). Trigger on:
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",

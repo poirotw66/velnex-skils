@@ -1,5 +1,5 @@
 ---
-name: spec
+name: vif-spec
 description: >-
   Phase 1 - Specification and design. Covers Example Mapping, Gherkin feature
   writing, and technical spec creation. Trigger on: "spec", "規格", "設計",

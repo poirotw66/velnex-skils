@@ -1,5 +1,5 @@
 ---
-name: develop
+name: vif-develop
 description: >-
   Phase 2 - Per-task TDD development loop with subagent dispatch. Trigger on:
   "develop", "開發", "implement", "實作", "coding", "寫程式", "task",
