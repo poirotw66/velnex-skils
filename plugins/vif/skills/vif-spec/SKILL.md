@@ -1,124 +1,121 @@
 ---
 name: vif-spec
 description: >-
-  Phase 1 - Specification and design. Covers Example Mapping, Gherkin feature
-  writing, and technical spec creation. Trigger on: "spec", "規格", "設計",
-  "寫規格", "spec design", "技術設計", "行為規格", "spec review",
-  "Example Mapping", "寫 feature".
+  Technical specification and impact analysis. Trigger on: "spec", "規格",
+  "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
+  "影響分析", "scope planning".
 metadata:
-  version: 1.0.0
+  version: 2.0.0
 ---
 
-# Phase 1 — Spec 規格與設計
+# Spec — 技術規劃與影響分析
 
-從需求出發，透過三視角探索與 BDD Discovery 建立共識，產出 .feature 行為規格與 spec.md 技術設計。
+分析需求的技術影響範圍，規劃需要的 API、頁面、DB Table，產出 spec.md 作為開發的作戰計畫。
 
 ## Hard Gate
 
-**Spec 未 approved，不進入 Phase 2 開發。** 所有專案都需要 spec，不論看起來多簡單。
-簡單專案往往是浪費最多的地方。
+**Spec 未 approved，不進入開發。**
+
+> 規格不服務程式碼，程式碼服務規格。
+> 跳過 spec 寫出來的程式碼，是在回答一個沒人問過的問題。
+
+## Stance
+
+**Spec 是作戰計畫，不是設計細節。**
+
+- Spec 回答「要做什麼、涉及哪些模組、怎麼分工」
+- 設計細節（API 邏輯、頁面互動、DB 欄位）交給 `/vif-api-spec` 和 `/vif-ui-spec`
+- **影響分析是核心** — 判斷哪些是新增、哪些是既有受影響的，比寫新東西更重要
+
+## 輸入
+
+- **必要**：PRD（`docs/prd-NNN.md`）
+- **參考**：Figma 畫面（圖片 / MCP / 結構化描述）
+- **參考**：.feature（`docs/features/` — 如有，來自 `/vif-bdd`）
+- **參考**：既有設計文件（`docs/api-specs/`、`docs/ui-specs/`、`docs/schema/`）
 
 ## Workflow
 
 ```
-Step 0          Step 1           Step 2          Step 3          Step 4
-三視角      →   Example      →   Write       →   Write       →   Review
-探索             Mapping          .feature         spec.md         (Auto + Human)
+Step 1            Step 2              Step 3             Step 4
+影響分析      →   撰寫 spec.md    →   選擇展開         →   Review
+(掃描現有)        (作戰計畫)          (api/ui/schema)       (Auto + Human)
 ```
 
-### Step 0: 三視角探索
+### Step 1: 影響分析
 
-在 Example Mapping 之前，先從三個角度檢視功能，確保不遺漏：
+**這是 Spec 最重要的步驟。**
 
-| 視角 | 核心問題 |
-|------|----------|
-| **業務** | 解決什麼問題？價值是什麼？業務規則？ |
-| **開發** | 怎麼實作？技術限制？邊界案例？ |
-| **測試** | 什麼會出錯？遺漏了什麼？怎麼驗證？ |
+1. 讀取 PRD + Figma + .feature（如有）
+2. 瀏覽 codebase 了解現有架構
+3. 掃描現有設計文件：
+   - `docs/api-specs/` — 既有 API 設計
+   - `docs/ui-specs/` — 既有頁面設計
+   - `docs/schema/` — 既有 DB 設計
+4. 判斷每個項目是**新增**還是**修改既有**
 
-流程：業務方描述需求 → 三視角輪流提問、挑戰假設 → 用具體範例回答 → 記錄範例和疑問
+產出影響分析表：
 
-三視角探索的產出直接輸入 Example Mapping。
+```
+### 頁面
+| 動作 | 頁面 | 說明 | 現有 UISpec |
+|------|------|------|------------|
+| 新增 | 登入頁 | 帳密登入 | — |
+| 修改 | Header | 加入登入/登出按鈕 | docs/ui-specs/common/header.md |
 
-### Step 1: Example Mapping
+### API
+| 動作 | API | Method + Path | 說明 | 現有 ApiSpec |
+|------|-----|--------------|------|-------------|
+| 新增 | 登入 | POST /auth/login | 帳密驗證 | — |
+| 新增 | 刷新 | POST /auth/refresh | 換新 token | — |
+| 修改 | 取得使用者 | GET /users/:id | 回傳加入 lastLoginAt | docs/api-specs/iam/user/get-user.md |
 
-使用四色卡片法將探索結果結構化：
-
-| 顏色 | 代表 | 說明 |
-|------|------|------|
-| 🟡 黃色 | Story | 要實作的功能 |
-| 🔵 藍色 | Rule | 業務規則 / 驗收條件 |
-| 🟢 綠色 | Example | 具體情境 → 成為 Scenario |
-| 🔴 紅色 | Question | 未解決的疑問 |
-
-**操作步驟：**
-
-1. 頂部放一張 🟡 Story 卡片
-2. 列出已知的 🔵 Rule
-3. 每條 Rule 下列出 🟢 Example（正面 + 反面）
-4. 不確定的用 🔴 標記
-5. 與 Human 逐一解決 🔴 Question
-
-**完成判定：**
-
-- 🔴 紅色卡片為零或已有明確處理方式
-- 每條 Rule 至少一個正面和一個反面 Example
-- 與 Human 確認 Example 充分
-
-### Step 2: Write .feature
-
-將 Example Mapping 結果轉化為 Gherkin 格式：
-
-```gherkin
-Feature: [功能名稱]
-  [一句話描述功能目的]
-
-  Rule: [規則描述]（對應 🔵 卡片）
-    Example: [正面範例]（對應 🟢 卡片）
-      Given [前置條件]
-      When [動作]
-      Then [預期結果]
-
-    Example: [反面範例]
-      Given [前置條件]
-      When [動作]
-      Then [預期結果]
+### DB
+| 動作 | Table | 說明 | 現有 Schema |
+|------|-------|------|------------|
+| 新增 | login_attempts | 登入失敗紀錄 | — |
+| 修改 | users | 加 last_login_at 欄位 | docs/schema/iam-auth.md |
 ```
 
-**撰寫原則：**
+> **修改既有比新增更危險。** 修改項目需特別標記，確認不會 breaking 既有功能。
 
-- **一個 Scenario 一個行為** — 不要在一個 scenario 塞多個邏輯
-- **使用業務語言** — 不用技術術語
-- **聲明式而非命令式** — 描述「什麼」而非「怎麼做」
-- **具體範例值** — `"user@example.com"` 而非 `"a valid email"`
-- **場景獨立** — 不依賴執行順序
+### Step 2: 撰寫 spec.md
 
-**存放位置：** `docs/features/[domain]/[name].feature`
+使用 spec 模板（`references/spec-template.md`），撰寫技術規劃。
 
-### Step 3: Write spec.md
+spec.md 是**作戰計畫**：
+- 背景與設計原則
+- 涉及範圍（Step 1 的影響分析表）
+- 業務規則
+- 驗收條件
 
-使用 spec 模板（`references/spec-template.md`），撰寫技術設計。
-
-spec.md 回答 **HOW to build**（技術上怎麼做到），不是需求：
-
-- 架構設計（模組劃分、依賴關係）
-- 資料結構（Interface / Schema）
-- API / 介面設計
-- 影響檔案分析
-- **任務拆解**（核心）
-
-**任務拆解規範：**
-
-- 粒度 2-5 分鐘（bite-sized）
-- `[P]` 標記可平行執行的任務
-- 每個行為相關任務標註 `feature ref:` 連結對應 .feature scenario
-- 標註預估時間和影響檔案
-- 明確標示依賴關係
-- 任務描述要讓零上下文的 agent 也能理解執行
+**可選：任務拆解（Section 6）**
+- 模式一（AI 驅動）：拆解為 2-5 分鐘粒度的任務
+- 模式二（團隊分工）：可省略，由各 PG 自行拆解
 
 同時建立 `progress.md`（`references/progress-template.md`）。
 
 **存放位置：** `docs/specs/NNN-name/spec.md`
+
+### Step 3: 選擇展開
+
+Spec 撰寫完成後，根據影響分析表，詢問 Human：
+
+```
+> Spec 規劃完成。涉及範圍：
+>   - 3 支 API（2 新增, 1 修改）
+>   - 2 個頁面（1 新增, 1 修改）
+>   - 2 張 Table（1 新增, 1 修改）
+>
+> 要展開設計文件嗎？
+>   A. 展開全部（呼叫 /vif-api-spec + /vif-ui-spec）
+>   B. 只展開 API Spec（呼叫 /vif-api-spec）
+>   C. 只展開 UI Spec（呼叫 /vif-ui-spec）
+>   D. 不展開（只留清單，待各角色展開）
+```
+
+選擇 A/B/C → 引導使用 `/vif-api-spec` 和/或 `/vif-ui-spec`
+選擇 D → 各角色稍後自行展開
 
 ### Step 4: Review
 
@@ -126,26 +123,27 @@ spec.md 回答 **HOW to build**（技術上怎麼做到），不是需求：
 
 派遣 `spec-reviewer` agent：
 
-1. 審查 .feature 完整性
-2. 審查 spec.md 技術可行性
-3. 產出審查報告
-4. 如有問題，修改後重新審查
-5. 最多 5 次自動迭代
+1. 審查影響分析是否完整（有沒有漏掉的模組）
+2. 審查 .feature 與 spec 的一致性（如有 .feature）
+3. 審查 spec.md 技術可行性
+4. 最多 5 次自動迭代
 
 **Stage B — Human 審查：**
 
-自動審查通過後，呈現給 Human：
-- .feature 檔案（行為規格）
-- spec.md（技術設計 + 任務清單）
+自動審查通過後，呈現給 Human **完整產出**：
+- 影響分析表（新增 vs 修改）
+- spec.md（作戰計畫）
+- 已展開的設計文件（如有）
+- .feature（如有）
 
-Human approve → 進入 Phase 2（`/develop`）
+Human approve → **commit**（`docs: add spec-NNN [名稱]`）
 
 ## Exit Criteria
 
-- [ ] Example Mapping 完成（🔴 = 0）
-- [ ] .feature 檔案已建立
-- [ ] spec.md 已建立（含任務拆解）
+- [ ] 影響分析完成（新增 / 修改 項目已識別）
+- [ ] spec.md 已建立
 - [ ] progress.md 已建立
 - [ ] specs-overview.md 已更新
 - [ ] 自動審查通過
 - [ ] Human 已 approve
+- [ ] 已 commit

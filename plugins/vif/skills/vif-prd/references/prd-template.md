@@ -3,7 +3,7 @@
 ## Meta
 - 提案人：
 - 日期：YYYY-MM-DD
-- 狀態：proposal / approved / rejected
+- 狀態：proposal / approved
 
 ## 1. 問題描述
 

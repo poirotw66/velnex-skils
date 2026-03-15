@@ -1,48 +1,66 @@
 ---
 name: vif-develop
 description: >-
-  Phase 2 - Per-task TDD development loop with subagent dispatch. Trigger on:
-  "develop", "開發", "implement", "實作", "coding", "寫程式", "task",
-  "任務", "execute plan", "開始開發", "RED GREEN REFACTOR".
+  TDD development loop with subagent dispatch. Trigger on: "develop", "開發",
+  "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
+  "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 1.0.0
+  version: 2.0.0
 ---
 
-# Phase 2 — Develop 逐任務 TDD 開發
+# Develop — TDD 開發
 
-按 spec.md 任務清單，逐任務執行 TDD，直到所有任務完成。
+按 spec.md 任務清單（或自行拆解的任務），逐任務執行 TDD，直到所有任務完成。
+
+## Test Strategy
+
+開發前確認測試策略。可在 CLAUDE.md 預設，或開發時選擇：
+
+```
+> 本次開發的測試策略？
+>   A. Unit Test（預設）
+>   B. Unit + Integration Test（後端 API 建議）
+>   C. Unit + E2E Test（前端關鍵流程建議）
+>   D. Unit + Integration + E2E（Full Stack）
+```
+
+**CLAUDE.md 預設方式：**
+```markdown
+### 測試策略
+- Backend: Unit + Integration
+- Frontend: Unit + 關鍵流程 E2E
+```
 
 ## Outside-In 開發策略
 
 從外層行為測試驅動到內層實作：
 
 ```
-.feature Scenario (驗收測試)
-  └─▶ 外層測試 (Controller/API)
-        └─▶ 內層測試 (Service/Domain)
-              └─▶ 實作程式碼
+.feature Scenario（如有）
+  └─▶ E2E / Integration Test（驗收層）
+        └─▶ Unit Test（邏輯層）
+              └─▶ Implementation
 ```
 
-- **BDD** 回答「要建什麼？」— .feature scenario 定義外層行為
-- **TDD** 回答「怎麼建？」— RED/GREEN/REFACTOR 實現內層邏輯
-- 從 .feature scenario 開始，逐層往內推進，需要內層邏輯時切換到 TDD 循環
+- 有 .feature → 從 scenario 驅動外層測試，再往內推進
+- 無 .feature → 從 API Spec / UI Spec 的驗收條件驅動測試
 
 ## Prerequisites
 
-- [ ] spec.md 已 approved
-- [ ] progress.md 已建立
-- [ ] 任務清單已確認
+- [ ] spec.md 已 approved（或已有明確的開發任務）
+- [ ] 設計文件可用（api-spec / ui-spec / schema — 依涉及範圍）
 
 ## Core Loop
 
 ```
-For each task in spec.md:
+For each task:
 ┌──────────────────────────────────────────────────┐
 │  1. RED       — test-writer 寫失敗測試           │
 │  2. GREEN     — implementer 寫最小實作           │
 │  3. REFACTOR  — implementer 清理（保持綠燈）     │
 │  4. Verify    — 輕量驗證（build + typecheck）     │
 │  5. Update    — 更新 progress.md                 │
+│  6. Commit    — per-scenario 或 per-task         │
 │                                                  │
 │  → Next task (respect dependency order)          │
 └──────────────────────────────────────────────────┘
@@ -50,7 +68,7 @@ For each task in spec.md:
 
 ### Task Execution Order
 
-1. 讀取 spec.md 任務清單和依賴圖
+1. 讀取 spec.md 任務清單和依賴圖（如有）
 2. `[P]` 標記的任務可平行處理（用 Agent tool 並行派遣）
 3. 有依賴的任務必須等依賴完成
 4. 每完成一個任務，更新 progress.md
@@ -59,8 +77,8 @@ For each task in spec.md:
 
 派遣 `test-writer` agent：
 
-1. 讀取任務的 `feature ref:` 找到對應 .feature scenario
-2. 將 scenario 轉化為測試程式碼
+1. 讀取任務對應的設計文件（api-spec / ui-spec / .feature scenario）
+2. 將規格轉化為測試程式碼（依測試策略決定層級）
 3. 執行測試，**確認失敗**（RED）
 4. 驗證 RED 有效性：
    - ✅ 因功能不存在而失敗 → 正確的 RED
@@ -102,14 +120,23 @@ For each task in spec.md:
 
 ```bash
 # 依專案建構工具調整
-npm run build       # or bun build
-npx tsc --noEmit    # TypeScript type check
+npm run build          # or bun build
+npx tsc --noEmit       # TypeScript type check
 npm test -- --related  # 執行相關測試
+```
+
+### Commit
+
+建議以 **scenario 或功能邏輯單元** 為一個 commit：
+
+```
+feat: implement login API endpoint (spec-001)
+feat: implement login failure lockout (spec-001)
 ```
 
 ### De-Sloppify Pass
 
-所有任務完成後（或每完成一輪），執行清理：
+所有任務完成後，執行清理：
 
 - 移除 `console.log` / `print` debug 語句
 - 移除註解掉的程式碼
@@ -161,4 +188,5 @@ npm test -- --related  # 執行相關測試
 - [ ] 所有測試通過
 - [ ] De-Sloppify 清理完成
 - [ ] progress.md 已更新
-- [ ] 進入 Phase 3（`/verify`）
+- [ ] 已 commit
+- [ ] 進入 `/vif-verify`

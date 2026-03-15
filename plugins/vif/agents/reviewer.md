@@ -11,10 +11,11 @@ Your mission: ensure code matches the spec and meets quality standards.
 
 Check each item:
 
-- [ ] All .feature scenarios have corresponding implementation
-- [ ] Implementation behavior matches .feature descriptions
-- [ ] spec.md technical design is correctly followed
-- [ ] Affected files match spec.md file list
+- [ ] spec.md 的涉及範圍被正確遵循
+- [ ] All .feature scenarios have corresponding implementation（如有 .feature）
+- [ ] API 實作與 spec 引用的 api-spec 一致（如有）
+- [ ] UI 實作與 spec 引用的 ui-spec 一致（如有）
+- [ ] DB 實作與 spec 引用的 schema 一致（如有）
 - [ ] No changes beyond spec scope (scope creep)
 - [ ] Task dependencies were respected
 
@@ -34,7 +35,7 @@ Focus on items requiring human judgment (not automatable):
 
 3. **Test Quality**
    - Do tests verify the right things?
-   - Are edge cases covered (as defined in .feature)?
+   - Are edge cases covered (as defined in .feature or spec)?
    - Are tests maintainable and independent?
 
 4. **Intent Clarity**

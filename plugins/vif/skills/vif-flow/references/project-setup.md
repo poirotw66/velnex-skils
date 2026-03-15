@@ -1,60 +1,97 @@
 # Project Setup Guide
 
-## 使用 AI-Driven Development Flow 設定新專案
+## 使用 vif 設定新專案
 
-### 1. 建立目錄結構
+### 1. 安裝 vif plugin
+
+```bash
+/plugin marketplace add [velnex-repo-path-or-url]
+/plugin install vif@velnex
+```
+
+### 2. 建立目錄結構
 
 ```
 your-project/
-├── docs/
-│   ├── features/          ← Gherkin 行為規格（按業務領域組織）
-│   │   └── .gitkeep
-│   ├── specs/             ← 技術設計規格
-│   │   ├── specs-overview.md
-│   │   └── templates/     ← 可選：從 skill references 複製模板
-│   └── feature-map.md     ← 功能全貌追蹤
 ├── .claude/
-│   └── CLAUDE.md          ← 專案規範
-└── ...
+│   └── CLAUDE.md                  ← 專案規範 + vif 設定
+│
+├── docs/
+│   ├── architecture/              ← ADR 架構決策記錄
+│   │   └── .gitkeep
+│   ├── features/                  ← BDD .feature（可選）
+│   │   └── .gitkeep
+│   ├── specs/                     ← 技術規劃（per-feature）
+│   │   ├── specs-overview.md
+│   │   └── templates/
+│   ├── api-specs/                 ← API 設計（累積型，per-module）
+│   │   └── .gitkeep
+│   ├── ui-specs/                  ← UI 設計（累積型，per-page）
+│   │   └── .gitkeep
+│   ├── schema/                    ← DB Schema（累積型，per-domain）
+│   │   └── .gitkeep
+│   └── feature-map.md
+│
+├── guideline/                     ← 開發規範（專案特定）
+│   └── .gitkeep
+│
+└── src/
+    └── ...
 ```
 
-### 2. 設定 .claude/CLAUDE.md
+> `docs/api-specs/`、`docs/ui-specs/`、`docs/schema/` 不是每個專案都需要。
+> 依專案性質選用即可。
 
-在專案的 `.claude/CLAUDE.md` 中加入：
+### 3. 設定 .claude/CLAUDE.md
 
 ```markdown
 # [專案名稱]
 
-## 開發流程
+## AI-Driven Development Flow
 
-本專案採用 AI-Driven Development Flow。
+本專案採用 vif。
 
 ### Skills
 
-- `/ai-dev-flow` — 流程總覽與 phase routing
-- `/prd` — Phase 0: 產品探索
-- `/spec` — Phase 1: 規格與設計
-- `/develop` — Phase 2: 逐任務 TDD
-- `/verify` — Phase 3: 自動化驗證
-- `/code-review` — Phase 4: 程式碼審查
-- `/close` — Phase 5: 完成
+| 類別 | Skill | 說明 |
+|------|-------|------|
+| 架構 | `/vif-arch` | 架構決策 + ADR |
+| 需求 | `/vif-prd` | PRD 撰寫 |
+| 行為 | `/vif-bdd` | BDD Discovery（可選） |
+| 規劃 | `/vif-spec` | 影響分析 + 技術規劃 |
+| 設計 | `/vif-ui-spec` | UI 頁面規格 |
+| 設計 | `/vif-api-spec` | API + openapi + dbschema |
+| 開發 | `/vif-develop` | TDD 開發 |
+| 驗證 | `/vif-verify` | 自動化驗證 |
+| 審查 | `/vif-review` | 程式碼審查 |
+| 收尾 | `/vif-close` | 完成檢查清單 |
 
 ### 技術棧
 
-- 語言：[TypeScript / Dart / Go / ...]
-- 框架：[Next.js / Flutter / Gin / ...]
-- 測試：[Jest / Vitest / Flutter test / ...]
+- 語言：[TypeScript / Python / Go / ...]
+- 框架：[Next.js / FastAPI / Gin / ...]
+- 測試：[Jest / Vitest / pytest / ...]
 - 建構：[npm / bun / cargo / ...]
 
 ### 專案指令
 
-- Build: `[npm run build / bun build / ...]`
-- Test: `[npm test / bun test / ...]`
+- Build: `[npm run build / ...]`
+- Test: `[npm test / ...]`
 - Lint: `[npm run lint / ...]`
 - Type Check: `[npx tsc --noEmit / ...]`
+
+### 測試策略
+
+- Backend: Unit + Integration
+- Frontend: Unit + 關鍵流程 E2E
+
+### vif-verify 設定
+
+# - Code Quality: true
+# - Design Doc Consistency: true
 ```
 
-### 3. 初始化追蹤文件
+### 4. 初始化追蹤文件
 
 **docs/specs/specs-overview.md:**
 
@@ -85,8 +122,6 @@ your-project/
 ```markdown
 # Feature Map
 
-## 狀態說明
-
 | 符號 | 意義 |
 |------|------|
 | ✅ | 已完成 |
@@ -100,28 +135,28 @@ your-project/
 |------|------|------|------|------|
 ```
 
-### 4. 開始使用
+### 5. 架構決策（建議先做）
 
 ```
-使用者：我想加一個 [功能名稱]
-AI：（觸發 /ai-dev-flow）讓我們從 Phase 0 開始...
+/vif-arch
 
-使用者：/prd
-AI：開始 Phase 0 — PRD 產品探索...
-
-使用者：/spec
-AI：開始 Phase 1 — Spec 規格與設計...
+討論並記錄：
+- 技術棧選擇
+- 專案架構
+- 共用規範
+- 測試策略
 ```
 
-### 5. 可選：複製模板
+### 6. 開始使用
 
-如果需要專案內的模板參考，可以從 skill references 複製：
-
-```bash
-mkdir -p docs/specs/templates
-# 手動從 ~/.agents/skills/prd/references/prd-template.md 複製
-# 手動從 ~/.agents/skills/spec/references/spec-template.md 複製
-# 手動從 ~/.agents/skills/spec/references/progress-template.md 複製
+**模式一（完全自動化）：**
+```
+> 我想加一個使用者登入功能
+AI：讓我們從 /vif-prd 開始...
 ```
 
-或直接讓 AI 使用 skill references 中的模板即可（不需要複製到專案內）。
+**模式二（輔助自動化）：**
+```
+> 我是 SA，需要根據 PRD-001 和 Figma 規劃技術 spec
+AI：讓我用 /vif-spec 來分析影響範圍...
+```

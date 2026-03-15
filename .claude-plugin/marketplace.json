@@ -4,14 +4,14 @@
     "name": "Vito"
   },
   "metadata": {
-    "description": "AI-Driven Development Flow marketplace",
+    "description": "vif — AI-driven development flow marketplace",
     "pluginRoot": "./plugins"
   },
   "plugins": [
     {
       "name": "vif",
       "source": "./plugins/vif",
-      "description": "Vito AI Flow — Six-phase AI-driven development flow with TDD, BDD, and structured review"
+      "description": "vif — AI-driven development flow with 11 skills supporting both fully-automated and team-assisted modes"
     }
   ]
 }

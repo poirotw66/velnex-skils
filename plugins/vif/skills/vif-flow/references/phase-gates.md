@@ -2,89 +2,91 @@
 
 ## Gate 定義
 
-| 從 | 到 | 觸發條件 | Human 必要 | 自動化程度 |
-|----|-----|---------|-----------|-----------|
-| — | Phase 0 | 使用者提出需求 | ✅ 發起 | — |
-| Phase 0 | Phase 1 | PRD approved | ✅ Approve | AI 撰寫 |
-| Phase 1 | Phase 2 | Spec + .feature approved | ✅ Approve | AI 撰寫 + 自動審查 |
-| Phase 2 | Phase 3 | 所有任務完成 | ❌ | 全自動 |
-| Phase 3 | Phase 4 | Verification Report PASS | ❌ | 全自動 |
-| Phase 4 | Phase 5 | Code Review approved | ✅ Approve | AI 審查 + Human 最終 |
-| Phase 5 | Done | Close checklist 完成 | ❌ | 全自動 |
+| 從 | 到 | 觸發條件 | Human 必要 |
+|----|-----|---------|-----------|
+| — | Arch | 專案啟動或重大架構決策 | ✅ 決策 |
+| — | PRD | 使用者提出需求 | ✅ 發起 |
+| PRD | BDD / Spec | PRD approved | ✅ Approve |
+| BDD | Spec | .feature 完成 | ❌（可直接進 Spec） |
+| Spec | Design Docs | Spec approved | ✅ Approve |
+| Spec | Develop | 設計文件完成 | ❌ |
+| Develop | Verify | 所有任務完成 | ❌ |
+| Verify | Review | Verification PASS | ❌ |
+| Review | Close | Code Review approved | ✅ Approve |
+| Close | Done | Checklist 完成 | ❌ |
 
-## 各 Phase 進入條件
+## 各階段進入條件
 
-### Phase 0 → Phase 1
+### PRD → BDD / Spec
 
 - [ ] PRD 文件已建立（`docs/prd-NNN.md`）
-- [ ] 問題定義明確（一句話說明）
-- [ ] 有證據支持
-- [ ] 預期成果可衡量
-- [ ] 方案比較已完成
-- [ ] Feature/Spec 拆解建議已列出
+- [ ] 問題定義明確
 - [ ] Human 已 approve PRD
+- [ ] 已 commit
 
-### Phase 1 → Phase 2
+### BDD → Spec（如有 BDD）
 
-- [ ] Example Mapping 完成（🔴 Question = 0）
+- [ ] Example Mapping 完成（🔴 = 0）
 - [ ] .feature 檔案已建立
-  - [ ] 每個 Rule 有正面 + 反面 Example
-  - [ ] 使用業務語言，非技術術語
-  - [ ] Scenario 獨立、不依賴順序
+- [ ] Human 已確認
+- [ ] 已 commit
+
+### Spec → Design Docs / Develop
+
+- [ ] 影響分析完成（新增 / 修改項目已識別）
 - [ ] spec.md 已建立
-  - [ ] 技術設計可行
-  - [ ] 任務拆解粒度 2-5 分鐘
-  - [ ] [P] 標記和依賴關係正確
-  - [ ] 每個任務有 feature ref
 - [ ] progress.md 已建立
 - [ ] specs-overview.md 已更新
 - [ ] 自動 Spec Review 通過
 - [ ] Human 已 approve
+- [ ] 已 commit
 
-### Phase 2 → Phase 3
+### Design Docs → Develop
 
-- [ ] 所有 spec.md 任務完成
+- [ ] 涉及的 api-spec 已撰寫（或標記不需要）
+- [ ] 涉及的 ui-spec 已撰寫（或標記不需要）
+- [ ] 涉及的 schema 已撰寫（或標記不需要）
+- [ ] openapi.yaml 已更新（如涉及 API）
+- [ ] Spec Section 4 的路徑已回填
+- [ ] 已 commit
+
+### Develop → Verify
+
+- [ ] 所有任務完成
 - [ ] 每個任務都走完 RED → GREEN → REFACTOR
 - [ ] 所有測試通過
 - [ ] De-Sloppify 清理完成
 - [ ] progress.md 已更新
+- [ ] 已 commit
 
-### Phase 3 → Phase 4
+### Verify → Review
 
-- [ ] Verification Report overall PASS 或 WARN
-- [ ] 無 FAIL stage（或已修復後重驗）
-- [ ] Security review 無 Critical 漏洞
+- [ ] Core stages 全部 PASS
+- [ ] Security Review 通過
+- [ ] Verification Report 已產出
 
-### Phase 4 → Phase 5
+### Review → Close
 
-- [ ] Stage 1 Spec Compliance 通過
-- [ ] Stage 2 Code Quality 審查完成
+- [ ] Spec + Design Compliance 通過
+- [ ] Code Quality 審查完成
 - [ ] 無 🔴 Critical 未修復
 - [ ] 無 🟡 Major 未修復（或有正當理由）
 - [ ] Human 已 approve
 
-### Phase 5 → Done
+### Close → Done
 
-- [ ] Verification Before Completion Gate 5 點全過
-- [ ] Close Checklist 全部完成
+- [ ] 設計文件已同步（反映最終實作）
 - [ ] 追蹤文件已更新（progress.md, specs-overview.md, feature-map.md）
-- [ ] 版控完成（commit, tag）
+- [ ] 版控完成（commit）
+- [ ] 已 commit
 
 ## 跳過判斷速查表
 
-| 需求規模 | PRD | Spec | Develop | Verify | Review |
-|---------|:---:|:----:|:-------:|:------:|:------:|
-| Bug fix | 跳 | 輕量 | 寫重現測試→修復 | 輕量 | AI |
-| Config 變更 | 跳 | 跳 | 直接改 | 跳 | 跳 |
-| UI 微調 | 跳 | 輕量 | Widget test+實作 | 輕量 | AI |
-| 小功能 (<1天) | 跳 | 必須（可省 Example Mapping） | 必須 | 必須 | PR |
-| 中功能 (1-5天) | 必須 | 必須（含 Example Mapping） | 必須 | 必須 | PR |
-| 大功能 (>5天) | 必須 | 必須（完整 Example Mapping） | 必須 | 完整 | PR+TL |
-
-## Profile 制
-
-| Profile | 適用 | Discovery 深度 | .feature | Cucumber | 任務 Review |
-|---------|------|---------------|----------|----------|------------|
-| Solo | 個人開發 | 輕量 | ✔ | ✗ | AI 自動 |
-| Team | 小團隊 2-5 人 | 完整 | ✔ | ✗ | AI+同儕 |
-| Enterprise | 大團隊/有 PM·QA | 完整+Three Amigos | ✔ | ✔ 可選 | AI+人工+QA |
+| 需求規模 | Arch | PRD | BDD | Spec | Design | Develop | Verify | Review |
+|---------|:----:|:---:|:---:|:----:|:------:|:-------:|:------:|:------:|
+| Bug fix | — | 跳 | 跳 | 輕量 | 跳 | 寫重現測試→修復 | Core | AI |
+| Config 變更 | — | 跳 | 跳 | 跳 | 跳 | 直接改 | Core | 跳 |
+| UI 微調 | — | 跳 | 跳 | 輕量 | 更新 ui-spec | 實作 | Core | AI |
+| 小功能 (<1天) | — | 跳 | 可選 | 必須 | 必須 | TDD | Core+選 | 必須 |
+| 中功能 (1-5天) | — | 必須 | 可選 | 必須 | 必須 | TDD | 全部 | 必須 |
+| 大功能 (>5天) | 檢查 | 必須 | 建議 | 必須 | 必須 | TDD | 全部 | 必須 |

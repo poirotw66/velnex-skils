@@ -1,203 +1,167 @@
-# 開發流程規範
+# vif 開發流程規範
 
-本文件定義 AI 驅動開發流程的完整規範，包含每個 Phase 的詳細步驟、檢查點、和轉換條件。
+本目錄為人類參考文件，描述 vif 的完整開發流程。
+
+> 實際的 AI skill 定義在 `plugins/vif/skills/` 下，本目錄僅供人類閱讀和理解流程。
 
 ## 流程總覽
 
 ```
-Phase 0     Phase 1        Phase 2         Phase 3     Phase 4      Phase 5
- PRD    ──▶  Spec       ──▶  Develop    ──▶  Verify  ──▶  Review  ──▶  Close
- 探索       規格與設計     開發(TDD)       驗證         審查         完成
+/vif-arch → /vif-prd → /vif-bdd(可選) → /vif-spec → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
 ```
 
-## Phase Transition Gates
+## Skill 清單
 
-每個 Phase 之間有明確的轉換條件和檢查點：
+| 類別 | Skill | 說明 |
+|------|-------|------|
+| 架構 | `/vif-arch` | 架構決策 + ADR 記錄 |
+| 需求 | `/vif-prd` | PRD 撰寫 |
+| 行為 | `/vif-bdd` | BDD Discovery → .feature（可選） |
+| 規劃 | `/vif-spec` | 影響分析 + 技術規劃 |
+| 設計 | `/vif-ui-spec` | UI 頁面規格（Figma → spec） |
+| 設計 | `/vif-api-spec` | API 規格 + openapi.yaml + dbschema |
+| 開發 | `/vif-develop` | TDD 開發（含測試策略選擇） |
+| 驗證 | `/vif-verify` | 自動化驗證（Core + Optional） |
+| 審查 | `/vif-review` | 程式碼審查（合規 + 品質） |
+| 收尾 | `/vif-close` | 文件同步 + 完成檢查清單 |
+| 總覽 | `/vif-flow` | 流程編排 + routing |
 
-| 轉換 | 觸發方式 | Human 動作 | 自動化 | 檢查點 |
-|------|---------|-----------|--------|--------|
-| → Phase 0 | Human 發起需求 | 撰寫/確認需求 | 否 | — |
-| 0 → 1 | Human approve PRD | ✅ 必須 | 否 | PRD 完整、feature/spec 清單已拆解 |
-| 1 → 2 | Human approve spec | ✅ 必須 | 否 | Question=0、.feature 正反面完整、任務清單完整 |
-| 2 → 3 | 所有任務 GREEN | — | ✅ 自動 | lint pass、type check pass |
-| 3 → 4 | Verify 全 PASS | — | ✅ 自動 | 六階段驗證通過 |
-| 4 → 5 | Human approve review | ✅ 必須 | 否 | 無 Critical、Major 已處理 |
+## 兩種模式
 
-**關鍵設計**：Human 在 Phase 0→1 和 1→2 確認意圖和設計；Phase 2→3→4 由 AI 自主推進；Phase 4→5 Human 做最終確認。
+### 模式一：完全自動化
 
-## Phase 詳細規範
+AI 為主力，Human 為審查角色。適合 solo 或小團隊。
 
-### Phase 0: PRD — 產品探索
+- BDD 是標準流程的一部分
+- AI 自動串接各階段
+- 一人驅動完整流程
 
-**目的**：定義問題和方向
+### 模式二：輔助自動化
 
-**產出**：`docs/prd-NNN.md`
+各角色各自驅動 AI。適合企業團隊（PM、PD、SA、SD、Frontend、Backend、QA）。
 
-**檢查點**：
-- [ ] 問題描述清楚（一句話說明）
-- [ ] 有證據支持（數據、回饋、觀察）
-- [ ] 預期成果可衡量
-- [ ] 至少 2 個方案做比較
-- [ ] 「不在範圍內」已明確列出
-- [ ] 已拆解為 feature / spec 清單
+- BDD 是可選的
+- 各角色使用對應的 skill
+- Figma 是重要輸入來源
 
-**可跳過**：Bug fix、< 1 人天、技術債、config 變更
-
----
-
-### Phase 1: Spec — 規格與設計
-
-**目的**：將需求轉化為可執行的行為規格和技術設計
-
-**產出**：
-- `docs/features/[domain]/*.feature` — 行為規格
-- `docs/specs/NNN-name/spec.md` — 技術設計
-- `docs/specs/NNN-name/progress.md` — 進度追蹤
-
-**四個步驟**：
-
-#### Step 1: Example Mapping
-
-| 檢查點 | 說明 |
-|--------|------|
-| 🟡 Story 已定義 | 清楚知道要做什麼功能 |
-| 🔵 Rule 已列出 | 所有業務規則都被識別 |
-| 🟢 Example 正反面 | 每條 Rule 至少有正面和反面範例 |
-| 🔴 Question = 0 | 所有疑問都已解決 |
-
-#### Step 2: .feature 撰寫
-
-| 檢查點 | 說明 |
-|--------|------|
-| Gherkin 語法正確 | Feature → Rule → Example → Given/When/Then |
-| 業務語言 | 不含技術實作細節 |
-| 術語一致 | 同一概念用同一名詞 |
-| Example 具體 | 有實際的值（"alice@example.com"），不是抽象描述（"某用戶"） |
-
-#### Step 3: spec.md 撰寫
-
-| 檢查點 | 說明 |
-|--------|------|
-| Meta 完整 | 類型、狀態、PRD 連結、行為規格連結、依賴 |
-| 設計原則附理由 | 每個決策都有「為什麼」 |
-| 任務粒度 2-5 min | 每個任務可在 2-5 分鐘內完成 |
-| [P] 標記正確 | 可平行的任務有標記，依賴關係正確 |
-| feature ref 完整 | 有行為的任務都指向對應的 .feature scenario |
-
-#### Step 4: Review
-
-| 檢查點 | 說明 |
-|--------|------|
-| .feature + spec.md 一起審 | 不要只看其中一個 |
-| specs-overview.md 已更新 | 新 spec 已加入索引 |
-
----
-
-### Phase 2: Develop — 開發
-
-**目的**：透過逐任務 TDD 迴圈實作功能
-
-**核心迴圈**（per task）：
+## 文件結構（導入 vif 的專案）
 
 ```
-RED → GREEN → REFACTOR → 輕量驗證 → 下一個 task
+project/
+├── .claude/
+│   └── CLAUDE.md                      ← 專案規範 + vif 設定
+│
+├── docs/
+│   ├── architecture/                  ← ADR 架構決策記錄
+│   │   └── adr-NNN-[name].md
+│   │
+│   ├── prd-NNN.md                     ← 需求規格（WHY + WHAT）
+│   │
+│   ├── features/                      ← BDD 行為規格（可選）
+│   │   └── [domain]/
+│   │       └── [name].feature
+│   │
+│   ├── specs/                         ← 技術規劃（per-feature）
+│   │   ├── specs-overview.md          ← 索引
+│   │   └── NNN-name/
+│   │       ├── spec.md                ← 作戰計畫
+│   │       └── progress.md            ← 進度追蹤
+│   │
+│   ├── api-specs/                     ← API 設計（累積型，per-module）
+│   │   └── [module]/
+│   │       ├── openapi.yaml           ← OpenAPI 3.x
+│   │       └── [domain]/
+│   │           └── [name].md          ← 單支 API 完整規格
+│   │
+│   ├── ui-specs/                      ← UI 設計（累積型，per-page）
+│   │   └── [module]/
+│   │       └── [page]/
+│   │           └── [name].md          ← 頁面規格
+│   │
+│   ├── schema/                        ← DB Schema（累積型，per-domain）
+│   │   └── [domain].md                ← Table 定義 + 關聯 + Migration
+│   │
+│   └── feature-map.md                 ← 功能追蹤
+│
+├── guideline/                         ← 開發規範（專案特定）
+│   ├── api/                           ← API 開發規範 + 撰寫模板
+│   ├── ui/                            ← UI 開發規範 + 撰寫模板
+│   └── schema/                        ← Schema 命名規範
+│
+└── src/
+    └── ...
 ```
 
-| 步驟 | 檢查點 | Agent |
-|------|--------|-------|
-| RED | 測試正確地失敗（不是語法錯誤） | test-writer |
-| GREEN | 當前測試通過 + 既有測試未破壞 | implementer |
-| REFACTOR | 清理後測試仍全綠 | implementer |
-| 輕量驗證 | lint + type check pass | implementer |
+### 文件性質
 
-**失敗處理**：
+| 目錄 | 性質 | 誰產出 | 更新頻率 |
+|------|------|--------|---------|
+| `docs/architecture/` | 累積型 | Architect / SA | 少（重大決策時） |
+| `docs/prd-*.md` | per-feature | PD / PM | 寫完不改 |
+| `docs/features/` | per-feature（可選） | PD / PM | 偶爾修正 |
+| `docs/specs/` | per-feature | SA / SD / AI | 開發中更新 |
+| `docs/api-specs/` | 累積型 | Backend / SA | 隨功能迭代 |
+| `docs/ui-specs/` | 累積型 | Frontend / PD | 隨功能迭代 |
+| `docs/schema/` | 累積型 | Backend / SA | 隨功能迭代 |
+| `guideline/` | 穩定型 | 專案初期建立 | 很少 |
 
-```
-失敗 → 重試（max 3）→ 仍失敗 → Escalation Protocol
-```
+## Agents
 
-**Escalation Protocol**：
-1. 產出失敗報告（嘗試了什麼、失敗原因、建議）
-2. 通知 Human
-3. 等待 Human 決策：
-   - a. 提供提示讓 AI 重試
-   - b. Human 手動修復
-   - c. 調整 spec / task 拆分
-   - d. 標記 blocked，跳過
+Skills 在特定階段會派遣 agents（subagents）執行工作：
 
----
+| Agent | 用途 | 工具限制 | 派遣者 |
+|-------|------|---------|--------|
+| `test-writer` | TDD RED：寫失敗測試 | 無限制 | `/vif-develop` |
+| `implementer` | TDD GREEN + REFACTOR：最小實作 | 無限制 | `/vif-develop` |
+| `spec-reviewer` | 審查 spec + 設計文件 | 無限制 | `/vif-spec` |
+| `reviewer` | 程式碼審查（合規 + 品質） | 無限制 | `/vif-review` |
+| `verifier` | 驗證 pipeline（Build → Test → Diff） | Bash + Read | `/vif-verify` |
+| `security-reviewer` | OWASP Top 10 安全性檢查 | Read only | `/vif-verify` |
 
-### Phase 3: Verify — 驗證
+> `/vif-verify` 的 Code Quality 檢查使用 Claude Code 內建的 `/simplify` skill（非 Claude Code 環境不適用）。
 
-**目的**：自動化品質檢查
+## Human 介入點
 
-**六階段流水線**：
+| Gate | Human 行為 | 說明 |
+|------|-----------|------|
+| PRD → Spec | Approve PRD | 確認問題定義與方向 |
+| Spec → Develop | Approve Spec | 確認涉及範圍 + 設計文件 |
+| Review → Close | Approve Code | 最終審查 |
 
-| Stage | 名稱 | 檢查內容 | 失敗條件 |
-|-------|------|---------|---------|
-| 1 | Build | 專案可建構 | build 失敗 |
-| 2 | Type Check | 型別正確 | 有 type error |
-| 3 | Lint | 風格規範 | 有 lint error |
-| 4 | Test Suite | 測試通過 + 覆蓋率 | 測試失敗或覆蓋率 < 80% |
-| 5 | Security | 漏洞掃描 | 有 critical/high 漏洞 |
-| 6 | Diff Review | 變更合理性 | 觸碰敏感路徑、超大檔案 |
+## Commit Points
 
-**失敗處理**：implementer 修復 → 重新六階段（max 3）→ escalate
+| 時機 | Message 範例 |
+|------|-------------|
+| PRD approved | `docs: add prd-001 user-login` |
+| BDD 完成 | `docs: add feature iam/user-login` |
+| Spec approved | `docs: add spec-001 user-login` |
+| 設計文件完成 | `docs: add api-spec iam/auth/login` |
+| 開發 per-scenario | `feat: implement login API (spec-001)` |
+| Review 修復 | `fix: address review feedback (spec-001)` |
+| 收尾 | `docs: close spec-001, update feature-map` |
 
----
+## 核心原則
 
-### Phase 4: Review — 審查
+1. **行為先於設計** — 先理解「系統該做什麼」再設計「怎麼做到」
+2. **影響分析是核心** — 判斷新增 vs 修改既有，修改比新增更危險
+3. **TDD 硬性約束** — 沒有失敗測試就不寫 production code
+4. **Spec 先行** — 沒有 approved spec 不寫程式
+5. **驗證即誠實** — 每一個聲明都要有新鮮的證據支撐
+6. **最多重試 3 次** — 超過就 escalate 給 Human
 
-**目的**：人類判斷的品質把關
+## 參考框架
 
-**審查重點**（不重複 Phase 3 已做的事）：
-1. Spec 合規性 — 功能是否符合規格
-2. 架構合理性 — 設計是否正確
-3. 程式碼可讀性 — 是否易於維護
-4. 測試品質 — 是否真正驗證行為
+vif 整合了以下框架的精華：
 
-**回饋處理**：
+| 框架 | 採用的概念 |
+|------|-----------|
+| **Spec Kit**（GitHub） | 規格驅動開發、Power Inversion |
+| **Superpowers**（obra） | Hard Gate、Verification Principle、Don't Trust the Report |
+| **OpenSpec**（Fission AI） | Explore Stance、Curious not Prescriptive |
+| **ECC**（Affaan-M） | De-Sloppify、OWASP Top 10、六階段驗證 |
+| **gstack**（Garry Tan） | 認知模式轉換、Error Mapping、推薦導向 |
 
-| 回饋級別 | 處理 |
-|---------|------|
-| 🔴 Critical | 必須修復 → 回到 Phase 2 → 重跑 Phase 3-4 |
-| 🟡 Major | 應該修復 → 修復後重跑 Phase 3-4 |
-| 🟢 Minor | 可選修復 → 不影響 approve |
-| 需改 spec | 回到 Phase 1 修改 spec → 重跑 Phase 2-4 |
+## 其他參考
 
----
-
-### Phase 5: Close — 完成
-
-**目的**：確保所有文件和版控到位
-
-**Checklist**：
-- [ ] .feature scenario 全數有測試且通過
-- [ ] AC-manual 全數驗證
-- [ ] Verification Report 全部 PASS
-- [ ] progress.md 更新至最終狀態
-- [ ] specs-overview.md 同步（狀態 = done）
-- [ ] feature-map.md 同步
-- [ ] 變更已 commit
-- [ ] Git tag 已標記（如適用）
-
----
-
-## 跳過判斷速查表
-
-| 需求規模 | PRD | Spec | Develop | Verify | Review |
-|---------|:---:|:----:|:-------:|:------:|:------:|
-| Bug fix | 跳 | 輕量 | 寫重現測試→修復 | 輕量 | AI |
-| Config 變更 | 跳 | 跳 | 直接改 | 跳 | 跳 |
-| UI 微調 | 跳 | 輕量 | Widget test+實作 | 輕量 | AI |
-| 小功能 (<1天) | 跳 | 必須（可省 Example Mapping） | 必須 | 必須 | PR |
-| 中功能 (1-5天) | 必須 | 必須（含 Example Mapping） | 必須 | 必須 | PR |
-| 大功能 (>5天) | 必須 | 必須（完整 Example Mapping） | 必須 | 完整 | PR+TL |
-
-## Profile 制
-
-| Profile | 適用 | Discovery 深度 | .feature | Cucumber | 任務 Review |
-|---------|------|---------------|----------|----------|------------|
-| Solo | 個人開發 | 輕量 | ✔ | ✗ | AI 自動 |
-| Team | 小團隊 2-5 人 | 完整 | ✔ | ✗ | AI+同儕 |
-| Enterprise | 大團隊/有 PM·QA | 完整+Three Amigos | ✔ | ✔ 可選 | AI+人工+QA |
+- 研究報告：`guideline/ai-driven-development-research-report.md`
+- 測試規範：`plugins/vif/skills/vif-develop/references/testing-guideline.md`

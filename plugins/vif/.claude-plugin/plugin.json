@@ -1,7 +1,7 @@
 {
   "name": "vif",
-  "description": "Vito AI Flow — Six-phase AI-driven development flow with TDD, BDD, and structured review",
-  "version": "1.0.0",
+  "description": "vif — AI-driven development flow with 11 skills supporting both fully-automated and team-assisted modes",
+  "version": "2.0.0",
   "author": {
     "name": "Vito"
   }

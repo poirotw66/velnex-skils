@@ -4,8 +4,8 @@
 - 類型：Feature / Workflow / Infra / Refactor
 - 狀態：draft / approved / in-progress / done
 - PRD：prd-NNN（如有）
-- 實現的行為規格：
-  - features/[domain]/[name].feature
+- 行為規格：features/[domain]/[name].feature（如有）
+- 參考畫面：[Figma link / 截圖路徑]（如有）
 - 依賴：spec-NNN, spec-NNN
 - 建立：YYYY-MM-DD
 - 更新：YYYY-MM-DD
@@ -23,28 +23,40 @@
 
 - [明確排除項目]
 
-## 4. 技術設計
+## 4. 涉及範圍
 
-### 架構
+### 頁面清單
 
-[模組劃分、依賴關係]
+| 動作 | 頁面 | 說明 | 參考 | UISpec |
+|------|------|------|------|--------|
+| 新增 | | | Figma# | docs/ui-specs/... 或「待展開」 |
+| 修改 | | | | docs/ui-specs/...（既有） |
 
-### 資料結構
+### API 清單
 
-[Interface / Schema 變更，diff 格式]
+| 動作 | API | Method | Path | 說明 | ApiSpec |
+|------|-----|--------|------|------|---------|
+| 新增 | | | | | docs/api-specs/... 或「待展開」 |
+| 修改 | | | | | docs/api-specs/...（既有） |
 
-### API / 介面
+### DB 清單
 
-[CLI 指令 / API endpoints / 頁面設計]
+| 動作 | Table | 說明 | Schema |
+|------|-------|------|--------|
+| 新增 | | | docs/schema/... 或「待展開」 |
+| 修改 | | [變更說明] | docs/schema/...（既有） |
 
-## 5. 影響檔案
+> UISpec / ApiSpec / Schema 欄位：已產出 → 填入路徑；待展開 → 標記「待展開」
 
-| 檔案 | 變更程度 | 說明 |
-|------|---------|------|
-| src/xxx.ts | 小 (< 30 行) | Add interface |
-| src/yyy.ts | 大 (> 150 行) | New module |
+## 5. 業務規則
 
-## 6. 實作任務
+- [規則 1]
+- [規則 2]
+
+## 6. 實作任務（可選）
+
+> 模式一（AI 驅動）：拆解為 2-5 分鐘粒度的任務
+> 模式二（團隊分工）：可省略，由各 PG 自行拆解
 
 ### 依賴圖
 
@@ -57,17 +69,13 @@ task-1, task-2 [P] → task-3 (depends: 1,2) → task-4 (depends: 3)
 3. [ ] [任務描述] — 依賴: 1, 2 — ~[N] min
    - feature ref: features/[domain]/[name].feature#[scenario]
 4. [ ] [任務描述] — 依賴: 3 — ~[N] min
-   - feature ref: features/[domain]/[name].feature#[scenario]
 
-## 7. 驗收標準
+## 7. 驗收條件
 
-### AC-auto
+- [ ] [條件 1]
+- [ ] [條件 2]
 
-見 `實現的行為規格` 中列出的 .feature 檔案。
-
-### AC-manual（人工驗證）
-
-- [ ] [步驟 + 預期結果]
+> 如有 .feature，可引用：見 features/[domain]/[name].feature
 
 ## 8. 約束與限制
 
@@ -76,5 +84,5 @@ task-1, task-2 [P] → task-3 (depends: 1,2) → task-4 (depends: 3)
 
 ## 9. 成功標準
 
-- 驗收標準全數通過
+- 驗收條件全數通過
 - [商業成功指標（如有）]
