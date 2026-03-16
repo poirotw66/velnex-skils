@@ -24,7 +24,7 @@ metadata:
 AI 為主力開發，Human 為審查角色。一人驅動完整流程。
 
 ```
-/vif-arch → /vif-prd → /vif-bdd → /vif-spec → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
+/vif-arch + /vif-uiux → /vif-prd → /vif-bdd → /vif-spec → /vif-prototype(可選) → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
 ```
 
 ### 模式二：輔助自動化（企業團隊）
@@ -34,9 +34,9 @@ AI 為主力開發，Human 為審查角色。一人驅動完整流程。
 ```
 Architect:  /vif-arch（專案啟動 + 決策記錄）
 PD/PM:      /vif-prd → /vif-bdd（可選）
-Designer:   Figma（手動）
-SA/SD:      /vif-spec（PRD + Figma → 規劃範圍）
-Frontend:   /vif-ui-spec（Figma + Spec → 頁面規格）
+Designer:   /vif-uiux（設計基礎）→ Figma（手動）或 /vif-prototype（AI 產出原型）
+SA/SD:      /vif-spec（PRD + Figma/Prototype → 規劃範圍）
+Frontend:   /vif-ui-spec（Figma/Prototype + Spec → 頁面規格）
 Backend:    /vif-api-spec（PRD + Figma + Spec → API + openapi + dbschema）
 PGs:        /vif-develop → /vif-verify → /vif-review
 All:        /vif-close
@@ -47,9 +47,11 @@ All:        /vif-close
 | 類別 | Skill | 說明 |
 |------|-------|------|
 | 架構 | `/vif-arch` | 架構決策 + ADR 記錄 |
+| 設計基礎 | `/vif-uiux` | UI/UX 設計基礎（色系、字型、元件規範） |
 | 需求 | `/vif-prd` | PRD 撰寫 |
 | 行為 | `/vif-bdd` | BDD Discovery → .feature（可選） |
 | 規劃 | `/vif-spec` | 影響分析 + 技術規劃 |
+| 原型 | `/vif-prototype` | HTML 原型（可選，無 Figma 時使用） |
 | 設計 | `/vif-ui-spec` | UI 頁面規格 |
 | 設計 | `/vif-api-spec` | API 規格 + openapi.yaml + dbschema |
 | 開發 | `/vif-develop` | TDD 開發（含測試策略選擇） |

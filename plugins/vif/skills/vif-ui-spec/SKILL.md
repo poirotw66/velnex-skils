@@ -22,7 +22,7 @@ metadata:
 
 ## 輸入
 
-- **必要**：Figma 畫面（圖片 / MCP / 結構化描述）
+- **必要**：Figma 畫面（圖片 / MCP / 結構化描述）或 Prototype 確認結果
 - **參考**：Spec（`docs/specs/NNN-name/spec.md` — 如有）
 - **參考**：ApiSpec（`docs/api-specs/` — 如有，確認可用的 API）
 
@@ -30,7 +30,7 @@ metadata:
 
 ### Step 1: 讀取輸入
 
-1. 讀取 Figma 畫面（圖片或 MCP）
+1. 讀取 Figma 畫面（圖片或 MCP）或 Prototype 確認結果
 2. 讀取相關 Spec 的頁面清單（如有）
 3. 讀取已有的 ApiSpec（確認可呼叫的 API）
 4. 讀取 `docs/ui-specs/` 下既有頁面（確認是否有需要修改的）
