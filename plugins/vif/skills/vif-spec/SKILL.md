@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.1.2
+  version: 2.1.3
 ---
 
 # Spec — 技術規劃與影響分析
@@ -143,6 +143,28 @@ Spec 撰寫完成後，根據影響分析表，詢問 Human：
 
 Human approve → **commit**（`docs: add spec-NNN [名稱]`）
 
+### 進入開發的前置條件
+
+Spec approved 後，檢查 Section 4 涉及範圍的 UISpec / ApiSpec / Schema 欄位：
+
+- **全部已展開**（有路徑） → 可以進入 `/vif-develop`
+- **有「待展開」項目** → **不可以進入開發**。提示：
+
+```
+> Spec 已 approved，但以下設計文件尚未展開：
+>   - UISpec: Layout + Sidebar（待展開）
+>   - UISpec: TranscribeView（待展開）
+>   - ApiSpec: start_transcription（待展開）
+>   - ...
+>
+> 請先展開設計文件：
+>   A. 展開全部（/vif-api-spec + /vif-ui-spec）
+>   B. 只展開 API Spec（/vif-api-spec）
+>   C. 只展開 UI Spec（/vif-ui-spec）
+>
+> 設計文件全部完成後才能進入 /vif-develop。
+```
+
 ## Exit Criteria
 
 - [ ] 影響分析完成（新增 / 修改 項目已識別）
@@ -152,3 +174,4 @@ Human approve → **commit**（`docs: add spec-NNN [名稱]`）
 - [ ] 自動審查通過
 - [ ] Human 已 approve
 - [ ] 已 commit
+- [ ] 涉及範圍的設計文件全部展開（無「待展開」項目），或由 Human 明確確認可跳過

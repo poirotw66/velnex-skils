@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.1.2
+  version: 2.1.3
 ---
 
 # Develop — TDD 開發
@@ -48,7 +48,7 @@ metadata:
 ## Prerequisites
 
 - [ ] spec.md 已 approved（或已有明確的開發任務）
-- [ ] 設計文件可用（api-spec / ui-spec / schema — 依涉及範圍）
+- [ ] **設計文件全部展開** — 讀取 spec.md Section 4 涉及範圍，確認 UISpec / ApiSpec / Schema 欄位都有路徑（不能有「待展開」）。如有待展開，提示先完成設計文件再開始開發。
 
 ## Core Loop
 

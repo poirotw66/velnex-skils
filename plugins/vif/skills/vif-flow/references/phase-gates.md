@@ -43,9 +43,10 @@
 
 ### Design Docs → Develop
 
-- [ ] 涉及的 api-spec 已撰寫（或標記不需要）
-- [ ] 涉及的 ui-spec 已撰寫（或標記不需要）
-- [ ] 涉及的 schema 已撰寫（或標記不需要）
+- [ ] Spec Section 4 涉及範圍**無「待展開」項目** — 所有 UISpec / ApiSpec / Schema 欄位都有路徑
+- [ ] 涉及的 api-spec 已撰寫（或由 Human 確認不需要）
+- [ ] 涉及的 ui-spec 已撰寫（或由 Human 確認不需要）
+- [ ] 涉及的 schema 已撰寫（或由 Human 確認不需要）
 - [ ] openapi.yaml 已更新（如涉及 API）
 - [ ] Spec Section 4 的路徑已回填
 - [ ] 已 commit
