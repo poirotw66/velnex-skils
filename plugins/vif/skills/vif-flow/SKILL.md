@@ -5,7 +5,7 @@ description: >-
   "phase", "階段", "新功能", "new feature", "ai-driven", "AI 開發",
   "哪個階段", "下一步", "flow overview", "流程總覽".
 metadata:
-  version: 2.0.0
+  version: 2.1.1
 ---
 
 # vif — AI-Driven Development Flow

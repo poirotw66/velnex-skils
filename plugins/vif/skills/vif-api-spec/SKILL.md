@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 1.0.0
+  version: 2.1.1
 ---
 
 # API Spec — API 規格 + OpenAPI + DB Schema
