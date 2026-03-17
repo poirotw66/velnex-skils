@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.2.0
+  version: 2.2.1
 ---
 
 # Spec — 技術規劃與影響分析

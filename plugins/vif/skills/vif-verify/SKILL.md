@@ -5,7 +5,7 @@ description: >-
   "verification", "pipeline", "驗證流水線", "跑驗證", "品質檢查",
   "build check", "pre-review check".
 metadata:
-  version: 2.2.0
+  version: 2.2.1
 ---
 
 # Verify — 自動化驗證
@@ -115,20 +115,71 @@ Date: YYYY-MM-DD
 ## Issues
 [具體問題描述，含檔案位置和錯誤訊息]
 
+## WARN Evaluation
+[每個 WARN 項目的評估結果和理由]
+
 ## Verdict
 READY / NOT READY for Code Review
 ```
 
+## Result Classification
+
+每個 stage 的結果分為三種：
+
+| 結果 | 說明 | 能否進入 review？ |
+|------|------|-------------------|
+| ✅ PASS | 無錯誤 | 可以 |
+| ⚠️ WARN | 有 warnings，不影響正確性 | 需評估後決定 |
+| ❌ FAIL | 有 errors | 不可以，必須修復 |
+
+### WARN 的處理流程
+
+WARN 不能直接跳過。每個 WARN 項目必須逐一評估：
+
+```
+對每個 WARN 項目：
+├─ 需要修復 → 回 develop 修復 → 重跑完整 verify
+└─ 確認不修 → 記錄理由（為什麼可以接受）
+```
+
+**記錄格式**（在 Report 的 Issues 區塊）：
+
+```
+### [WARN-accepted] Rust dead_code warnings (20)
+理由：commands.rs 為預留空殼，實作時自然消除。不影響功能。
+
+### [WARN-accepted] Security: CSP disabled
+理由：Tauri 開發階段需要，production build 會啟用。
+```
+
+> WARN 沒有記錄理由 = 沒有評估 = 不能進入 review。
+
 ## Failure Handling
 
-1. 記錄所有失敗 stage 和具體錯誤
-2. 回到開發修復問題
-3. 修復後重新執行**完整** pipeline（不要只跑失敗的 stage）
+### FAIL 修復流程
+
+1. 記錄所有 FAIL stage 和具體錯誤
+2. 回到 develop 修復
+3. 修復後重新執行**完整** pipeline（不能只跑失敗的 stage）
 4. 最多 3 次修復循環，超過 escalate
+
+> **為什麼要重跑完整 pipeline？** 修復 A 問題可能引入 B 問題。只跑失敗的 stage 會漏掉連帶影響。
+
+### 職責分界
+
+verify 發現的問題由 verify 流程處理完畢才能往下走。reviewer 不負責處理 verify 的遺留項目。
+
+| 問題來源 | 誰處理 | 什麼時候 |
+|---------|--------|---------|
+| FAIL | 開發者 | 修復後重跑 verify |
+| WARN（需修復） | 開發者 | 修復後重跑 verify |
+| WARN（可接受） | verify 記錄理由 | 當下評估 |
+| Spec 合規 / 驗收條件 | reviewer | `/vif-review` Stage 1 |
 
 ## Exit Criteria
 
-- [ ] Core stages 全部 PASS（或 WARN 已評估可接受）
+- [ ] Core stages 全部 PASS
+- [ ] WARN 項目全部已評估（修復或記錄理由）
 - [ ] Optional stages 已執行或已確認跳過
 - [ ] Verification Report 已產出
 - [ ] 進入 `/vif-review`

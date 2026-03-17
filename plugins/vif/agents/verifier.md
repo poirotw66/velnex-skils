@@ -71,14 +71,21 @@ Record:
 
 ### Stage 5: Diff Review
 
+收集本次開發的完整變更，審查內容品質。
+
 ```bash
-git diff --stat       # Changed files summary
-git diff              # Detailed changes
+# 1. 已 commit 的變更（與主分支比較）
+git diff main...HEAD --stat
+git diff main...HEAD
+
+# 2. 尚未 commit 的變更（staged + unstaged）
+git diff HEAD --stat
+git diff HEAD
 ```
 
+> 合併兩者得到完整變更範圍。未 commit 不是問題（commit 時機由使用者決定）。
+
 Check:
-- Change scope matches spec（如有 spec）
-- No unexpected file changes
 - No leftover debug code (console.log, print, debugger)
 - No commented-out code
 - No hardcoded secrets or credentials
@@ -115,11 +122,17 @@ Date: YYYY-MM-DD
 READY / NOT READY for Code Review
 ```
 
-## Result Determination
+## Result Classification
 
-- **PASS**: All stages pass with no errors
-- **WARN**: All stages pass but with warnings that need evaluation
-- **FAIL**: One or more stages have errors
+每個 stage 的結果：
+
+| 結果 | 說明 |
+|------|------|
+| ✅ PASS | 無錯誤 |
+| ⚠️ WARN | 有 warnings，需人工評估是否接受 |
+| ❌ FAIL | 有 errors，必須修復才能進入 review |
+
+> WARN 項目由 vif-verify skill 負責評估，不是你的職責。你只需要準確分類並報告。
 
 ## Principles
 
