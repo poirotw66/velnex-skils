@@ -5,7 +5,7 @@ description: >-
   "verification", "pipeline", "驗證流水線", "跑驗證", "品質檢查",
   "build check", "pre-review check".
 metadata:
-  version: 2.1.3
+  version: 2.2.0
 ---
 
 # Verify — 自動化驗證
@@ -49,7 +49,7 @@ Build    →  Type Check  →  Lint     →  Test Suite →  Diff Review
 
 **所有 stage 都執行，即使早期 stage 失敗也繼續。** 收集完整問題清單。
 
-### Optional Stages（可選）
+### Optional Stage（可選）
 
 **Stage 7: Code Quality**
 
@@ -63,34 +63,21 @@ Build    →  Type Check  →  Lint     →  Test Suite →  Diff Review
 
 > Code Quality 只**報告**問題，不修復。Human 決定要修的項目後自行處理。
 
-**Stage 8: Design Doc Consistency**
+> 設計文件一致性（Design Doc Consistency）和驗收條件核對由 `/vif-review` Stage 1 處理，不在 verify 範圍。
 
-派遣 `verifier` agent，以 spec.md 的 Section 4 引用為準，逐項驗證：
-
-- **API 一致性**：API 實作與 spec 引用的 `docs/api-specs/` 及 `openapi.yaml` 一致
-- **UI 一致性**：頁面實作與 spec 引用的 `docs/ui-specs/` 一致
-- **Schema 一致性**：DB model 與 spec 引用的 `docs/schema/` 一致
-- **行為一致性**：實作與 spec 引用的 `.feature` 一致（如有）
-- 無 breaking change（或已在 spec 中標註）
-
-> 若 spec 未引用任何設計文件，跳過此 stage。
-
-### Optional Stages 的啟用方式
+### Optional Stage 的啟用方式
 
 1. **CLAUDE.md 預設**（取消註解即啟用，預設不啟用）：
 ```markdown
 ### vif-verify 設定
 # - Code Quality: true
-# - Design Doc Consistency: true
 ```
 
 2. **執行時互動**（CLAUDE.md 未預設時詢問）：
 ```
-> Core stages 執行完畢。要執行額外檢核嗎？
->   A. Code Quality（Reuse + Quality + Efficiency）
->   B. Design Doc Consistency（對照 spec 引用的設計文件）
->   C. 全部
->   D. 不用
+> Core stages 執行完畢。要執行 Code Quality 檢核嗎？
+>   A. Yes（Reuse + Quality + Efficiency）
+>   B. 不用
 ```
 
 ## Tool Restrictions
@@ -124,7 +111,6 @@ Date: YYYY-MM-DD
 | Stage | Status | Details |
 |-------|--------|---------|
 | Code Quality | ✅/⚠️/⏭ | [N issues found] |
-| Design Doc | ✅/⚠️/⏭ | [consistency check result] |
 
 ## Issues
 [具體問題描述，含檔案位置和錯誤訊息]

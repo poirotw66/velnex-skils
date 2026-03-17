@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.1.3
+  version: 2.2.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -32,14 +32,31 @@ metadata:
 
 **Stage 1 未通過，不進入 Stage 2。**
 
-- [ ] 所有 .feature scenario 都有對應實作
-- [ ] 實作行為與 .feature 描述一致
-- [ ] spec.md 的技術設計被正確遵循
-- [ ] API 實作與 `docs/api-specs/` 一致（如有）
-- [ ] UI 實作與 `docs/ui-specs/` 一致（如有）
-- [ ] DB 實作與 `docs/schema/` 一致（如有）
+#### 1-1. 驗收條件核對
+
+讀取 spec.md Section 4 的驗收條件，逐條對照實作與測試結果：
+
+- [ ] 每一條驗收條件都有對應的實作
+- [ ] 每一條驗收條件都有對應的測試覆蓋（或 .feature scenario）
+- [ ] 測試確實驗證了驗收條件描述的行為（不只是形式上存在）
+
+> 產出逐條 PASS / FAIL 清單，FAIL 項目需說明原因。
+
+#### 1-2. 設計文件一致性
+
+以 spec.md Section 4 引用的設計文件為準，進行結構性與語意比對：
+
+- [ ] API 實作與 `docs/api-specs/` 一致（欄位、型別、狀態碼、業務邏輯）
+- [ ] UI 實作與 `docs/ui-specs/` 一致（元件、狀態、互動行為）
+- [ ] DB 實作與 `docs/schema/` 一致（表結構、欄位、關聯）
+- [ ] 實作行為與 `.feature` 描述一致（如有）
+- [ ] 無 breaking change（或已在 spec 中標註）
+
+#### 1-3. 範圍確認
+
 - [ ] 影響檔案與 spec.md 列表一致
 - [ ] 沒有超出 spec 範圍的變更（scope creep）
+- [ ] spec.md 的技術設計被正確遵循
 
 ### Stage 2: Code Quality
 

@@ -5,18 +5,35 @@ Your mission: ensure code matches the spec and meets quality standards.
 
 ## Two-Stage Review
 
-### Stage 1: Spec Compliance (do this FIRST)
+### Stage 1: Spec + Design Compliance (do this FIRST)
 
 **If Stage 1 fails, do NOT proceed to Stage 2.**
 
-Check each item:
+#### 1-1. Acceptance Criteria Check
 
-- [ ] spec.md 的涉及範圍被正確遵循
-- [ ] All .feature scenarios have corresponding implementation（如有 .feature）
-- [ ] API 實作與 spec 引用的 api-spec 一致（如有）
-- [ ] UI 實作與 spec 引用的 ui-spec 一致（如有）
-- [ ] DB 實作與 spec 引用的 schema 一致（如有）
+Read spec.md Section 4 acceptance criteria. Verify each one against implementation and tests:
+
+- [ ] Every acceptance criterion has corresponding implementation
+- [ ] Every acceptance criterion has test coverage (or .feature scenario)
+- [ ] Tests actually verify the described behavior (not just exist)
+
+> Produce a per-item PASS / FAIL list. For FAIL items, explain why.
+
+#### 1-2. Design Doc Consistency
+
+Using spec.md Section 4 referenced design docs, perform structural + semantic comparison:
+
+- [ ] API implementation matches `docs/api-specs/`（fields, types, status codes, business logic）
+- [ ] UI implementation matches `docs/ui-specs/`（components, states, interactions）
+- [ ] DB implementation matches `docs/schema/`（tables, columns, relations）
+- [ ] Implementation behavior matches `.feature` descriptions（如有）
+- [ ] No breaking changes（or explicitly noted in spec）
+
+#### 1-3. Scope Check
+
+- [ ] Changed files match spec.md scope list
 - [ ] No changes beyond spec scope (scope creep)
+- [ ] spec.md technical design was correctly followed
 - [ ] Task dependencies were respected
 
 ### Stage 2: Code Quality

@@ -88,7 +88,6 @@ your-project/
 ### vif-verify 設定
 
 # - Code Quality: true
-# - Design Doc Consistency: true
 ```
 
 ### 4. 初始化追蹤文件
