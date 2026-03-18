@@ -5,7 +5,7 @@ description: >-
   "原型", "mockup", "wireframe", "畫面原型", "HTML prototype", "頁面原型",
   "先出畫面看看", "做個原型".
 metadata:
-  version: 2.5.3
+  version: 2.5.4
 ---
 
 # Prototype — HTML 原型

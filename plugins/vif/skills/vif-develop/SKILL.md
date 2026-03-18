@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.5.3
+  version: 2.5.4
 ---
 
 # Develop — TDD 開發
@@ -144,7 +144,7 @@ For each task:
 
 1. 讀取任務的 `spec ref` 對應的設計文件（api-spec / ui-spec）和 `feature ref`（如有）
 2. 將規格轉化為測試程式碼（依測試策略決定層級）
-3. 執行測試，**確認失敗**（RED）
+3. 執行**目標測試檔案**，確認失敗（RED）。不要跑全部測試，不要用 `run_in_background`
 4. 驗證 RED 有效性：
    - ✅ 因功能不存在而失敗 → 正確的 RED
    - ❌ 因語法錯誤而失敗 → 修正後重試
@@ -171,8 +171,8 @@ test-writer 完成後，**在派遣 implementer 之前**，自行驗證：
 
 1. 讀取失敗的測試
 2. 寫**最小程式碼**讓測試通過
-3. 執行測試，**確認通過**（GREEN）
-4. 確認沒有破壞既有測試
+3. 執行**目標測試檔案**，確認通過（GREEN）。不要跑全部測試，不要用 `run_in_background`
+4. 跑相關測試確認沒有破壞既有功能（`npm test -- --related` 或等效指令）
 5. 報告 Status Code
 
 **Implementer Status Codes：**
