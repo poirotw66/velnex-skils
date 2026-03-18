@@ -49,6 +49,7 @@
 - [ ] 涉及的 schema 已撰寫（或由 Human 確認不需要）
 - [ ] openapi.yaml 已更新（如涉及 API）
 - [ ] Spec Section 4 的路徑已回填
+- [ ] 設計文件交叉比對通過（spec-auditor Pass 3）
 - [ ] 已 commit
 
 ### Develop → Verify

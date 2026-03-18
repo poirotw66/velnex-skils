@@ -1,7 +1,7 @@
 {
   "name": "vif",
   "description": "vif — AI-driven development flow with 14 skills supporting both fully-automated and team-assisted modes",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "author": {
     "name": "Vito"
   }

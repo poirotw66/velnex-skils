@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.5.1
+  version: 2.5.2
 ---
 
 # Develop — TDD 開發
