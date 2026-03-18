@@ -55,7 +55,7 @@
 
 ## 6. 實作任務（可選）
 
-> 模式一（AI 驅動）：拆解為 2-5 分鐘粒度的任務
+> 模式一（AI 驅動）：拆解為小粒度的任務
 > 模式二（團隊分工）：可省略，由各 PG 自行拆解
 
 ### 依賴圖
@@ -64,11 +64,15 @@ task-1, task-2 [P] → task-3 (depends: 1,2) → task-4 (depends: 3)
 
 ### 任務清單
 
-1. [P] [任務描述] — 影響: [檔案] — ~[N] min
-2. [P] [任務描述] — 影響: [檔案] — ~[N] min
-3. [ ] [任務描述] — 依賴: 1, 2 — ~[N] min
+1. [P] [任務描述] — 影響: [檔案]
+   - spec ref: docs/api-specs/[module]/[name].md
+2. [P] [任務描述] — 影響: [檔案]
+   - spec ref: docs/ui-specs/[module]/[name].md
+3. [ ] [任務描述] — 依賴: 1, 2
+   - spec ref: docs/api-specs/[module]/[name].md
    - feature ref: features/[domain]/[name].feature#[scenario]
-4. [ ] [任務描述] — 依賴: 3 — ~[N] min
+4. [ ] [任務描述] — 依賴: 3
+   - spec ref: docs/ui-specs/[module]/[name].md
 
 ## 7. 驗收條件
 

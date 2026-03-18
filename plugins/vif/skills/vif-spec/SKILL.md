@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.2.1
+  version: 2.3.0
 ---
 
 # Spec — 技術規劃與影響分析
@@ -131,11 +131,23 @@ Spec 撰寫完成後，根據影響分析表，詢問 Human：
 1. 審查影響分析是否完整（有沒有漏掉的模組）
 2. 審查 .feature 與 spec 的一致性（如有 .feature）
 3. 審查 spec.md 技術可行性
-4. 最多 5 次自動迭代
 
-**Stage B — Human 審查：**
+有問題 → AI 修正 → 再次派遣 spec-reviewer 審查。最多 5 次迭代。
 
-自動審查通過後，呈現給 Human **完整產出**：
+**Stage B — 自我審視（AI 反思）：**
+
+spec-reviewer 通過後，交給 Human 之前，AI 重新讀一遍完整 spec 進行反思：
+
+1. **開發者視角** — 拿到這份 spec 能不能直接開工？任務清單的每個 task 都有明確的 spec ref 嗎？
+2. **邏輯連貫** — Section 4（涉及範圍）、Section 6（任務清單）、Section 7（驗收條件）三者是否對得上？
+3. **無模糊地帶** — 有沒有用詞模糊、可能被不同方式解讀的描述？
+4. **可驗證性** — 每一條驗收條件都能寫成測試嗎？無法測試的條件要改寫
+
+> 發現問題就直接修正，不需要再跑 spec-reviewer。重大修改才重跑。
+
+**Stage C — Human 審查：**
+
+自我審視完成後，呈現給 Human **完整產出**：
 - 影響分析表（新增 vs 修改）
 - spec.md（作戰計畫）
 - 已展開的設計文件（如有）

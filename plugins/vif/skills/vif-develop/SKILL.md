@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.2.1
+  version: 2.3.0
 ---
 
 # Develop — TDD 開發
@@ -14,17 +14,42 @@ metadata:
 
 ## Test Strategy
 
-開發前確認測試策略。可在 CLAUDE.md 預設，或開發時選擇：
+開發前依據驗收條件決定測試策略，不要盲選。
+
+### Step 1: 掃描驗收條件
+
+讀取 spec.md Section 4 的驗收條件，分類每一條：
+
+| 驗收條件特徵 | 需要的測試層級 |
+|-------------|---------------|
+| 純計算 / 邏輯判斷 / 資料轉換 | Unit |
+| 跨模組互動 / API 呼叫 / DB 操作 | Integration |
+| 使用者操作流程（點擊、拖放、頁面切換） | E2E |
+| 跨系統整合（IPC、sidecar、外部服務） | Integration 或 E2E |
+
+### Step 2: 產出測試策略
 
 ```
-> 本次開發的測試策略？
->   A. Unit Test（預設）
->   B. Unit + Integration Test（後端 API 建議）
->   C. Unit + E2E Test（前端關鍵流程建議）
->   D. Unit + Integration + E2E（Full Stack）
+> 根據驗收條件分析，建議的測試策略：
+>
+> Unit Test:
+>   - AC-1: [純邏輯] 轉檔格式驗證
+>   - AC-3: [資料轉換] 時間戳格式化
+>
+> Integration Test:
+>   - AC-4: [跨層] Rust command 透過 IPC 回傳結果到前端
+>
+> E2E Test:
+>   - AC-2: [使用者流程] 拖入音檔 → 轉錄 → 瀏覽
+>   - AC-5: [使用者流程] 儲存 → 關閉 → 重新開啟
+>
+> 確認這個策略？或要調整？
 ```
 
-**CLAUDE.md 預設方式：**
+### CLAUDE.md 預設方式
+
+如果專案有固定的測試策略，可在 CLAUDE.md 預設（跳過 Step 1-2）：
+
 ```markdown
 ### 測試策略
 - Backend: Unit + Integration
@@ -71,13 +96,13 @@ For each task:
 1. 讀取 spec.md 任務清單和依賴圖（如有）
 2. `[P]` 標記的任務可平行處理（用 Agent tool 並行派遣）
 3. 有依賴的任務必須等依賴完成
-4. 每完成一個任務，更新 progress.md
+4. 每完成一個任務，更新 progress.md（含 TDD 紀錄）
 
 ### RED Stage
 
 派遣 `test-writer` agent：
 
-1. 讀取任務對應的設計文件（api-spec / ui-spec / .feature scenario）
+1. 讀取任務的 `spec ref` 對應的設計文件（api-spec / ui-spec）和 `feature ref`（如有）
 2. 將規格轉化為測試程式碼（依測試策略決定層級）
 3. 執行測試，**確認失敗**（RED）
 4. 驗證 RED 有效性：
@@ -113,6 +138,20 @@ For each task:
 - 改善命名
 - 抽取 helper（僅在有明確重複時）
 - **保持測試通過**，不新增行為
+
+### Update progress.md
+
+每個任務完成後，記錄 TDD 執行痕跡：
+
+```markdown
+- [x] Task 1: 用戶拖入音檔觸發轉錄
+  - RED: `test/transcribe.test.ts` — 測試 onDrop 觸發 invoke('transcribe')，失敗：函式不存在 ✓
+  - GREEN: `src/lib/FileDropZone.svelte` — 加入 invoke 呼叫，測試通過 ✓
+  - REFACTOR: 抽取 handleFileDrop helper ✓
+  - Test: Unit ✓ | Integration ✓
+```
+
+> 沒有 RED/GREEN/REFACTOR 紀錄 = 沒有走 TDD。reviewer 會檢查。
 
 ### Lightweight Verification
 

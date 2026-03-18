@@ -51,9 +51,11 @@ Focus on items requiring human judgment (not automatable):
    - Are necessary comments present (and unnecessary ones absent)?
 
 3. **Test Quality**
-   - Do tests verify the right things?
-   - Are edge cases covered (as defined in .feature or spec)?
+   - Do tests verify the right things (behavior, not implementation)?
+   - Are edge cases covered (as defined in design docs)?
    - Are tests maintainable and independent?
+   - No unnecessary mocks (only mock external services, time, random)
+   - Assertions are precise (not too loose, not too strict)
 
 4. **Intent Clarity**
    - Does the code clearly express "why it does this"?

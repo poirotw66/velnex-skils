@@ -89,6 +89,7 @@ Check:
 - No leftover debug code (console.log, print, debugger)
 - No commented-out code
 - No hardcoded secrets or credentials
+- progress.md 的每個 task 都有 RED/GREEN/REFACTOR 紀錄（沒有紀錄 → WARN）
 
 ## 不在本 agent 範圍內
 
