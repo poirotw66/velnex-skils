@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 2.5.2
+  version: 2.5.3
 ---
 
 # API Spec — API 規格 + OpenAPI + DB Schema
@@ -97,6 +97,18 @@ metadata:
 - 回填 Spec Section 4 的 ApiSpec/Schema 路徑（如有 Spec）
 - **commit**（`docs: add/update api-spec [module]/[domain]`）
 
+### Step 6: 設計文件交叉比對（自動）
+
+回填路徑後，檢查 Spec Section 4 是否還有「待展開」項目：
+
+- **還有待展開** → 結束，等其他設計文件完成
+- **全部到齊** → 派遣 `spec-auditor`（僅 Pass 3）做交叉比對：
+  - api-spec 欄位 vs schema 欄位
+  - ui-spec 資料來源 vs api-spec response
+  - spec.md 描述 vs 設計文件實際內容
+  - 通過 → 報告「設計文件交叉比對通過，所有設計文件已就緒」
+  - 有問題 → 列出問題，修正後重跑
+
 **存放位置：**
 - API Spec：`docs/api-specs/[module]/[domain]/[name].md`
 - OpenAPI：`docs/api-specs/[module]/openapi.yaml`
@@ -111,3 +123,4 @@ metadata:
 - [ ] Spec 的 ApiSpec/Schema 欄位已回填（如有 Spec）
 - [ ] Human 已確認
 - [ ] 已 commit
+- [ ] 設計文件交叉比對通過（如為最後一份設計文件）

@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 2.5.2
+  version: 2.5.3
 ---
 
 # UI Spec — 頁面規格
@@ -57,6 +57,18 @@ metadata:
 - 回填 Spec Section 4 的 UISpec 路徑（如有 Spec）
 - **commit**（`docs: add/update ui-spec [module]/[page]`）
 
+### Step 4: 設計文件交叉比對（自動）
+
+回填路徑後，檢查 Spec Section 4 是否還有「待展開」項目：
+
+- **還有待展開** → 結束，等其他設計文件完成
+- **全部到齊** → 派遣 `spec-auditor`（僅 Pass 3）做交叉比對：
+  - api-spec 欄位 vs schema 欄位
+  - ui-spec 資料來源 vs api-spec response
+  - spec.md 描述 vs 設計文件實際內容
+  - 通過 → 報告「設計文件交叉比對通過，所有設計文件已就緒」
+  - 有問題 → 列出問題，修正後重跑
+
 **存放位置：** `docs/ui-specs/[module]/[page]/[name].md`
 
 ## Exit Criteria
@@ -66,3 +78,4 @@ metadata:
 - [ ] Spec 的 UISpec 欄位已回填（如有 Spec）
 - [ ] Human 已確認
 - [ ] 已 commit
+- [ ] 設計文件交叉比對通過（如為最後一份設計文件）

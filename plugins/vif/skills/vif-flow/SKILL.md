@@ -6,7 +6,7 @@ description: >-
   "哪個階段", "下一步", "flow overview", "流程總覽", "init", "初始化",
   "setup", "專案設定", "對齊結構", "align structure".
 metadata:
-  version: 2.5.2
+  version: 2.5.3
 ---
 
 # vif — AI-Driven Development Flow
