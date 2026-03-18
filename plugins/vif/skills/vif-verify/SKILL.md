@@ -5,7 +5,7 @@ description: >-
   "verification", "pipeline", "驗證流水線", "跑驗證", "品質檢查",
   "build check", "pre-review check".
 metadata:
-  version: 2.4.5
+  version: 2.5.0
 ---
 
 # Verify — 自動化驗證

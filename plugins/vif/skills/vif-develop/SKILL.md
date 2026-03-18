@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.4.5
+  version: 2.5.0
 ---
 
 # Develop — TDD 開發
@@ -268,8 +268,13 @@ feat: implement login failure lockout (spec-001)
 
 依照統一的 Escalation Protocol（見 `/vif-flow`）：
 
-- 第 1-2 次失敗：AI 嘗試替代方案
-- 第 3 次失敗：產出 Escalation Report，交由 Human
+**方案性失敗（`BLOCKED`）：**
+- 第 1-2 次：AI 嘗試替代方案
+- 第 3 次：產出 Escalation Report，交由 Human
+
+**系統性失敗（`BLOCKED_BY_ENV` / `BLOCKED_BY_SPEC`）：**
+- 立即 escalate，不重試（重試也不會解決）
+- 例如：缺少 dependency、spec 自相矛盾、測試框架未安裝
 
 ## TDD Exceptions
 

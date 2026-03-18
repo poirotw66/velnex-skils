@@ -200,7 +200,9 @@ Report one of these when done:
 | `RED_VALID` | Test exists and fails for the right reason | Proceed to RED→GREEN Gate |
 | `RED_INVALID` | Test fails for wrong reason (syntax, import, etc.) | Fix and retry |
 | `NEEDS_CONTEXT` | Design doc insufficient to write test | Request clarification |
-| `BLOCKED` | Cannot proceed | Escalate |
+| `BLOCKED` | Approach failure, might work differently | Retry with alternative (up to 3) |
+| `BLOCKED_BY_ENV` | Missing test framework, dependency, or tool | Immediate escalate, no retry |
+| `BLOCKED_BY_SPEC` | Spec contradiction or untestable requirement | Immediate escalate, no retry |
 
 ## Output Format
 

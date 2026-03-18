@@ -81,7 +81,9 @@ Report one of these when done:
 | `DONE` | Task complete, all tests pass | Proceed to next task |
 | `DONE_WITH_CONCERNS` | Complete but has concerns | Log concerns, proceed |
 | `NEEDS_CONTEXT` | Need more information | Provide context, retry |
-| `BLOCKED` | Cannot proceed | Escalate to Human |
+| `BLOCKED` | Approach failure, might work differently | Retry with alternative (up to 3) |
+| `BLOCKED_BY_ENV` | Missing dependency, tool, or infra | Immediate escalate, no retry |
+| `BLOCKED_BY_SPEC` | Spec contradiction or impossible requirement | Immediate escalate, no retry |
 
 ## Self-Review Before Reporting DONE
 

@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 2.4.5
+  version: 2.5.0
 ---
 
 # UI Spec — 頁面規格

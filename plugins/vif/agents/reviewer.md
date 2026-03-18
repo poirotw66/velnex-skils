@@ -80,6 +80,7 @@ Do not repeat what Phase 3 automation already covers:
 - Type errors (covered by Stage 2)
 - Build failures (covered by Stage 1)
 - Test failures (covered by Stage 4)
+- Code Reuse / Efficiency (covered by `/simplify` if it was run in Phase 3)
 
 Focus on what automation cannot catch.
 

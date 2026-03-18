@@ -6,7 +6,7 @@ description: >-
   "哪個階段", "下一步", "flow overview", "流程總覽", "init", "初始化",
   "setup", "專案設定", "對齊結構", "align structure".
 metadata:
-  version: 2.4.5
+  version: 2.5.0
 ---
 
 # vif — AI-Driven Development Flow
@@ -308,10 +308,15 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 所有 skill 統一的 escalation 規則：
 
-### 失敗重試（所有 skill）
+### 方案性失敗（`BLOCKED`）
 
 - 第 1-2 次失敗：AI 嘗試替代方案
 - 第 3 次失敗：產出 Escalation Report，交由 Human
+
+### 系統性失敗（`BLOCKED_BY_ENV` / `BLOCKED_BY_SPEC`）
+
+- 立即 escalate，不重試
+- 環境問題（缺少 dependency / 工具未安裝）或規格問題（spec 自相矛盾 / 不可能的需求）重試也不會解決
 
 ### 迭代改善（spec-auditor）
 
