@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -36,9 +36,19 @@ metadata:
 - [ ] Phase 3 Verification Report 為 PASS（或 WARN 已接受）
 - [ ] 所有測試通過
 
+## Guideline 注入
+
+派遣 reviewer agent 前，使用 `/vif-guideline` 取得與此次變更相關的 guideline：
+
+- 涉及後端 → context = `api-spec`
+- 涉及前端 → context = `ui-spec`
+- 涉及 DB → context = `schema`
+
+將取得的 guideline 內容注入 reviewer dispatch prompt。
+
 ## Two-Stage Review
 
-派遣 `reviewer` agent：
+派遣 `reviewer` agent（含相關 guideline）：
 
 ### Stage 1: Spec + Design Compliance（先做）
 
@@ -112,7 +122,7 @@ Review 發現問題
   → 回 Phase 2 修復
   → 重跑 Phase 3 Verify（完整 pipeline）
   → 重跑 Phase 4 Review
-  → 最多 3 次循環，超過 escalate
+  → 最多 3 次循環，超過產出 Escalation Report（見 /vif-flow）
 ```
 
 ## Exit Criteria

@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # Develop — TDD 開發
@@ -67,8 +67,14 @@ metadata:
               └─▶ Implementation
 ```
 
-- 有 .feature → 從 scenario 驅動外層測試，再往內推進
-- 無 .feature → 從 API Spec / UI Spec 的驗收條件驅動測試
+**測試來源優先順序（當多個來源並存時）：**
+
+1. `.feature` scenario — 最優先，行為層級的規格
+2. `spec.md` 驗收條件 — 次之，驗收層級的規格
+3. `api-spec` / `ui-spec` — 設計層級的細節
+
+> 有 .feature → 從 scenario 驅動外層測試，再往內推進。
+> 無 .feature → 從 spec.md 驗收條件或 api-spec / ui-spec 驅動。
 
 ## Workspace
 
@@ -88,6 +94,20 @@ metadata:
 
 - [ ] spec.md 已 approved（或已有明確的開發任務）
 - [ ] **設計文件全部展開** — 讀取 spec.md Section 4 涉及範圍，確認 UISpec / ApiSpec / Schema 欄位都有路徑（不能有「待展開」）。如有待展開，提示先完成設計文件再開始開發。
+- [ ] **掃描 Guideline** — 使用 `/vif-guideline` 掃描可用的 guideline
+
+## Guideline 注入
+
+每個 task dispatch agent 前，使用 `/vif-guideline` 取得與 task 相關的 guideline：
+
+- task 的 `spec ref` 為 `api-spec` → context = `api-spec`
+- task 的 `spec ref` 為 `ui-spec` → context = `ui-spec`
+- task 的 `spec ref` 為 `schema` → context = `schema`
+- test-writer → 額外加入 context = `testing`
+
+將取得的 guideline 內容注入 agent dispatch prompt。
+
+> 解析規則、匹配邏輯、CLAUDE.md 映射 → 見 `/vif-guideline`。
 
 ## Core Loop
 
@@ -161,8 +181,23 @@ test-writer 完成後，**在派遣 implementer 之前**，自行驗證：
 |------|------|---------|
 | `DONE` | 任務完成，測試通過 | 進入 REFACTOR |
 | `DONE_WITH_CONCERNS` | 完成但有疑慮 | 記錄疑慮，進入 REFACTOR |
-| `NEEDS_CONTEXT` | 需要更多上下文 | 補充上下文後重試 |
+| `NEEDS_CONTEXT` | 需要更多上下文 | 見下方反饋迴路 |
 | `BLOCKED` | 無法繼續 | Escalate |
+
+### Implementer → Test-Writer 反饋迴路
+
+當 implementer 回傳 `NEEDS_CONTEXT` 且問題源自測試本身（邊界條件不清、mock 設定有誤、測試假設不合理）：
+
+```
+implementer NEEDS_CONTEXT
+  → 分析問題是否與測試相關
+    ├── 是（測試問題）→ 重新派遣 test-writer，附上 implementer 的回饋，修改測試
+    │                   → 重跑 RED → GREEN Gate
+    │                   → 重新派遣 implementer
+    └── 否（缺少上下文）→ 補充 context 後重試 implementer
+```
+
+> 反饋迴路最多 1 次。第 2 次 NEEDS_CONTEXT → escalate 給 Human。
 
 ### REFACTOR Stage
 
@@ -231,12 +266,10 @@ feat: implement login failure lockout (spec-001)
 
 ### Escalation
 
+依照統一的 Escalation Protocol（見 `/vif-flow`）：
+
 - 第 1-2 次失敗：AI 嘗試替代方案
-- 第 3 次失敗：產出 Escalation Report，交由 Human 決定：
-  - a. 提供提示讓 AI 重試
-  - b. Human 手動修復
-  - c. 調整 spec / task 拆分
-  - d. 標記 blocked，跳過
+- 第 3 次失敗：產出 Escalation Report，交由 Human
 
 ## TDD Exceptions
 

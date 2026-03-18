@@ -6,7 +6,7 @@ description: >-
   "哪個階段", "下一步", "flow overview", "流程總覽", "init", "初始化",
   "setup", "專案設定", "對齊結構", "align structure".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # vif — AI-Driven Development Flow
@@ -25,8 +25,12 @@ metadata:
 AI 為主力開發，Human 為審查角色。一人驅動完整流程。
 
 ```
-/vif-arch + /vif-uiux → /vif-prd → /vif-bdd → /vif-spec → /vif-prototype(可選) → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
+/vif-arch + /vif-uiux → /vif-prd → /vif-prototype(可選) → /vif-bdd → /vif-spec → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
 ```
+
+> `/vif-prototype` 可在 PRD 後或 Spec 後使用：
+> - PRD 後：探索視覺概念，幫助釐清需求再進入 Spec
+> - Spec 後：確認規格的畫面呈現，再進入 api-spec / ui-spec
 
 ### 模式二：輔助自動化（企業團隊）
 
@@ -215,6 +219,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 | 驗證 | `/vif-verify` | 自動化驗證（Core + Optional） |
 | 審查 | `/vif-review` | 程式碼審查（合規 + 品質） |
 | 收尾 | `/vif-close` | 文件同步 + 完成檢查清單 |
+| 規範 | `/vif-guideline` | 專案規範解析（被其他 skill 引用） |
 
 ## Core Principles
 
@@ -227,11 +232,30 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 ## Human Intervention Points
 
-| Gate | Human 行為 | 說明 |
-|------|-----------|------|
-| PRD → Spec | Approve PRD | 確認問題定義與方向 |
-| Spec → Develop | Approve Spec | 確認涉及範圍 + 設計文件 |
-| Review → Close | Approve Code | 最終審查 |
+### Approval Gates（必須 approve 才能進入下一階段）
+
+| Gate | Skill | Human 行為 |
+|------|-------|-----------|
+| PRD → Spec | `/vif-prd` | Approve PRD |
+| Spec → Develop | `/vif-spec` | Approve Spec |
+| Review → Close | `/vif-review` | Approve Code |
+
+### 互動點（需要 Human 回應）
+
+| # | 時機 | Skill | 內容 |
+|---|------|-------|------|
+| 1 | 架構討論 | `/vif-arch` | 討論技術選型 |
+| 2 | 設計基礎 | `/vif-uiux` | 逐項討論色系、字型等 |
+| 3 | BDD Discovery | `/vif-bdd` | 解決 Question、確認 Example |
+| 4 | Spec 展開選擇 | `/vif-spec` | 選擇展開哪些設計文件 |
+| 5 | 原型範圍 | `/vif-prototype` | 確認要做原型的頁面 |
+| 6 | 原型確認 | `/vif-prototype` | 看畫面、給回饋 |
+| 7 | API Spec 確認 | `/vif-api-spec` | 確認 API 規格 |
+| 8 | UI Spec 確認 | `/vif-ui-spec` | 確認頁面規格 |
+| 9 | 測試策略 | `/vif-develop` | 確認測試策略 |
+| 10 | WARN 評估 | `/vif-verify` | 評估 WARN 要修還是記錄理由 |
+| 11 | TDD 例外 | `/vif-develop` | 確認是否可不走 TDD |
+| 12 | Escalation | `/vif-develop` | 3 次失敗後 Human 決定 |
 
 ## Documents
 
@@ -282,8 +306,37 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 ## Escalation Protocol
 
-1. **失敗 1-2 次**：AI 嘗試替代方案
-2. **失敗 3 次**：產出 Escalation Report，交由 Human
+所有 skill 統一的 escalation 規則：
+
+### 失敗重試（所有 skill）
+
+- 第 1-2 次失敗：AI 嘗試替代方案
+- 第 3 次失敗：產出 Escalation Report，交由 Human
+
+### 迭代改善（spec-auditor）
+
+- spec-auditor 審查 → AI 修正 → 重新審查，最多 5 次迭代
+- 這是改善 loop，不是失敗重試，性質不同
+
+### Escalation Report 格式
+
+```
+# Escalation Report
+
+## 問題描述
+[具體問題，不是「卡住了」]
+
+## 已嘗試方案
+1. [方案 A] → [結果]
+2. [方案 B] → [結果]
+3. [方案 C] → [結果]
+
+## 建議選項
+- a. [提示讓 AI 重試]
+- b. [Human 手動處理]
+- c. [調整 spec / task]
+- d. [標記 blocked，跳過]
+```
 
 ## Model Selection
 
@@ -295,3 +348,4 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 詳細 Phase Transition Gates 見 `references/phase-gates.md`。
 專案設定（新專案 / 既有專案對齊）見 `references/project-setup.md`。
+Agent Dispatch 標準格式見 `references/dispatch-contract.md`。

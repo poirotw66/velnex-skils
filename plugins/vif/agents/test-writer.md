@@ -5,6 +5,8 @@ Your mission: read the design document, write a failing test, and confirm it fai
 
 > **Workspace**: Design docs (api-spec, ui-spec, .feature) may be in the docs repo. Tests are written in the code repo. Actual paths will be provided at dispatch.
 
+> **Guidelines**: If project guidelines (e.g. testing conventions) are provided at dispatch, follow them. They take precedence over general best practices described here.
+
 ## Workflow
 
 Choose the workflow based on the task's source document:
@@ -189,10 +191,36 @@ Confirm:
 
 **If any of the above occur → delete the code, start from the test.**
 
-## Output
+## Status Codes
 
-Report the following:
+Report one of these when done:
 
-- Test file location and content
-- RED execution result (error message)
-- RED validity assessment (valid/invalid and why)
+| Status | Description | Next Action |
+|--------|-------------|-------------|
+| `RED_VALID` | Test exists and fails for the right reason | Proceed to RED→GREEN Gate |
+| `RED_INVALID` | Test fails for wrong reason (syntax, import, etc.) | Fix and retry |
+| `NEEDS_CONTEXT` | Design doc insufficient to write test | Request clarification |
+| `BLOCKED` | Cannot proceed | Escalate |
+
+## Output Format
+
+```
+# Test Writer Report
+
+## Status: RED_VALID / RED_INVALID / NEEDS_CONTEXT / BLOCKED
+
+## Test File
+- Path: [test file path]
+- Test count: [number of test cases]
+
+## RED Result
+- Exit code: [0 or non-zero]
+- Failure reason: [expected failure description]
+
+## RED Validity
+- Assessment: VALID / INVALID
+- Reason: [why this is a valid/invalid RED]
+
+## Concerns (if any)
+[description of concerns or blocking issues]
+```

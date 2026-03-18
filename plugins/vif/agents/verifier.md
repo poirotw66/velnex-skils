@@ -76,14 +76,20 @@ Record:
 Collect all changes from this development cycle and review content quality.
 
 ```bash
-# 1. Committed changes (compared to main branch)
-git diff main...HEAD --stat
-git diff main...HEAD
+# 0. Detect default branch (check CLAUDE.md for override, or auto-detect)
+DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+[ -z "$DEFAULT_BRANCH" ] && DEFAULT_BRANCH="main"
+
+# 1. Committed changes (compared to default branch)
+git diff $DEFAULT_BRANCH...HEAD --stat
+git diff $DEFAULT_BRANCH...HEAD
 
 # 2. Uncommitted changes (staged + unstaged)
 git diff HEAD --stat
 git diff HEAD
 ```
+
+> If CLAUDE.md specifies `default-branch`, use that instead of auto-detection.
 
 > Combine both to get the full change scope. Uncommitted files are not a problem (commit timing is decided by the user).
 
@@ -92,6 +98,20 @@ Check:
 - No commented-out code
 - No hardcoded secrets or credentials
 - Every task in progress.md has RED/GREEN/REFACTOR records (missing records → WARN)
+
+### Stage 6: Dependency Audit
+
+```bash
+npm audit               # Node.js
+cargo audit             # Rust (if cargo-audit installed)
+pip-audit               # Python (if pip-audit installed)
+```
+
+> Only run audit commands that are available in the project. Skip gracefully if the tool is not installed.
+
+Record:
+- Number of known vulnerabilities by severity (critical/high/medium/low)
+- Packages affected
 
 ## Out of Scope
 
@@ -119,7 +139,16 @@ Date: YYYY-MM-DD
 | Diff Review | ✅/❌ | [N files changed] |
 
 ## Issues
-[Specific problem descriptions with file locations and error messages]
+
+For each issue, use this structured format:
+
+| # | Severity | Stage | Category | File | Description | Auto-fixable |
+|---|----------|-------|----------|------|-------------|-------------|
+| 1 | ❌ FAIL | Lint | F541 | src/cli.py:175 | f-string without placeholders | Yes |
+| 2 | ⚠️ WARN | Build | dead_code | src/commands.rs | 20 unused function warnings | No |
+| 3 | ⚠️ WARN | Diff | tdd_record | progress.md | Task 3 missing RED/GREEN/REFACTOR | No |
+
+> Structured fields help vif-verify evaluate each WARN with enough context.
 
 ## Verdict
 READY / NOT READY for Code Review

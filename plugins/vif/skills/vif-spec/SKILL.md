@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # Spec — 技術規劃與影響分析
@@ -58,7 +58,7 @@ Step 1            Step 2              Step 3             Step 4
 
 1. 讀取 PRD + Figma + .feature（如有）
 2. **讀取既有程式碼** — 瀏覽 codebase，了解現有架構、既有的預設值、資料結構、生命週期
-3. **讀取相關文件** — 架構文件（ADR）、其他 spec、guideline
+3. **讀取相關文件** — 架構文件（ADR）、其他 spec、使用 `/vif-guideline` 取得相關規範
 4. 掃描現有設計文件：
    - `docs/api-specs/` — 既有 API 設計
    - `docs/ui-specs/` — 既有頁面設計
@@ -136,24 +136,24 @@ Spec 撰寫完成後，根據影響分析表，詢問 Human：
 
 **Stage A — 自動審查（Spec Reviewer subagent）：**
 
-派遣 `spec-reviewer` agent：
+派遣 `spec-auditor` agent：
 
 1. 審查影響分析是否完整（有沒有漏掉的模組）
 2. 審查 .feature 與 spec 的一致性（如有 .feature）
 3. 審查 spec.md 技術可行性
 
-有問題 → AI 修正 → 再次派遣 spec-reviewer 審查。最多 5 次迭代。
+有問題 → AI 修正 → 再次派遣 spec-auditor 審查。最多 5 次迭代。
 
 **Stage B — 自我審視（AI 反思）：**
 
-spec-reviewer 通過後，交給 Human 之前，AI 重新讀一遍完整 spec 進行反思：
+spec-auditor 通過後，交給 Human 之前，AI 重新讀一遍完整 spec 進行反思：
 
 1. **開發者視角** — 拿到這份 spec 能不能直接開工？任務清單的每個 task 都有明確的 spec ref 嗎？
 2. **邏輯連貫** — Section 4（涉及範圍）、Section 6（任務清單）、Section 7（驗收條件）三者是否對得上？
 3. **無模糊地帶** — 有沒有用詞模糊、可能被不同方式解讀的描述？
 4. **可驗證性** — 每一條驗收條件都能寫成測試嗎？無法測試的條件要改寫
 
-> 發現問題就直接修正，不需要再跑 spec-reviewer。重大修改才重跑。
+> 發現問題就直接修正，不需要再跑 spec-auditor。重大修改才重跑。
 
 **Stage C — Human 審查：**
 

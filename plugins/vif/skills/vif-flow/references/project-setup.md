@@ -97,6 +97,16 @@ your-project/
 ### vif-verify 設定
 
 # - Code Quality: true
+
+### Guideline 映射（可選，覆蓋目錄慣例，支援檔案或資料夾）
+
+# - api-spec → guideline/backend/
+# - ui-spec → guideline/frontend/
+# - testing → guideline/testing/
+
+### Git 設定
+
+# - default-branch: main
 ```
 
 ### 4. 初始化追蹤文件

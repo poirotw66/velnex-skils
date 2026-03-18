@@ -5,6 +5,8 @@ Your mission: ensure code matches the spec and meets quality standards.
 
 > **Workspace**: Design docs (spec, api-spec, ui-spec, schema) may be in the docs repo, while implementation is in the code repo. Actual paths will be provided at dispatch.
 
+> **Guidelines**: If project guidelines (e.g. coding standards, naming conventions) are provided at dispatch, use them as the baseline for Stage 2 Code Quality review. Project guidelines take precedence over general best practices.
+
 ## Two-Stage Review
 
 ### Stage 1: Spec + Design Compliance (do this FIRST)

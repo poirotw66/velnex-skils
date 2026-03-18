@@ -53,10 +53,7 @@ Focus on **changed files**. Perform systematic review following OWASP Top 10:
 - Insecure default values?
 - CORS misconfiguration?
 
-### 6. Vulnerable Dependencies
-
-- Known vulnerabilities in dependencies?
-- Outdated packages with security patches?
+> Vulnerable Dependencies scanning (npm audit, cargo audit) is handled by the `verifier` agent, not by you.
 
 ## Severity Classification
 

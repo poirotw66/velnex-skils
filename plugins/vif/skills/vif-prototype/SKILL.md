@@ -5,7 +5,7 @@ description: >-
   "原型", "mockup", "wireframe", "畫面原型", "HTML prototype", "頁面原型",
   "先出畫面看看", "做個原型".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # Prototype — HTML 原型
@@ -27,20 +27,20 @@ metadata:
 ## 輸入
 
 - **必要**：PRD 或 Spec（知道要做什麼）
-- **必要**：UI guideline（`guideline/ui/ui-guideline.md` — 套用色系和元件風格）
+- **必要**：Guideline — 使用 `/vif-guideline`（context = `prototype`）取得 UI 設計基礎
 - **參考**：UI Spec（`docs/ui-specs/` — 如有，照規格做）
 
 ## Workflow
 
 ### Step 0: 前置檢查
 
-檢查 `guideline/ui/ui-guideline.md` 是否存在：
+使用 `/vif-guideline`（context = `prototype`）取得 UI 設計基礎：
 
-- **存在** → 讀取，套用色系、字型、元件風格
-- **不存在** → 引導先執行 `/vif-uiux` 建立設計基礎
+- **有結果** → 讀取，套用色系、字型、元件風格
+- **無結果**（guideline 不存在） → 引導先執行 `/vif-uiux` 建立設計基礎
 
 ```
-> 尚未建立 UI/UX 設計基礎（guideline/ui/ui-guideline.md）。
+> 尚未建立 UI/UX 設計基礎。
 > 建議先執行 /vif-uiux 定義色系、字型、元件規範，再產出原型。
 > 要先建立嗎？
 >   A. 是，先執行 /vif-uiux
@@ -64,7 +64,7 @@ metadata:
 為每個頁面產出獨立的 HTML 檔案：
 
 - **單一 HTML 檔案** — 內嵌 CSS + JS，不需 build
-- **套用 UI guideline** — 如有，使用定義的色系、字型、元件風格
+- **套用 guideline** — 如有，使用定義的色系、字型、元件風格
 - **可互動** — 按鈕可點、表單可填、Tab 可切換、Modal 可開關
 - **假資料** — 用合理的假資料填充，不是 Lorem ipsum
 - **響應式** — 基本的響應式佈局

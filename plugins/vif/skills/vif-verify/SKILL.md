@@ -5,7 +5,7 @@ description: >-
   "verification", "pipeline", "驗證流水線", "跑驗證", "品質檢查",
   "build check", "pre-review check".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # Verify — 自動化驗證
@@ -43,23 +43,26 @@ metadata:
 
 ### Core Stages（必跑）
 
-派遣 `verifier` agent 執行 Stage 1-5：
+派遣 `verifier` agent 執行 Stage 1-6：
 
 ```
-Stage 1     Stage 2       Stage 3     Stage 4       Stage 5
-Build    →  Type Check  →  Lint     →  Test Suite →  Diff Review
+Stage 1     Stage 2       Stage 3     Stage 4       Stage 5         Stage 6
+Build    →  Type Check  →  Lint     →  Test Suite →  Diff Review →  Dependency Audit
 ```
 
-**Stage 6: Security Review**（必跑）
+Stage 6 (Dependency Audit) 由 verifier 執行 `npm audit` / `cargo audit` 等命令，檢查已知漏洞。
 
-派遣 `security-reviewer` agent，執行 OWASP Top 10 系統性檢查：
+**Stage 7: Security Code Review**（必跑）
+
+派遣 `security-reviewer` agent（Read only），對程式碼進行 OWASP Top 10 靜態檢查：
 
 1. **Injection** — SQL、Command、XSS、Path Traversal
 2. **Broken Authentication** — Session 管理、密碼處理
 3. **Sensitive Data Exposure** — 加密、Log 洩漏
 4. **Broken Access Control** — 授權檢查
 5. **Security Misconfiguration** — 硬編碼 secrets、debug 模式
-6. **Vulnerable Dependencies** — `npm audit` / `cargo audit`
+
+> security-reviewer 是 Read only，只做靜態程式碼審查。需要執行命令的檢查（npm audit 等）由 verifier 處理。
 
 **所有 stage 都執行，即使早期 stage 失敗也繼續。** 收集完整問題清單。
 
@@ -119,7 +122,8 @@ Date: YYYY-MM-DD
 | Lint | ✅/❌ | [N warnings, M errors] |
 | Test Suite | ✅/❌ | [N pass, M fail, coverage: X%] |
 | Diff Review | ✅/❌ | [N files changed] |
-| Security | ✅/❌/⏭ | [N vulnerabilities] |
+| Dependency Audit | ✅/❌ | [N vulnerabilities] |
+| Security Code Review | ✅/❌ | [N findings] |
 
 ## Optional Stage Results
 | Stage | Status | Details |
@@ -127,7 +131,11 @@ Date: YYYY-MM-DD
 | Code Quality | ✅/⚠️/⏭ | [N issues found] |
 
 ## Issues
-[具體問題描述，含檔案位置和錯誤訊息]
+
+| # | Severity | Stage | Category | File | Description | Auto-fixable |
+|---|----------|-------|----------|------|-------------|-------------|
+| 1 | ❌ FAIL | ... | ... | ... | ... | Yes/No |
+| 2 | ⚠️ WARN | ... | ... | ... | ... | Yes/No |
 
 ## WARN Evaluation
 [每個 WARN 項目的評估結果和理由]
@@ -175,7 +183,7 @@ WARN 不能直接跳過。每個 WARN 項目必須逐一評估：
 1. 記錄所有 FAIL stage 和具體錯誤
 2. 回到 develop 修復
 3. 修復後重新執行**完整** pipeline（不能只跑失敗的 stage）
-4. 最多 3 次修復循環，超過 escalate
+4. 最多 3 次修復循環，超過產出 Escalation Report（格式見 `/vif-flow` Escalation Protocol）
 
 > **為什麼要重跑完整 pipeline？** 修復 A 問題可能引入 B 問題。只跑失敗的 stage 會漏掉連帶影響。
 

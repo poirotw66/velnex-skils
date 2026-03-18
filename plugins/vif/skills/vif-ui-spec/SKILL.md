@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # UI Spec — 頁面規格
@@ -25,6 +25,7 @@ metadata:
 - **必要**：Figma 畫面（圖片 / MCP / 結構化描述）或 Prototype 確認結果
 - **參考**：Spec（`docs/specs/NNN-name/spec.md` — 如有）
 - **參考**：ApiSpec（`docs/api-specs/` — 如有，確認可用的 API）
+- **參考**：Guideline — 使用 `/vif-guideline`（context = `ui-spec`）取得 UI 設計基礎 + 前端規範
 
 ## Workflow
 
@@ -33,7 +34,8 @@ metadata:
 1. 讀取 Figma 畫面（圖片或 MCP）或 Prototype 確認結果
 2. 讀取相關 Spec 的頁面清單（如有）
 3. 讀取已有的 ApiSpec（確認可呼叫的 API）
-4. 讀取 `docs/ui-specs/` 下既有頁面（確認是否有需要修改的）
+4. **讀取 Guideline** — 使用 `/vif-guideline`（context = `ui-spec`）取得相關規範，後續撰寫時遵循
+5. 讀取 `docs/ui-specs/` 下既有頁面（確認是否有需要修改的）
 
 ### Step 2: 撰寫 UI Spec
 

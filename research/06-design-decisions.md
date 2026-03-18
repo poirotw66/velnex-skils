@@ -76,7 +76,7 @@ Phase 0: PRD → Phase 1: Spec → Phase 2: Develop → Phase 3: Verify → Phas
 | implementer | TDD 紀律：只看測試寫最小實作，Status Code 回報機制 |
 | verifier | 工具限制：Bash + Read only，防止驗證過程修改程式碼 |
 | security-reviewer | 工具限制：Read only，防止安全檢查時執行危險命令 |
-| spec-reviewer | Context 隔離：獨立於 spec 撰寫者的視角 |
+| spec-auditor | Context 隔離：獨立於 spec 撰寫者的視角 |
 | reviewer | Context 隔離：獨立於開發者的視角，Don't Trust the Report |
 
 ### 不需要 agent 的 skills

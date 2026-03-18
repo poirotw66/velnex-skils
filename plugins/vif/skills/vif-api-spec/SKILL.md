@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # API Spec — API 規格 + OpenAPI + DB Schema
@@ -28,6 +28,7 @@ metadata:
 - **參考**：Spec（`docs/specs/NNN-name/spec.md` — 如有）
 - **參考**：.feature（`docs/features/` — 如有，對應行為規格）
 - **參考**：既有 openapi.yaml 和 schema（確認不 breaking）
+- **參考**：Guideline — 使用 `/vif-guideline`（context = `api-spec`）取得後端設計規範
 
 ## Workflow
 
@@ -35,8 +36,9 @@ metadata:
 
 1. 讀取 PRD / Spec 的 API 和 DB 清單
 2. 讀取 Figma 畫面（確認需要什麼資料）
-3. 掃描現有 `docs/api-specs/[module]/`，判斷新增 vs 修改
-4. 掃描現有 `docs/schema/`，判斷新增 vs 修改
+3. **讀取 Guideline** — 使用 `/vif-guideline`（context = `api-spec`）取得相關規範，後續撰寫時遵循
+4. 掃描現有 `docs/api-specs/[module]/`，判斷新增 vs 修改
+5. 掃描現有 `docs/schema/`，判斷新增 vs 修改
 5. 列出影響清單：
 
 ```

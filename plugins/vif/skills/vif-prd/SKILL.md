@@ -5,7 +5,7 @@ description: >-
   "product requirement", "問題定義", "需求文件", "要做什麼", "why build",
   "寫 PRD", "新需求".
 metadata:
-  version: 2.4.0
+  version: 2.4.5
 ---
 
 # Phase 0 — PRD 產品探索
