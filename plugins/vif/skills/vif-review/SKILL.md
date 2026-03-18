@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -18,6 +18,18 @@ metadata:
 > 不要信任 implementer 或 verifier 的自我報告。
 > 聲明 X 已通過 → 你去確認 X 真的通過了。
 > 聲明行為符合 .feature → 你去讀程式碼確認行為真的符合。
+
+## Workspace
+
+> Multi-repo 下，所有 `docs/` 路徑透過 workspace 設定解析。見 `/vif-flow` Workspace Mode。
+
+| 操作 | 位置 |
+|------|------|
+| 讀取 spec.md、api-spec、ui-spec、schema、.feature | docs repo |
+| 讀取 implementation | code repo |
+| 執行 tests | code repo |
+
+> 從 docs repo 或 code repo 執行 review 都可以，AI 會依 workspace 設定解析路徑。
 
 ## Prerequisites
 

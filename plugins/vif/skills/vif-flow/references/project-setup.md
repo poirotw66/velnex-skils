@@ -1,6 +1,11 @@
 # Project Setup Guide
 
-## 使用 vif 設定新專案
+> Workspace 模式說明見 `/vif-flow` Workspace Mode section。
+> 本文件提供 Monorepo 和 Multi-Repo 的設定範例。
+
+---
+
+## Monorepo（預設）
 
 ### 1. 安裝 vif plugin
 
@@ -17,30 +22,34 @@ your-project/
 │   └── CLAUDE.md                  ← 專案規範 + vif 設定
 │
 ├── docs/
-│   ├── architecture/              ← ADR 架構決策記錄
-│   │   └── .gitkeep
-│   ├── features/                  ← BDD .feature（可選）
-│   │   └── .gitkeep
-│   ├── specs/                     ← 技術規劃（per-feature）
+│   ├── prd-NNN.md                 ← PRD 文件（per-feature）        [必要]
+│   ├── specs/                     ← 技術規劃（per-feature）        [必要]
 │   │   ├── specs-overview.md
-│   │   └── templates/
-│   ├── api-specs/                 ← API 設計（累積型，per-module）
-│   │   └── .gitkeep
-│   ├── ui-specs/                  ← UI 設計（累積型，per-page）
-│   │   └── .gitkeep
-│   ├── schema/                    ← DB Schema（累積型，per-domain）
-│   │   └── .gitkeep
-│   └── feature-map.md
+│   │   └── NNN-name/
+│   │       ├── spec.md
+│   │       └── progress.md
+│   ├── feature-map.md             ← 功能追蹤                       [必要]
+│   │
+│   ├── api-specs/                 ← API 設計（累積型，per-module）  [視需要]
+│   ├── ui-specs/                  ← UI 設計（累積型，per-page）     [視需要]
+│   ├── schema/                    ← DB Schema（累積型，per-domain） [視需要]
+│   ├── architecture/              ← ADR 架構決策記錄                [視需要]
+│   └── features/                  ← BDD .feature                   [視需要]
 │
-├── guideline/                     ← 開發規範（專案特定）
-│   └── .gitkeep
+├── guideline/                     ← 開發規範（專案特定）            [視需要]
 │
 └── src/
     └── ...
 ```
 
-> `docs/api-specs/`、`docs/ui-specs/`、`docs/schema/` 不是每個專案都需要。
-> 依專案性質選用即可。
+**目錄分類：**
+
+| 分類 | 說明 | 何時建立 |
+|------|------|---------|
+| **必要** | VIF 流程運作所需 | 專案 init 時建立 |
+| **視需要** | 使用對應 skill 時才需要 | 首次使用該 skill 時自動建立 |
+
+> 視需要的目錄不用預先建立。例如 `docs/api-specs/` 在第一次執行 `/vif-api-spec` 時才會建立。
 
 ### 3. 設定 .claude/CLAUDE.md
 
@@ -159,3 +168,135 @@ AI：讓我們從 /vif-prd 開始...
 > 我是 SA，需要根據 PRD-001 和 Figma 規劃技術 spec
 AI：讓我用 /vif-spec 來分析影響範圍...
 ```
+
+---
+
+## Multi-Repo 模式
+
+### 目錄結構
+
+```
+workspace/
+├── project-docs/                  ← docs repo
+│   ├── .claude/
+│   │   └── CLAUDE.md              ← workspace 設定 + vif 設定
+│   ├── docs/
+│   │   ├── prd-NNN.md             [必要]
+│   │   ├── specs/                 [必要]
+│   │   ├── feature-map.md         [必要]
+│   │   ├── api-specs/             [視需要]
+│   │   ├── ui-specs/              [視需要]
+│   │   ├── schema/                [視需要]
+│   │   ├── architecture/          [視需要]
+│   │   └── features/              [視需要]
+│   └── guideline/                 [視需要]
+│
+├── project-frontend/              ← frontend code repo
+│   ├── .claude/
+│   │   └── CLAUDE.md              ← workspace 設定 + 技術棧 + 測試策略
+│   ├── src/
+│   └── test/
+│
+└── project-backend/               ← backend code repo
+    ├── .claude/
+    │   └── CLAUDE.md              ← workspace 設定 + 技術棧 + 測試策略
+    ├── src/
+    └── test/
+```
+
+### 每個 Repo 的 CLAUDE.md 設定
+
+**docs repo（project-docs/.claude/CLAUDE.md）：**
+
+```markdown
+# Project Docs
+
+## vif Workspace
+
+| 角色 | 路徑 | 包含 |
+|------|------|------|
+| docs | . | docs/, guideline/ |
+| frontend | ../project-frontend | src/, test/ |
+| backend | ../project-backend | src/, test/ |
+
+當前 repo 角色: docs
+
+## AI-Driven Development Flow
+
+本專案採用 vif（multi-repo workspace）。
+
+### Skills
+（同 monorepo 的 skill 表格）
+```
+
+**frontend repo（project-frontend/.claude/CLAUDE.md）：**
+
+```markdown
+# Project Frontend
+
+## vif Workspace
+
+| 角色 | 路徑 | 包含 |
+|------|------|------|
+| docs | ../project-docs | docs/, guideline/ |
+| frontend | . | src/, test/ |
+| backend | ../project-backend | src/, test/ |
+
+當前 repo 角色: frontend
+
+## AI-Driven Development Flow
+
+本專案採用 vif（multi-repo workspace）。
+
+### 技術棧
+- 語言：TypeScript
+- 框架：Svelte 5
+- 測試：Vitest
+- 建構：Vite
+
+### 專案指令
+- Build: `npm run build`
+- Test: `npm test`
+- Lint: `npm run lint`
+- Type Check: `npx svelte-check`
+
+### 測試策略
+- Frontend: Unit + 關鍵流程 E2E
+```
+
+**backend repo（project-backend/.claude/CLAUDE.md）：**
+
+```markdown
+# Project Backend
+
+## vif Workspace
+
+| 角色 | 路徑 | 包含 |
+|------|------|------|
+| docs | ../project-docs | docs/, guideline/ |
+| frontend | ../project-frontend | src/, test/ |
+| backend | . | src/, test/ |
+
+當前 repo 角色: backend
+
+## AI-Driven Development Flow
+
+本專案採用 vif（multi-repo workspace）。
+
+### 技術棧
+- 語言：Python 3.11
+- 框架：FastAPI
+- 測試：pytest
+- 建構：uv
+
+### 專案指令
+- Build: `uv build`
+- Test: `uv run pytest`
+- Lint: `uv run ruff check`
+- Type Check: `uv run mypy .`
+
+### 測試策略
+- Backend: Unit + Integration
+```
+
+> 初始化追蹤文件（specs-overview、feature-map）只在 docs repo 建立。

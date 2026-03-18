@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # Develop — TDD 開發
@@ -70,6 +70,20 @@ metadata:
 - 有 .feature → 從 scenario 驅動外層測試，再往內推進
 - 無 .feature → 從 API Spec / UI Spec 的驗收條件驅動測試
 
+## Workspace
+
+> Multi-repo 下，所有 `docs/` 路徑透過 workspace 設定解析。見 `/vif-flow` Workspace Mode。
+
+| 操作 | 位置 |
+|------|------|
+| 讀取 spec.md、api-spec、ui-spec、.feature | docs repo |
+| 讀/寫 progress.md | docs repo |
+| 寫 test、寫 src | code repo（當前 repo） |
+| 執行 build、test、lint | code repo（當前 repo） |
+| git commit | 各自的 repo |
+
+> 多個 code repo 時，根據 task 的 `spec ref` 判斷目標 repo（api-spec → backend，ui-spec → frontend）。
+
 ## Prerequisites
 
 - [ ] spec.md 已 approved（或已有明確的開發任務）
@@ -77,10 +91,16 @@ metadata:
 
 ## Core Loop
 
+> **CRITICAL: 沒有失敗的測試，就不能寫 production code。**
+> 不可以跳過 RED 直接派遣 implementer。
+> 不可以先寫 code 再補 test。
+> 違反此規則 = 不是 TDD，產出的程式碼品質無法保證。
+
 ```
 For each task:
 ┌──────────────────────────────────────────────────┐
 │  1. RED       — test-writer 寫失敗測試           │
+│  ── GATE: 測試存在且失敗，才能進入 GREEN ──      │
 │  2. GREEN     — implementer 寫最小實作           │
 │  3. REFACTOR  — implementer 清理（保持綠燈）     │
 │  4. Verify    — 輕量驗證（build + typecheck）     │
@@ -110,6 +130,20 @@ For each task:
    - ❌ 因語法錯誤而失敗 → 修正後重試
    - ❌ 因 import 失敗而失敗 → 建立最小 stub 後重試
    - ❌ 測試直接通過 → 測試有 bug，重寫
+
+### RED → GREEN Gate
+
+test-writer 完成後，**在派遣 implementer 之前**，自行驗證：
+
+1. **測試檔案存在嗎？** — 用 Glob 或 Read 確認 test-writer 產出的測試檔案存在
+2. **測試確實失敗嗎？** — 用 Bash 執行測試，確認 exit code ≠ 0
+
+```
+兩者都確認 → 派遣 implementer
+任一不符   → 不往下走，回到 RED Stage 修正
+```
+
+> 這個 gate 由 vif-develop 自己執行，不是交給 AI 自律。每個 task 都必須過這個 gate。
 
 ### GREEN Stage
 

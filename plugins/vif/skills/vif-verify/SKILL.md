@@ -5,7 +5,7 @@ description: >-
   "verification", "pipeline", "驗證流水線", "跑驗證", "品質檢查",
   "build check", "pre-review check".
 metadata:
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # Verify — 自動化驗證
@@ -24,6 +24,20 @@ metadata:
 3. **閱讀** — 檢查完整輸出和退出代碼
 4. **驗證** — 輸出是否確認聲明？
 5. **只有之後** — 才能在報告中做出聲明
+
+## Workspace
+
+> Multi-repo 下，所有 `docs/` 路徑透過 workspace 設定解析。見 `/vif-flow` Workspace Mode。
+
+| 操作 | 位置 |
+|------|------|
+| 執行 build、test、lint、type check | code repo |
+| git diff | code repo |
+| 檢查 progress.md TDD 紀錄 | docs repo |
+| Security Review | code repo |
+
+> 多個 code repo 時，每個 code repo 各跑一次完整 pipeline。
+> 從 docs repo 執行 verify 時，需 cd 到 code repo 執行 commands。
 
 ## Pipeline 結構
 

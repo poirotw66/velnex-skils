@@ -38,16 +38,16 @@ async function retryOperation<T>(
 
 ## Verify GREEN — MANDATORY
 
-實作後**必須執行**，不能跳過：
+After implementing, you **must run tests** — do not skip:
 
 ```bash
 npm test path/to/test.test.ts
 ```
 
-確認：
+Confirm:
 - Test **passes**
 - Other tests **still pass**
-- Output pristine（no errors, warnings）
+- Output is clean (no errors, no warnings)
 
 **Test fails?** Fix code, not test.
 **Other tests fail?** Fix now.

@@ -5,12 +5,23 @@ description: >-
   "收尾", "結案", "wrap up", "finish", "done", "closing checklist",
   "merge ready".
 metadata:
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # Phase 5 — Close 完成
 
 確認所有工作項目完成，同步設計文件，更新追蹤文件，標記完成。
+
+## Workspace
+
+> Multi-repo 下，所有 `docs/` 路徑透過 workspace 設定解析。見 `/vif-flow` Workspace Mode。
+
+| 操作 | 位置 |
+|------|------|
+| Design Doc Sync（api-spec、ui-spec、schema） | docs repo |
+| 更新 progress.md、specs-overview、feature-map | docs repo |
+| 檢查 implementation 偏離 | code repo |
+| git commit | 各自的 repo |
 
 ## Prerequisites
 

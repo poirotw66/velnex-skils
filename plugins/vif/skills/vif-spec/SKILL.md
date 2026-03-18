@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # Spec — 技術規劃與影響分析
@@ -26,6 +26,16 @@ metadata:
 - Spec 回答「要做什麼、涉及哪些模組、怎麼分工」
 - 設計細節（API 邏輯、頁面互動、DB 欄位）交給 `/vif-api-spec` 和 `/vif-ui-spec`
 - **影響分析是核心** — 判斷哪些是新增、哪些是既有受影響的，比寫新東西更重要
+
+## Workspace
+
+> Multi-repo 下，所有 `docs/` 路徑透過 workspace 設定解析。見 `/vif-flow` Workspace Mode。
+
+| 操作 | 位置 |
+|------|------|
+| 讀/寫 PRD、spec、api-spec、ui-spec、schema、.feature | docs repo |
+| 讀取既有程式碼（影響分析） | code repo（可能多個） |
+| 讀取架構文件（ADR） | docs repo |
 
 ## 輸入
 
