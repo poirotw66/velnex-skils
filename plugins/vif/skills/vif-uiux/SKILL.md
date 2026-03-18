@@ -5,7 +5,7 @@ description: >-
   "design system", "設計系統", "色系", "color", "字型", "font", "佈局", "layout",
   "style guide", "風格指南", "UI guideline", "design token", "theme".
 metadata:
-  version: 2.5.0
+  version: 2.5.1
 ---
 
 # UI/UX — 設計基礎

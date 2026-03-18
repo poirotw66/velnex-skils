@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.5.0
+  version: 2.5.1
 ---
 
 # Spec — 技術規劃與影響分析
@@ -134,7 +134,7 @@ Spec 撰寫完成後，根據影響分析表，詢問 Human：
 
 ### Step 4: Review
 
-**Stage A — 自動審查（Spec Reviewer subagent）：**
+**Stage A — 自動審查（Spec Auditor subagent）：**
 
 派遣 `spec-auditor` agent：
 
