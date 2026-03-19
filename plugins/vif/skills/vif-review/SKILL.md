@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.5.4
+  version: 2.5.5
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -95,9 +95,11 @@ metadata:
 
 | 等級 | 說明 | 處理 |
 |------|------|------|
-| 🔴 Critical | 影響正確性或安全性 | 必須修復，回到 Phase 2 |
-| 🟡 Major | 影響可維護性或效能 | 應該修復 |
-| 🟢 Minor | 風格或偏好 | 可選修復，不阻塞 approve |
+| 🔴 Critical | 影響正確性、安全性、或 spec 明確要求但未實作 | 必須修復，回到 Phase 2 |
+| 🟡 Major | 影響可維護性或效能、或 spec 描述的行為與實作不完全一致 | 應該修復 |
+| 🟢 Minor | spec 未要求的改善建議（風格、偏好、最佳實踐） | 可選修復，不阻塞 approve |
+
+> **判斷原則：spec 有寫的 = 至少 🟡，spec 沒寫的建議 = 🟢。**
 
 ## Giving Feedback
 

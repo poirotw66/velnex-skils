@@ -101,9 +101,11 @@ For each finding:
 
 | Level | Criteria | Action Required |
 |-------|----------|----------------|
-| 🔴 Critical | Affects correctness or security | Must fix, back to Phase 2 |
-| 🟡 Major | Affects maintainability or performance | Should fix |
-| 🟢 Minor | Style or preference | Optional, doesn't block approve |
+| 🔴 Critical | Affects correctness, security, or spec-required feature not implemented | Must fix, back to Phase 2 |
+| 🟡 Major | Affects maintainability/performance, or spec behavior partially mismatched | Should fix |
+| 🟢 Minor | Improvements NOT required by spec (style, preference, best practice) | Optional, doesn't block approve |
+
+> **Rule: if the spec describes it, it's at least 🟡. Only suggestions beyond spec scope are 🟢.**
 
 ## Review Principles
 
