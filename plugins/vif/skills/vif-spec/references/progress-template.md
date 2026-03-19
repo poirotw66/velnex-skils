@@ -1,5 +1,22 @@
 # Spec-NNN: [功能名稱] — Progress
 
+## 設計文件
+
+| 類型 | 名稱 | 路徑 | 自審 (Pass 1+2) | 狀態 |
+|------|------|------|:---:|------|
+| Feature | [name].feature | docs/features/[domain]/[name].feature | — | 完成 |
+| ApiSpec | [API 名稱] | docs/api-specs/[module]/[domain]/[name].md | ⬜ | 待撰寫 |
+| Schema | [domain] | docs/schema/[domain].md | ⬜ | 待撰寫 |
+| UISpec | [頁面名稱] | docs/ui-specs/[module]/[page]/[name].md | ⬜ | 待撰寫 |
+
+### 交叉比對 (Pass 3)
+- [ ] spec-auditor Pass 3
+
+> **不需要展開設計文件時**，以下列格式取代上方表格：
+> ```
+> - [x] 不需要展開設計文件 — [原因說明，例如：Bug fix，直接修復既有邏輯]
+> ```
+
 ## 測試策略
 
 依據驗收條件分析：

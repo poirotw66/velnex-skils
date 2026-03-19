@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 2.5.5
+  version: 2.6.0
 ---
 
 # API Spec — API 規格 + OpenAPI + DB Schema
@@ -91,23 +91,32 @@ metadata:
 - Enum / 代碼表
 - Migration 紀錄
 
-### Step 5: 確認與 Commit
+### Step 5: 自我審查（Self-Review）
 
-- 呈現給 Human 確認
-- 回填 Spec Section 4 的 ApiSpec/Schema 路徑（如有 Spec）
-- **commit**（`docs: add/update api-spec [module]/[domain]`）
+撰寫完成後，**commit 之前**，派遣 `spec-auditor` 進行自我審查：
 
-### Step 6: 設計文件交叉比對（自動）
+**Dispatch Parameters:**
+- scope: `design-review`
+- targets: 本次撰寫/修改的 api-spec + schema 檔案路徑
 
-回填路徑後，檢查 Spec Section 4 是否還有「待展開」項目：
+**審查項目（Pass 1 + Pass 2）：**
+- 內部一致性：命名、值、描述 vs 表格
+- 完整性：欄位定義、錯誤映射、邊界條件
+- API 專屬 checklist：HTTP Status 合理性、Request/Response schema 完整性、命名慣例一致性
 
-- **還有待展開** → 結束，等其他設計文件完成
-- **全部到齊** → 派遣 `spec-auditor`（僅 Pass 3）做交叉比對：
-  - api-spec 欄位 vs schema 欄位
-  - ui-spec 資料來源 vs api-spec response
-  - spec.md 描述 vs 設計文件實際內容
-  - 通過 → 報告「設計文件交叉比對通過，所有設計文件已就緒」
-  - 有問題 → 列出問題，修正後重跑
+**結果處理：**
+- APPROVED → 進入 Step 6
+- NEEDS_REVISION → 依報告修正 → 重跑 spec-auditor（最多 3 次迭代）
+
+### Step 6: 確認、更新 Progress 與 Commit
+
+1. 呈現自我審查結果 + 文件內容給 Human 確認
+2. 回填 Spec Section 4 的 ApiSpec/Schema 路徑（如有 Spec）
+3. **更新 progress.md** — 將對應的 ApiSpec / Schema 列更新：
+   - 自審欄：`⬜` → `✓`
+   - 狀態欄：`待撰寫` → `完成`
+   - 路徑欄：填入實際路徑
+4. **commit**（`docs: add/update api-spec [module]/[domain]`）
 
 **存放位置：**
 - API Spec：`docs/api-specs/[module]/[domain]/[name].md`
@@ -120,7 +129,7 @@ metadata:
 - [ ] openapi.yaml 已更新
 - [ ] DB Schema 已撰寫/更新
 - [ ] 既有 API/Schema 的修改已標記
-- [ ] Spec 的 ApiSpec/Schema 欄位已回填（如有 Spec）
+- [ ] **自我審查通過（spec-auditor Pass 1+2）**
+- [ ] progress.md 已更新（ApiSpec / Schema 列標為完成 + 自審 ✓）
 - [ ] Human 已確認
 - [ ] 已 commit
-- [ ] 設計文件交叉比對通過（如為最後一份設計文件）

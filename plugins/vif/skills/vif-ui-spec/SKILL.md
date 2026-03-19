@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 2.5.5
+  version: 2.6.0
 ---
 
 # UI Spec — 頁面規格
@@ -51,23 +51,32 @@ metadata:
 **新增的頁面** → 建立新檔案
 **修改的頁面** → 更新既有檔案，標記變更處
 
-### Step 3: 確認與 Commit
+### Step 3: 自我審查（Self-Review）
 
-- 呈現給 Human 確認
-- 回填 Spec Section 4 的 UISpec 路徑（如有 Spec）
-- **commit**（`docs: add/update ui-spec [module]/[page]`）
+撰寫完成後，**commit 之前**，派遣 `spec-auditor` 進行自我審查：
 
-### Step 4: 設計文件交叉比對（自動）
+**Dispatch Parameters:**
+- scope: `design-review`
+- targets: 本次撰寫/修改的 ui-spec 檔案路徑
 
-回填路徑後，檢查 Spec Section 4 是否還有「待展開」項目：
+**審查項目（Pass 1 + Pass 2）：**
+- 內部一致性：命名、值、描述 vs 表格
+- 完整性：欄位定義、操作流程、生命週期
+- UI 專屬 checklist：每個欄位有資料來源？空狀態？錯誤狀態？Loading 狀態？權限控制？
 
-- **還有待展開** → 結束，等其他設計文件完成
-- **全部到齊** → 派遣 `spec-auditor`（僅 Pass 3）做交叉比對：
-  - api-spec 欄位 vs schema 欄位
-  - ui-spec 資料來源 vs api-spec response
-  - spec.md 描述 vs 設計文件實際內容
-  - 通過 → 報告「設計文件交叉比對通過，所有設計文件已就緒」
-  - 有問題 → 列出問題，修正後重跑
+**結果處理：**
+- APPROVED → 進入 Step 4
+- NEEDS_REVISION → 依報告修正 → 重跑 spec-auditor（最多 3 次迭代）
+
+### Step 4: 確認、更新 Progress 與 Commit
+
+1. 呈現自我審查結果 + 文件內容給 Human 確認
+2. 回填 Spec Section 4 的 UISpec 路徑（如有 Spec）
+3. **更新 progress.md** — 將對應的 UISpec 列更新：
+   - 自審欄：`⬜` → `✓`
+   - 狀態欄：`待撰寫` → `完成`
+   - 路徑欄：填入實際路徑
+4. **commit**（`docs: add/update ui-spec [module]/[page]`）
 
 **存放位置：** `docs/ui-specs/[module]/[page]/[name].md`
 
@@ -75,7 +84,7 @@ metadata:
 
 - [ ] 每個頁面的 UI Spec 已撰寫
 - [ ] 欄位、互動、API 呼叫都已定義
-- [ ] Spec 的 UISpec 欄位已回填（如有 Spec）
+- [ ] **自我審查通過（spec-auditor Pass 1+2）**
+- [ ] progress.md 已更新（UISpec 列標為完成 + 自審 ✓）
 - [ ] Human 已確認
 - [ ] 已 commit
-- [ ] 設計文件交叉比對通過（如為最後一份設計文件）

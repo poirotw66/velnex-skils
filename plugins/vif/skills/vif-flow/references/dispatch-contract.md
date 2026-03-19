@@ -44,7 +44,42 @@
 |-------|--------|---------|
 | test-writer | vif-develop | task_id, spec_ref, guideline(testing) |
 | implementer | vif-develop | task_id, test file path, guideline(coding) |
-| spec-auditor | vif-spec | spec.md path, design doc paths |
+| spec-auditor | vif-spec, vif-api-spec, vif-ui-spec, vif-develop | scope, targets, spec_ref (if available) |
 | reviewer | vif-review | spec.md path, design doc paths, guideline |
 | verifier | vif-verify | code repo path, progress.md path |
 | security-reviewer | vif-verify | changed files list |
+
+## spec-auditor Dispatch Parameters
+
+spec-auditor 支援參數化派遣，3 種 scope：
+
+- `design-review` — Pass 1+2，checklist 從 targets 檔案類型自動判斷
+- `cross-check` — Pass 3，設計文件交叉比對
+- `spec` — Pass 1+2+3，spec.md 完整審查
+
+```
+## Dispatch Context
+
+### Task（must）
+- scope: cross-check
+- targets:
+  - docs/api-specs/iam/auth/login.md
+  - docs/ui-specs/iam/login-page.md
+  - docs/schema/iam-auth.md
+
+### Spec Reference（should）
+- spec_ref: docs/specs/001-user-login/spec.md
+
+### Workspace（must if multi-repo）
+- docs_repo: /absolute/path/to/project-docs
+```
+
+**Scope 速查：**
+
+| 派遣者 | Scope | 時機 |
+|--------|-------|------|
+| vif-api-spec | `design-review` | 撰寫完成，commit 前 |
+| vif-ui-spec | `design-review` | 撰寫完成，commit 前 |
+| vif-develop | `cross-check` | Entry Gate，設計文件全部完成時 |
+| vif-spec | `spec` | spec.md 撰寫完成時（含 .feature 審查） |
+| Human（手動） | 任意 | 手動觸發 |

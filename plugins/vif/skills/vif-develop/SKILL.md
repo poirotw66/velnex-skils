@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.5.5
+  version: 2.6.0
 ---
 
 # Develop — TDD 開發
@@ -93,8 +93,29 @@ metadata:
 ## Prerequisites
 
 - [ ] spec.md 已 approved（或已有明確的開發任務）
-- [ ] **設計文件全部展開** — 讀取 spec.md Section 4 涉及範圍，確認 UISpec / ApiSpec / Schema 欄位都有路徑（不能有「待展開」）。如有待展開，提示先完成設計文件再開始開發。
+- [ ] **設計文件 Gate（讀 progress.md）** — 見下方 Entry Gate
 - [ ] **掃描 Guideline** — 使用 `/vif-guideline` 掃描可用的 guideline
+
+### Entry Gate: 設計文件檢查
+
+開始開發前，**必須**讀取 `progress.md` 的設計文件區塊並檢查：
+
+```
+讀取 progress.md 設計文件區塊
+├── 有跳過 checkbox 且已勾選 → ✅ 放行
+├── 有設計文件表 →
+│   ├── 有「待撰寫」→ ❌ 阻擋，列出缺少的文件，提示先完成
+│   ├── 有自審 ⬜ → ❌ 阻擋，列出未自審的文件
+│   ├── Pass 3 未勾選 → 派遣 spec-auditor 交叉比對：
+│   │     scope: cross-check
+│   │     targets: 表中所有已完成的設計文件路徑
+│   │     通過 → 勾選 Pass 3 checkbox，commit，繼續
+│   │     失敗 → 列出問題，阻擋開發
+│   └── 全部 ✓ + Pass 3 ✓ → ✅ 放行
+└── 無設計文件區塊 → ❌ 阻擋，回 vif-spec 補建 progress.md
+```
+
+> **不可跳過此 gate。** 設計文件是開發的施工藍圖，沒有藍圖不能開工。
 
 ## Guideline 注入
 

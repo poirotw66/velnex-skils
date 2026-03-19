@@ -43,14 +43,14 @@
 
 ### Design Docs → Develop
 
-- [ ] Spec Section 4 涉及範圍**無「待展開」項目** — 所有 UISpec / ApiSpec / Schema 欄位都有路徑
-- [ ] 涉及的 api-spec 已撰寫（或由 Human 確認不需要）
-- [ ] 涉及的 ui-spec 已撰寫（或由 Human 確認不需要）
-- [ ] 涉及的 schema 已撰寫（或由 Human 確認不需要）
-- [ ] openapi.yaml 已更新（如涉及 API）
-- [ ] Spec Section 4 的路徑已回填
-- [ ] 設計文件交叉比對通過（spec-auditor Pass 3）
+由 `vif-develop` 的 Entry Gate 執行，依據 `progress.md` 設計文件表判斷：
+
+- [ ] progress.md 設計文件表**無「待撰寫」項目** — 所有列的狀態欄都是「完成」
+- [ ] 所有設計文件**自審通過** — 自審欄全部 ✓（不含標 — 的項目）
+- [ ] **交叉比對通過（spec-auditor Pass 3）** — Pass 3 checkbox 已勾選
 - [ ] 已 commit
+
+> 如 progress.md 使用跳過格式（`- [x] 不需要展開設計文件 — [原因]`），則直接放行。
 
 ### Develop → Verify
 
