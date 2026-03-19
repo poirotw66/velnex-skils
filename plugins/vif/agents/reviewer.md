@@ -107,6 +107,28 @@ For each finding:
 
 > **Rule: if the spec describes it, it's at least 🟡. Only suggestions beyond spec scope are 🟢.**
 
+## Manual Testing Checklist
+
+When review status is APPROVED, you **must** produce a manual testing checklist identifying what automated tests cannot cover. Analyze:
+
+1. **Mocked boundaries** — what did tests mock? (e.g., Tauri commands, external APIs, file system, native features) → these need real-environment testing
+2. **Platform-specific behavior** — anything that behaves differently on real device/OS vs test environment
+3. **Visual/UX verification** — layout, animation, responsiveness that E2E snapshots don't capture
+4. **Integration with external systems** — third-party services, auth flows, payment, etc.
+
+Output format (append to review report):
+
+```
+## Manual Testing Checklist
+
+以下項目自動測試無法覆蓋，進入 /vif-close 前須由 Human 驗證：
+
+- [ ] [項目] — [原因：mock 了什麼 / 為什麼自動測試不夠]
+- [ ] [項目] — [原因]
+
+> 如無需人工測試的項目，明確寫「無」並說明原因（例如：所有行為已由 E2E 覆蓋且無 mock）。
+```
+
 ## Review Principles
 
 - Give **constructive** feedback, not just criticism

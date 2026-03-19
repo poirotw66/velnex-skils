@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.6.1
+  version: 2.6.2
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -133,5 +133,7 @@ Review 發現問題
 - [ ] Stage 2 Code Quality 審查完成
 - [ ] 🔴 Critical 全部修復
 - [ ] 🟡 Major 全部修復（或有正當理由不修）
-- [ ] 呈現給 Human 做最終審查
+- [ ] **人工測試項目已列出**（reviewer 在 APPROVED 時產出 Manual Testing Checklist）
+- [ ] 呈現給 Human 做最終審查（含人工測試項目清單）
+- [ ] Human 完成人工測試並確認
 - [ ] Human approve → 進入 Phase 5（`/vif-close`）

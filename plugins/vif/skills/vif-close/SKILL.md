@@ -5,7 +5,7 @@ description: >-
   "收尾", "結案", "wrap up", "finish", "done", "closing checklist",
   "merge ready".
 metadata:
-  version: 2.6.1
+  version: 2.6.2
 ---
 
 # Phase 5 — Close 完成
@@ -52,7 +52,10 @@ metadata:
 
 ### 文件更新
 
-- [ ] `progress.md` — 所有任務標記完成，決策已記錄
+- [ ] `progress.md` — 全部項目已完成：
+  - 設計文件表：所有狀態為「完成」、自審全部 ✓、Pass 3 ✓
+  - Phase 1-5：全部 `[x]`
+  - 決策紀錄已記錄
 - [ ] `docs/specs/specs-overview.md` — spec 狀態更新為 ✔️ done
 - [ ] `docs/feature-map.md` — 對應功能狀態更新為 ✅
 - [ ] 設計文件已同步（見上方 Design Doc Sync）
