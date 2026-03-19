@@ -32,12 +32,12 @@ Depends on what was actually produced (not all are always present):
 
 1. `.feature` files — Gherkin behavior specs (if any)
 2. `spec.md` — Technical plan (impact analysis + battle plan)
-3. Design documents — api-spec, ui-spec, schema (if any)
+3. Design documents — api-spec, ui-spec, schema, openapi.yaml (if any)
 
 ## Method: Three-Pass Scanning
 
 **Do not run all checks in one pass. Separate into three passes, each focused on one dimension.**
-**Only run the passes specified in the `passes` parameter.** If not specified, run all three.
+**Only run the passes determined by the `scope` parameter.** `design-review` = Pass 1+2, `cross-check` = Pass 3, `spec` = all three.
 
 ---
 
@@ -110,6 +110,7 @@ Goal: find everything that's half-written, unspecified, or left blank.
    - [ ] Paginated APIs have pagination parameters and response format?
    - [ ] Permission/authorization defined? Role-based vs feature-based access clearly distinguished?
    - [ ] Rate limiting or throttling specified (if applicable)?
+   - [ ] openapi.yaml paths/schemas consistent with api-spec markdown? (if openapi.yaml in targets)
 
    **ui-spec checklist** (targets contain ui-spec files):
    - [ ] Every field has a data source (which API, which response field)?
@@ -154,6 +155,7 @@ Goal: confirm the document doesn't contradict existing code or other documents.
 
 4. **Cross-reference design docs** — compare design documents against each other:
    - api-spec fields vs schema fields (type, nullable, default consistent?)
+   - api-spec markdown vs openapi.yaml (paths, methods, request/response schemas match?)
    - ui-spec data source fields vs api-spec response fields (field name, type match?)
    - ui-spec API call list vs actually existing api-specs (referencing non-existent API?)
    - ui-spec error handling vs api-spec error mapping table (frontend handles errors that API defines?)
@@ -183,8 +185,7 @@ In addition to the three-pass scan, check .feature files separately:
 # Spec Audit Report
 
 ## Audit Scope
-- scope: [scope value]
-- passes: [passes run]
+- scope: [design-review / cross-check / spec]
 - targets: [file list]
 
 ## Status: APPROVED / NEEDS_REVISION

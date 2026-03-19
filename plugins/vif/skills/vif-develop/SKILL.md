@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.6.0
+  version: 2.6.1
 ---
 
 # Develop — TDD 開發
@@ -207,15 +207,15 @@ test-writer 完成後，**在派遣 implementer 之前**，自行驗證：
 
 ### Implementer → Test-Writer 反饋迴路
 
-當 implementer 回傳 `NEEDS_CONTEXT` 且問題源自測試本身（邊界條件不清、mock 設定有誤、測試假設不合理）：
+當 implementer 回傳 `NEEDS_CONTEXT` 時，依據其 **category** 路由：
 
 ```
 implementer NEEDS_CONTEXT
-  → 分析問題是否與測試相關
-    ├── 是（測試問題）→ 重新派遣 test-writer，附上 implementer 的回饋，修改測試
-    │                   → 重跑 RED → GREEN Gate
-    │                   → 重新派遣 implementer
-    └── 否（缺少上下文）→ 補充 context 後重試 implementer
+  ├── TEST_ISSUE     → 重新派遣 test-writer，附上 implementer 的回饋，修改測試
+  │                    → 重跑 RED → GREEN Gate
+  │                    → 重新派遣 implementer
+  ├── SPEC_UNCLEAR   → 立即 escalate 給 Human（spec 問題不是 AI 能解決的）
+  └── MISSING_CONTEXT → 補充 context 後重試 implementer
 ```
 
 > 反饋迴路最多 1 次。第 2 次 NEEDS_CONTEXT → escalate 給 Human。

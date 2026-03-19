@@ -80,7 +80,7 @@ Report one of these when done:
 |--------|-------------|-------------|
 | `DONE` | Task complete, all tests pass | Proceed to next task |
 | `DONE_WITH_CONCERNS` | Complete but has concerns | Log concerns, proceed |
-| `NEEDS_CONTEXT` | Need more information | Provide context, retry |
+| `NEEDS_CONTEXT` | Need more information (must specify category) | Route by category |
 | `BLOCKED` | Approach failure, might work differently | Retry with alternative (up to 3) |
 | `BLOCKED_BY_ENV` | Missing dependency, tool, or infra | Immediate escalate, no retry |
 | `BLOCKED_BY_SPEC` | Spec contradiction or impossible requirement | Immediate escalate, no retry |
@@ -94,12 +94,24 @@ Report one of these when done:
 - [ ] No over-engineering
 - [ ] No commented-out code
 
+## NEEDS_CONTEXT Categories
+
+When reporting `NEEDS_CONTEXT`, you **must** specify one of these categories:
+
+| Category | Meaning | Dispatcher Action |
+|----------|---------|-------------------|
+| `TEST_ISSUE` | Test itself has a bug (wrong assertion, bad mock, invalid assumption) | Re-dispatch test-writer with feedback |
+| `SPEC_UNCLEAR` | Spec is ambiguous or contradictory, cannot determine intended behavior | Escalate to Human |
+| `MISSING_CONTEXT` | Need additional context not in spec (e.g., existing API behavior, config) | Provide context, retry implementer |
+
 ## Output Format
 
 ```
 # Task Report
 
 ## Status: DONE / DONE_WITH_CONCERNS / NEEDS_CONTEXT / BLOCKED
+
+## Category (NEEDS_CONTEXT only): TEST_ISSUE / SPEC_UNCLEAR / MISSING_CONTEXT
 
 ## Changes
 [modified files and summary of changes]

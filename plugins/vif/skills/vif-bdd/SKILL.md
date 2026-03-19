@@ -6,7 +6,7 @@ description: >-
   "Example Mapping", "三視角", "discovery", "Gherkin", "寫 feature",
   "行為規格".
 metadata:
-  version: 2.6.0
+  version: 2.6.1
 ---
 
 # BDD Discovery — 行為驅動探索

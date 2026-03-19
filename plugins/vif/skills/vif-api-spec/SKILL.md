@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 2.6.0
+  version: 2.6.1
 ---
 
 # API Spec — API 規格 + OpenAPI + DB Schema
@@ -97,7 +97,7 @@ metadata:
 
 **Dispatch Parameters:**
 - scope: `design-review`
-- targets: 本次撰寫/修改的 api-spec + schema 檔案路徑
+- targets: 本次撰寫/修改的 api-spec + schema + openapi.yaml 檔案路徑
 
 **審查項目（Pass 1 + Pass 2）：**
 - 內部一致性：命名、值、描述 vs 表格
@@ -116,6 +116,7 @@ metadata:
    - 自審欄：`⬜` → `✓`
    - 狀態欄：`待撰寫` → `完成`
    - 路徑欄：填入實際路徑
+   - **如果是更新既有設計文件**（修改，非首次撰寫）→ 重置 Pass 3 checkbox 為未勾選
 4. **commit**（`docs: add/update api-spec [module]/[domain]`）
 
 **存放位置：**

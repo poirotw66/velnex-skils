@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.6.0
+  version: 2.6.1
 ---
 
 # Spec — 技術規劃與影響分析
@@ -112,7 +112,7 @@ spec.md 是**作戰計畫**：
 
 1. 從 Section 4 影響分析表提取所有設計文件項目（ApiSpec、UISpec、Schema）
 2. 如有 .feature → 加入 Feature 列，狀態標為「完成」
-3. 所有待展開的設計文件 → 狀態標為「待撰寫」、自審標為 ⬜
+3. 所有待撰寫的設計文件 → 狀態標為「待撰寫」、自審標為 ⬜
 4. 如不需要展開設計文件（Bug fix 等）→ 使用跳過格式：`- [x] 不需要展開設計文件 — [原因]`
 
 > progress.md 的設計文件表是 **Design Docs → Develop 的 gate 依據**。
@@ -146,6 +146,11 @@ Spec 撰寫完成後，根據影響分析表，詢問 Human：
 
 派遣 `spec-auditor` agent：
 
+**Dispatch Parameters:**
+- scope: `spec`
+- targets: spec.md + .feature 檔案路徑（如有）
+
+審查項目：
 1. 審查影響分析是否完整（有沒有漏掉的模組）
 2. 審查 .feature 與 spec 的一致性（如有 .feature）
 3. 審查 spec.md 技術可行性

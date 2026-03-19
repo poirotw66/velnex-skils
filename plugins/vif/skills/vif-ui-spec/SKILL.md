@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 2.6.0
+  version: 2.6.1
 ---
 
 # UI Spec — 頁面規格
@@ -76,6 +76,7 @@ metadata:
    - 自審欄：`⬜` → `✓`
    - 狀態欄：`待撰寫` → `完成`
    - 路徑欄：填入實際路徑
+   - **如果是更新既有設計文件**（修改，非首次撰寫）→ 重置 Pass 3 checkbox 為未勾選
 4. **commit**（`docs: add/update ui-spec [module]/[page]`）
 
 **存放位置：** `docs/ui-specs/[module]/[page]/[name].md`

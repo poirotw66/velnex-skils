@@ -29,24 +29,24 @@
 
 | 動作 | 頁面 | 說明 | 參考 | UISpec |
 |------|------|------|------|--------|
-| 新增 | | | Figma# | docs/ui-specs/... 或「待展開」 |
+| 新增 | | | Figma# | docs/ui-specs/... 或「待撰寫」 |
 | 修改 | | | | docs/ui-specs/...（既有） |
 
 ### API 清單
 
 | 動作 | API | Method | Path | 說明 | ApiSpec |
 |------|-----|--------|------|------|---------|
-| 新增 | | | | | docs/api-specs/... 或「待展開」 |
+| 新增 | | | | | docs/api-specs/... 或「待撰寫」 |
 | 修改 | | | | | docs/api-specs/...（既有） |
 
 ### DB 清單
 
 | 動作 | Table | 說明 | Schema |
 |------|-------|------|--------|
-| 新增 | | | docs/schema/... 或「待展開」 |
+| 新增 | | | docs/schema/... 或「待撰寫」 |
 | 修改 | | [變更說明] | docs/schema/...（既有） |
 
-> UISpec / ApiSpec / Schema 欄位：已產出 → 填入路徑；待展開 → 標記「待展開」
+> UISpec / ApiSpec / Schema 欄位：已產出 → 填入路徑；待撰寫 → 標記「待撰寫」
 
 ## 5. 業務規則
 
