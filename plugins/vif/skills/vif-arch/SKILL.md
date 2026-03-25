@@ -5,7 +5,7 @@ description: >-
   "tech stack", "技術棧", "ADR", "架構決策", "技術選型", "project setup",
   "專案架構", "architecture decision".
 metadata:
-  version: 2.6.2
+  version: 2.7.0
 ---
 
 # Architecture — 架構決策
@@ -20,6 +20,14 @@ metadata:
 - 決策記錄不是文件負擔，是防止重複討論的投資
 - 推薦先行 — 「做 B。原因是：」而非「有 A/B/C 三個選項」
 
+## Pre-check
+
+1. 檢查 `docs/` 是否已有 PRD（`prd-*.md`）
+2. **有 PRD** → 讀取作為架構決策的需求依據，技術選型應對齊 PRD 定義的問題、範圍與約束
+3. **沒有 PRD** → 直接與 Human 討論（PRD 可能在架構之後才寫）
+
+> 不論 PRD 是否存在，架構決策都需要與 Human 確認。PRD 是輸入參考，不是自動決策依據。
+
 ## 使用情境
 
 ### A. 專案啟動（首次）
@@ -31,6 +39,8 @@ metadata:
 3. **共用規範** — API style、error handling、auth 策略、命名慣例
 4. **測試策略** — 預設測試層級（Unit / Integration / E2E）
 5. **目錄結構** — src/ 的組織方式
+
+如有 PRD，以上討論應參考 PRD 中的需求範圍、技術約束與成功指標，確保技術選型能支撐產品目標。
 
 產出：
 - `docs/architecture/adr-001-[名稱].md`（使用 `references/adr-template.md`）

@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.6.2
+  version: 2.7.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -127,6 +127,19 @@ Review 發現問題
   → 最多 3 次循環，超過產出 Escalation Report（見 /vif-flow）
 ```
 
+## 更新 progress.md
+
+Review 完成後，更新 `progress.md` 的 Phase 4 區塊：
+
+```markdown
+- [x] Phase 4: Review
+  - 結果：APPROVED
+  - 🔴 Critical：0 | 🟡 Major：2（已修復） | 🟢 Minor：3
+```
+
+- **APPROVED** → 勾選 `[x]`，記錄結果、日期、各等級 issue 數量
+- **CHANGES_REQUESTED** → 維持 `[ ]`，記錄結果與待修項目摘要，回 develop 修復後重跑時覆蓋更新
+
 ## Exit Criteria
 
 - [ ] Stage 1 Spec + Design Compliance 通過
@@ -136,4 +149,5 @@ Review 發現問題
 - [ ] **人工測試項目已列出**（reviewer 在 APPROVED 時產出 Manual Testing Checklist）
 - [ ] 呈現給 Human 做最終審查（含人工測試項目清單）
 - [ ] Human 完成人工測試並確認
+- [ ] progress.md Phase 4 已更新
 - [ ] Human approve → 進入 Phase 5（`/vif-close`）

@@ -38,7 +38,11 @@
   - [ ] Task 2: [描述]
   - [ ] Task 3: [描述]
 - [ ] Phase 3: Verify
+  - 結果：PASS / WARN / FAIL
+  - WARN 接受項：[如有]
 - [ ] Phase 4: Review
+  - 結果：APPROVED / CHANGES_REQUESTED
+  - 🔴 Critical：0 | 🟡 Major：0 | 🟢 Minor：0
 - [ ] Phase 5: Close
 
 ## 決策紀錄
