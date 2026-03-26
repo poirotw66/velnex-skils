@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.7.0
+  version: 2.9.0
 ---
 
 # Develop — TDD 開發
@@ -116,6 +116,22 @@ metadata:
 ```
 
 > **不可跳過此 gate。** 設計文件是開發的施工藍圖，沒有藍圖不能開工。
+
+### 載入相關設計文件
+
+Entry Gate 通過後，分兩層載入設計文件：
+
+**第一層（確定）**：讀取 progress.md 設計文件表中明確列出的檔案路徑，直接 Read 載入。這些是本 spec 確定需要的設計文件，不經過篩選。
+
+**第二層（探索）**：frontmatter scan 補充跨 spec / 跨域的關聯文件：
+```
+1. Glob docs/api-specs/**/*.md + docs/ui-specs/**/*.md + docs/schema/**/*.md
+2. 讀取每個檔案的 frontmatter（--- 區塊內的 YAML metadata）
+3. 排除第一層已載入的檔案，綜合判斷剩餘檔案與當前 spec 的相關性
+4. Read 僅載入相關文件全文
+```
+
+> 第一層保證本 spec 的設計文件一定被載入（即使 frontmatter 不完整）。第二層發現跨域關聯。
 
 ## Guideline 注入
 

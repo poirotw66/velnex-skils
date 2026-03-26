@@ -1,10 +1,19 @@
+---
+name: [頁面名稱]
+description: [一行摘要]
+domain: [領域]
+module: [模組]
+spec: [spec-NNN]
+route: [/path]
+apis:
+  - [METHOD /api/v1/path]
+---
+
 # [頁面/元件名稱]
 
 ## Meta
 
-- Module: [module-name]
 - 頁面類型：search-page / form-page / detail-page / modal
-- 路由: `/[path]`
 - 頁面檔名: `[Name]View.vue`（或對應框架）
 - 狀態：draft / approved / implemented
 - 建立：YYYY-MM-DD

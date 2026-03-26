@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 2.7.0
+  version: 2.9.0
 ---
 
 # API Spec — API 規格 + OpenAPI + DB Schema
@@ -37,9 +37,15 @@ metadata:
 1. 讀取 PRD / Spec 的 API 和 DB 清單
 2. 讀取 Figma 畫面（確認需要什麼資料）
 3. **讀取 Guideline** — 使用 `/vif-guideline`（context = `api-spec`）取得相關規範，後續撰寫時遵循
-4. 掃描現有 `docs/api-specs/[module]/`，判斷新增 vs 修改
-5. 掃描現有 `docs/schema/`，判斷新增 vs 修改
-5. 列出影響清單：
+4. **掃描現有設計文件**（使用 frontmatter 快速比對）：
+   ```
+   a. Glob docs/api-specs/**/*.md + docs/schema/**/*.md
+   b. 讀取每個檔案的 frontmatter（--- 區塊內的 YAML metadata）
+   c. 綜合判斷相關性（不限於同 domain/module，跨域關聯也要納入）
+   d. Read 僅載入相關文件全文
+   ```
+5. **確認新增 vs 修改**：以 Spec Section 4 的規劃為主，用 scan 結果交叉驗證（如 spec 標示新增但 scan 發現同 path 已存在 → 提醒衝突）
+6. 列出影響清單：
 
 ```
 ### API

@@ -5,7 +5,7 @@ description: >-
   "tech stack", "技術棧", "ADR", "架構決策", "技術選型", "project setup",
   "專案架構", "architecture decision".
 metadata:
-  version: 2.7.0
+  version: 2.9.0
 ---
 
 # Architecture — 架構決策

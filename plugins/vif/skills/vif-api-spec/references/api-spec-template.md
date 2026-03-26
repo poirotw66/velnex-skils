@@ -1,11 +1,17 @@
+---
+name: [API 名稱]
+description: [一行摘要]
+domain: [領域]
+module: [模組]
+spec: [spec-NNN]
+method: [GET/POST/PUT/PATCH/DELETE]
+path: [/api/v1/resource]
+---
+
 # [API 名稱]
 
 ## Meta
 
-- Module: [module-name]
-- Domain: [domain-name]
-- Method: GET / POST / PUT / PATCH / DELETE
-- Path: `/api/v1/[resource]`
 - 狀態：draft / approved / implemented
 - 建立：YYYY-MM-DD
 - 更新：YYYY-MM-DD

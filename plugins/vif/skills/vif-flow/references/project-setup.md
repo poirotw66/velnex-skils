@@ -28,7 +28,6 @@ your-project/
 │   │   └── NNN-name/
 │   │       ├── spec.md
 │   │       └── progress.md
-│   ├── feature-map.md             ← 功能追蹤                       [必要]
 │   │
 │   ├── api-specs/                 ← API 設計（累積型，per-module）  [視需要]
 │   ├── ui-specs/                  ← UI 設計（累積型，per-page）     [視需要]
@@ -127,30 +126,12 @@ your-project/
 
 ## Spec 清單
 
-| # | 名稱 | 狀態 | PRD | 依賴 | 備註 |
-|---|------|------|-----|------|------|
+| # | 名稱 | 領域 | 狀態 | PRD | 依賴 | 備註 |
+|---|------|------|------|-----|------|------|
 
 ## 依賴圖
 
 （待 spec 建立後更新）
-```
-
-**docs/feature-map.md:**
-
-```markdown
-# Feature Map
-
-| 符號 | 意義 |
-|------|------|
-| ✅ | 已完成 |
-| 🚧 | 進行中 |
-| 📋 | 已規劃 |
-| 🔲 | 未開始 |
-
-## 功能清單
-
-| 領域 | 功能 | 狀態 | Spec | 備註 |
-|------|------|------|------|------|
 ```
 
 ### 5. 架構決策（建議先做）
@@ -193,7 +174,6 @@ workspace/
 │   ├── docs/
 │   │   ├── prd-NNN.md             [必要]
 │   │   ├── specs/                 [必要]
-│   │   ├── feature-map.md         [必要]
 │   │   ├── api-specs/             [視需要]
 │   │   ├── ui-specs/              [視需要]
 │   │   ├── schema/                [視需要]
@@ -309,4 +289,4 @@ workspace/
 - Backend: Unit + Integration
 ```
 
-> 初始化追蹤文件（specs-overview、feature-map）只在 docs repo 建立。
+> 初始化追蹤文件（specs-overview）只在 docs repo 建立。

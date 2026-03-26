@@ -6,7 +6,7 @@ description: >-
   "哪個階段", "下一步", "flow overview", "流程總覽", "init", "初始化",
   "setup", "專案設定", "對齊結構", "align structure".
 metadata:
-  version: 2.7.0
+  version: 2.9.0
 ---
 
 # vif — AI-Driven Development Flow
@@ -24,10 +24,20 @@ metadata:
 
 AI 為主力開發，Human 為審查角色。一人驅動完整流程。
 
+**技術先行**（先定技術邊界再寫需求）：
+
 ```
-/vif-arch + /vif-uiux → /vif-prd → /vif-prototype(可選) → /vif-bdd → /vif-spec → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
+/vif-arch + /vif-uiux → /vif-prd → /vif-bdd → /vif-spec → /vif-prototype(可選) → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
 ```
 
+**產品先行**（先定需求再選技術）：
+
+```
+/vif-prd → /vif-arch + /vif-uiux → /vif-bdd → /vif-spec → /vif-prototype(可選) → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
+```
+
+> `/vif-arch` 會自動偵測是否已有 PRD，有的話會讀取作為技術選型的參考依據。
+>
 > `/vif-prototype` 可在 PRD 後或 Spec 後使用：
 > - PRD 後：探索視覺概念，幫助釐清需求再進入 Spec
 > - Spec 後：確認規格的畫面呈現，再進入 api-spec / ui-spec
@@ -94,7 +104,7 @@ Multi-repo 下，每個操作明確歸屬到一個 repo：
 |------|-----------|
 | 讀/寫 PRD、spec、api-spec、ui-spec、schema、.feature | docs repo |
 | 讀/寫 guideline、architecture (ADR) | docs repo |
-| 讀/寫 progress.md、specs-overview、feature-map | docs repo |
+| 讀/寫 progress.md、specs-overview | docs repo |
 | 讀/寫 test、src | code repo |
 | 執行 build、test、lint、type check | code repo |
 | git diff、git commit | **各自的 repo，不跨 repo** |
@@ -175,7 +185,6 @@ code repo 路徑: /absolute/path/to/project-frontend
 >
 > 📁 需建立：
 >   - docs/specs/specs-overview.md（追蹤文件）
->   - docs/feature-map.md（功能追蹤）
 >
 > 📦 建議搬移：
 >   - guideline/db-schema.md → docs/schema/（VIF 累積型設計文件）
@@ -197,7 +206,6 @@ code repo 路徑: /absolute/path/to/project-frontend
 1. 檢查 `.claude/CLAUDE.md` 是否有 `vif` 相關設定區塊
 2. 如有 `vif Workspace` 區塊 → 依 workspace 設定解析 docs 路徑
 3. 檢查 docs 位置的 `specs/specs-overview.md` 是否存在
-4. 檢查 docs 位置的 `feature-map.md` 是否存在
 
 > 全部存在 → 已設定，跳過 init。缺任一項 → 提示 init。
 >
@@ -281,7 +289,6 @@ code repo 路徑: /absolute/path/to/project-frontend
 | 文件 | 說明 |
 |------|------|
 | `docs/specs/specs-overview.md` | Spec 索引 |
-| `docs/feature-map.md` | 功能追蹤 |
 
 ## Commit Points
 
@@ -293,7 +300,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 | 設計文件完成 | api-spec / ui-spec / schema | `docs: add api-spec iam/auth/login` |
 | 開發 per-scenario | test + implementation | `feat: implement login API (spec-001)` |
 | Review 修復 | review 修正 | `fix: address review feedback (spec-001)` |
-| 收尾 | 追蹤文件更新 | `docs: close spec-001, update feature-map` |
+| 收尾 | 追蹤文件更新 | `docs: close spec-001` |
 
 ## Skip Decision
 

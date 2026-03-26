@@ -5,7 +5,7 @@ description: >-
   "收尾", "結案", "wrap up", "finish", "done", "closing checklist",
   "merge ready".
 metadata:
-  version: 2.7.0
+  version: 2.9.0
 ---
 
 # Phase 5 — Close 完成
@@ -19,7 +19,7 @@ metadata:
 | 操作 | 位置 |
 |------|------|
 | Design Doc Sync（api-spec、ui-spec、schema） | docs repo |
-| 更新 progress.md、specs-overview、feature-map | docs repo |
+| 更新 progress.md、specs-overview | docs repo |
 | 檢查 implementation 偏離 | code repo |
 | git commit | 各自的 repo |
 
@@ -56,18 +56,17 @@ metadata:
   - 設計文件表：所有狀態為「完成」、自審全部 ✓、Pass 3 ✓
   - Phase 1-5：全部 `[x]`
   - 決策紀錄已記錄
-- [ ] `docs/specs/specs-overview.md` — spec 狀態更新為 ✔️ done
-- [ ] `docs/feature-map.md` — 對應功能狀態更新為 ✅
+- [ ] `docs/specs/specs-overview.md` — spec 狀態更新為 ✔️ done，領域正確
 - [ ] 設計文件已同步（見上方 Design Doc Sync）
+- [ ] 設計文件 frontmatter 一致性：每份設計文件的 `spec` 欄位指向正確的 spec
 
 ### 版控
 
-- [ ] 所有變更已 **commit**（`docs: close spec-NNN, update feature-map`）
+- [ ] 所有變更已 **commit**（`docs: close spec-NNN`）
 - [ ] Git tag 已建立（如為重要里程碑）
 
 ## Exit Criteria
 
 - [ ] 所有 Checklist 項目完成
 - [ ] Spec 狀態更新為 done
-- [ ] Feature map 已更新
 - [ ] 已 commit

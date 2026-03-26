@@ -79,6 +79,15 @@ AI 為主力開發，Human 為審查角色。適合 solo 或小團隊。
 
 ### 流程
 
+兩種起始路徑：
+
+- **技術先行**（先定技術邊界再寫需求）：`/vif-arch` + `/vif-uiux` → `/vif-prd` → ...
+- **產品先行**（先定需求再選技術）：`/vif-prd` → `/vif-arch` + `/vif-uiux` → ...
+
+> `/vif-arch` 會自動偵測是否已有 PRD，有的話會讀取作為技術選型的參考依據。
+
+以下以技術先行為例：
+
 ```
 /vif-arch + /vif-uiux（首次）
     │
@@ -259,7 +268,6 @@ project/
 │   │   └── [module]/[page]/[name].md
 │   ├── schema/                        ← DB Schema（累積型）
 │   │   └── [domain].md
-│   └── feature-map.md
 │
 ├── guideline/                         ← 開發規範（專案特定）
 │   ├── backend/                       ← 後端開發規範
@@ -353,7 +361,7 @@ project/
 | 設計文件完成 | `docs: add api-spec iam/auth/login` |
 | 開發 per-scenario | `feat: implement login API (spec-001)` |
 | Review 修復 | `fix: address review feedback (spec-001)` |
-| 收尾 | `docs: close spec-001, update feature-map` |
+| 收尾 | `docs: close spec-001` |
 
 ## Skip Decision
 

@@ -78,7 +78,7 @@
 ### Close → Done
 
 - [ ] 設計文件已同步（反映最終實作）
-- [ ] 追蹤文件已更新（progress.md, specs-overview.md, feature-map.md）
+- [ ] 追蹤文件已更新（progress.md, specs-overview.md）
 - [ ] 版控完成（commit）
 - [ ] 已 commit
 

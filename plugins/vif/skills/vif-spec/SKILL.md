@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.7.0
+  version: 2.9.0
 ---
 
 # Spec — 技術規劃與影響分析
@@ -59,11 +59,14 @@ Step 1            Step 2              Step 3             Step 4
 1. 讀取 PRD + Figma + .feature（如有）
 2. **讀取既有程式碼** — 瀏覽 codebase，了解現有架構、既有的預設值、資料結構、生命週期
 3. **讀取相關文件** — 架構文件（ADR）、其他 spec、使用 `/vif-guideline` 取得相關規範
-4. 掃描現有設計文件：
-   - `docs/api-specs/` — 既有 API 設計
-   - `docs/ui-specs/` — 既有頁面設計
-   - `docs/schema/` — 既有 DB 設計
-5. 判斷每個項目是**新增**還是**修改既有**
+4. **掃描現有設計文件**（使用 frontmatter 快速比對）：
+   ```
+   a. Glob docs/api-specs/**/*.md + docs/ui-specs/**/*.md + docs/schema/**/*.md
+   b. 讀取每個檔案的 frontmatter（--- 區塊內的 YAML metadata）
+   c. 綜合判斷相關性（不限於同 domain/module，跨域關聯也要納入）
+   d. Read 僅載入相關文件全文
+   ```
+5. **確認新增 vs 修改**：比對 scan 結果，已存在同 path/route/table → 修改，不存在 → 新增
 6. **交叉驗證** — spec 中的假設（預設值、格式、行為）是否與既有程式碼和文件一致
 
 > **不要憑印象寫 spec。** 每一個預設值、資料格式、行為假設，都去 code 和文件裡確認。

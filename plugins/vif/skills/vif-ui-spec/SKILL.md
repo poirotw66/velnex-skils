@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 2.7.0
+  version: 2.9.0
 ---
 
 # UI Spec — 頁面規格
@@ -33,9 +33,15 @@ metadata:
 
 1. 讀取 Figma 畫面（圖片或 MCP）或 Prototype 確認結果
 2. 讀取相關 Spec 的頁面清單（如有）
-3. 讀取已有的 ApiSpec（確認可呼叫的 API）
+3. **掃描 ApiSpec 和既有 UISpec**（使用 frontmatter 快速比對）：
+   ```
+   a. Glob docs/api-specs/**/*.md + docs/ui-specs/**/*.md
+   b. 讀取每個檔案的 frontmatter（--- 區塊內的 YAML metadata）
+   c. 綜合判斷相關性（不限於同 domain/module，跨域關聯也要納入）
+   d. Read 僅載入相關文件全文
+   ```
 4. **讀取 Guideline** — 使用 `/vif-guideline`（context = `ui-spec`）取得相關規範，後續撰寫時遵循
-5. 讀取 `docs/ui-specs/` 下既有頁面（確認是否有需要修改的）
+5. **確認新增 vs 修改**：以 Spec Section 4 的規劃為主，用 scan 結果交叉驗證（如 spec 標示新增但 scan 發現同 route 已存在 → 提醒衝突）
 
 ### Step 2: 撰寫 UI Spec
 

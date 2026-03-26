@@ -79,7 +79,8 @@ task-1, task-2 [P] → task-3 (depends: 1,2) → task-4 (depends: 3)
 - [ ] [條件 1]
 - [ ] [條件 2]
 
-> 如有 .feature，可引用：見 features/[domain]/[name].feature
+> **有 .feature** → 可引用：見 features/[domain]/[name].feature，驗收條件保持簡要描述即可
+> **沒有 .feature** → 每條驗收條件使用 Given/When/Then 格式，確保 AI 與 Human 都能明確理解預期行為
 
 ## 8. 約束與限制
 

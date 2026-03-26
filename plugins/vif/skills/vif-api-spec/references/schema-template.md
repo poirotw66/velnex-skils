@@ -1,3 +1,13 @@
+---
+name: [domain 名稱]
+description: [一行摘要]
+domain: [領域]
+module: [模組]
+spec: [spec-NNN]
+tables:
+  - [table_name]
+---
+
 # [Domain] Schema
 
 ## Meta
