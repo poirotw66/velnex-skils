@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.9.0
+  version: 2.10.0
 ---
 
 # Spec — 技術規劃與影響分析
@@ -170,6 +170,15 @@ spec-auditor 通過後，交給 Human 之前，AI 重新讀一遍完整 spec 進
 4. **可驗證性** — 每一條驗收條件都能寫成測試嗎？無法測試的條件要改寫
 
 > 發現問題就直接修正，不需要再跑 spec-auditor。重大修改才重跑。
+
+**AI Cross-Review（可選）：**
+
+讀取 CLAUDE.md `AI Cross-Review` 設定，`design` 已啟用時：
+
+- **team mode** → 在此觸發，傳入 spec.md（+ .feature 如有）
+- **solo mode** → 此處跳過。所有設計文件完成 + Pass 3 通過後統一觸發，傳入全部設計文件
+
+執行：呼叫設定的 AI CLI → 比對 spec-auditor 結果 → 有新發現則修正後重跑 spec-auditor。
 
 **Stage C — Human 審查：**
 

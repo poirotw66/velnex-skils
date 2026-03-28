@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.9.0
+  version: 2.10.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -90,6 +90,12 @@ metadata:
 4. **可維護性** — 程式碼是否容易理解和修改
 
 **不重複 Phase 3 自動化已做的檢查**（lint、type check 等）。
+
+### AI Cross-Review（可選）
+
+讀取 CLAUDE.md `AI Cross-Review` 設定，`review` 已啟用時，在 Stage 1+2 完成後觸發。傳入本次變更的 source code + spec.md + 相關設計文件。
+
+執行：呼叫設定的 AI CLI 進行獨立審查 → 比對 reviewer 結果 → 新發現加入 Review Report。
 
 ## Severity Levels
 

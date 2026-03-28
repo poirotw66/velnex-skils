@@ -386,6 +386,12 @@ project/
 ### vif-verify 設定
 # - Code Quality: true
 
+### AI Cross-Review（可選，取消註解啟用）
+# - mode: solo
+# - design: codex
+# - verify: codex
+# - review: codex
+
 ### Guideline 映射（可選，覆蓋目錄慣例，支援檔案或資料夾）
 # - api-spec → guideline/backend/
 # - ui-spec → guideline/frontend/

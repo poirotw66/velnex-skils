@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.9.0
+  version: 2.10.0
 ---
 
 # Develop — TDD 開發
@@ -111,11 +111,19 @@ metadata:
 │   │     targets: 表中所有已完成的設計文件路徑
 │   │     通過 → 勾選 Pass 3 checkbox，commit，繼續
 │   │     失敗 → 列出問題，阻擋開發
-│   └── 全部 ✓ + Pass 3 ✓ → ✅ 放行
+│   ├── 全部 ✓ + Pass 3 ✓ → AI Cross-Review（見下方）→ ✅ 放行
 └── 無設計文件區塊 → ❌ 阻擋，回 vif-spec 補建 progress.md
 ```
 
 > **不可跳過此 gate。** 設計文件是開發的施工藍圖，沒有藍圖不能開工。
+
+**AI Cross-Review（可選，solo mode only）：**
+
+讀取 CLAUDE.md `AI Cross-Review` 設定，`design` 已啟用且 mode 為 solo 時，在 Pass 3 通過後觸發。傳入 progress.md 設計文件表中所有已完成的設計文件。
+
+執行：呼叫設定的 AI CLI → 比對 spec-auditor 結果 → 有新發現則修正後重跑 spec-auditor Pass 3。
+
+> team mode 的設計文件 Cross-Review 在各 skill 內個別觸發（見 `/vif-spec`、`/vif-api-spec`、`/vif-ui-spec`）。
 
 ### 載入相關設計文件
 

@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 2.9.0
+  version: 2.10.0
 ---
 
 # UI Spec — 頁面規格
@@ -71,8 +71,16 @@ metadata:
 - UI 專屬 checklist：每個欄位有資料來源？空狀態？錯誤狀態？Loading 狀態？權限控制？
 
 **結果處理：**
-- APPROVED → 進入 Step 4
+- APPROVED → 進入 AI Cross-Review（如啟用）或 Step 4
 - NEEDS_REVISION → 依報告修正 → 重跑 spec-auditor（最多 3 次迭代）
+
+**AI Cross-Review（可選，team mode only）：**
+
+讀取 CLAUDE.md `AI Cross-Review` 設定，`design` 已啟用且 mode 為 team 時觸發。傳入本次撰寫的 ui-spec 檔案。
+
+執行：呼叫設定的 AI CLI → 比對 spec-auditor 結果 → 有新發現則修正後重跑 spec-auditor。
+
+> solo mode 的設計文件 Cross-Review 在 Pass 3 完成後統一觸發（見 `/vif-spec`）。
 
 ### Step 4: 確認、更新 Progress 與 Commit
 
