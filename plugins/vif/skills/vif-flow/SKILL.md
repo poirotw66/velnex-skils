@@ -9,7 +9,7 @@ metadata:
   version: 2.10.0
 ---
 
-# vif — AI-Driven Development Flow
+# vif (Velocity AI Flow) — AI-Driven Development Flow
 
 ## Philosophy
 

@@ -1,4 +1,4 @@
-# vif — AI-Driven Development Flow
+# vif (Velocity AI Flow) — AI-Driven Development Flow
 
 Claude Code plugin，提供 14 個 skills + 6 個 agents 的結構化開發流程。針對 LLM 的運作特性設計，覆蓋從需求到交付的完整 SDLC。
 
