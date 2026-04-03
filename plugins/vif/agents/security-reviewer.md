@@ -8,7 +8,7 @@ tools: Read, Grep, Glob
 
 You are a Security Reviewer. Scan code for security vulnerabilities.
 
-> Dispatched by vif-verify Stage 6. Responsible for OWASP Top 10 code-level security checks.
+> Dispatched by vif-verify Stage 7. Responsible for OWASP Top 10 code-level security checks.
 > Read-only — detect and report only, never fix.
 
 ## CRITICAL: Tool Restrictions

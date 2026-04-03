@@ -254,16 +254,18 @@ code repo 路徑: /absolute/path/to/project-frontend
 |---|------|-------|------|
 | 1 | 架構討論 | `/vif-arch` | 討論技術選型 |
 | 2 | 設計基礎 | `/vif-uiux` | 逐項討論色系、字型等 |
-| 3 | BDD Discovery | `/vif-bdd` | 解決 Question、確認 Example |
-| 4 | Spec 展開選擇 | `/vif-spec` | 選擇展開哪些設計文件 |
-| 5 | 原型範圍 | `/vif-prototype` | 確認要做原型的頁面 |
-| 6 | 原型確認 | `/vif-prototype` | 看畫面、給回饋 |
-| 7 | API Spec 確認 | `/vif-api-spec` | 確認 API 規格 |
-| 8 | UI Spec 確認 | `/vif-ui-spec` | 確認頁面規格 |
-| 9 | 測試策略 | `/vif-develop` | 確認測試策略 |
-| 10 | WARN 評估 | `/vif-verify` | 評估 WARN 要修還是記錄理由 |
+| 3 | 需求探索 | `/vif-prd` | 與 Human 對話釐清問題、影響、動機 |
+| 4 | BDD Discovery | `/vif-bdd` | 解決 Question、確認 Example |
+| 5 | Spec 展開選擇 | `/vif-spec` | 選擇展開哪些設計文件 |
+| 6 | 原型範圍 | `/vif-prototype` | 確認要做原型的頁面 |
+| 7 | 原型確認 | `/vif-prototype` | 看畫面、給回饋 |
+| 8 | API Spec 確認 | `/vif-api-spec` | 確認 API 規格 |
+| 9 | UI Spec 確認 | `/vif-ui-spec` | 確認頁面規格 |
+| 10 | 測試策略 | `/vif-develop` | 確認測試策略 |
 | 11 | TDD 例外 | `/vif-develop` | 確認是否可不走 TDD |
-| 12 | Escalation | `/vif-develop` | 3 次失敗後 Human 決定 |
+| 12 | WARN 評估 | `/vif-verify` | 評估 WARN 要修還是記錄理由 |
+| 13 | 手動測試 | `/vif-review` | 執行 reviewer 產出的手動測試清單 |
+| 14 | Escalation | 所有 skill | 3 次失敗後 Human 決定 |
 
 ## Documents
 

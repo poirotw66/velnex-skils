@@ -42,7 +42,7 @@ metadata:
 ### 驗收
 
 - [ ] 所有 .feature scenario 已實現且測試通過
-- [ ] AC-manual（如有）已驗證
+- [ ] reviewer 的 Manual Testing Checklist 已由 Human 驗證（如有）
 
 ### 品質
 

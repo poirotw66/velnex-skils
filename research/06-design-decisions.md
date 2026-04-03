@@ -4,7 +4,7 @@
 
 > 最新的流程說明見 [README.md](../README.md)。本文聚焦於**決策理由**。
 
-## 從六階段到十一 Skills
+## 從六階段到十四 Skills
 
 ### 初版設計（v1.0）
 
@@ -28,20 +28,23 @@ Phase 0: PRD → Phase 1: Spec → Phase 2: Develop → Phase 3: Verify → Phas
 
 ### 現行設計（v2.0）
 
-拆分為 11 個獨立 skills，支援兩種模式：
+拆分為 14 個獨立 skills，支援兩種模式：
 
 | 類別 | Skill | v1 對應 | 拆分原因 |
 |------|-------|---------|---------|
 | 架構 | vif-arch | 無 | 新增：架構決策需要被記錄 |
+| 設計基礎 | vif-uiux | 無 | 新增：色系、字型、元件規範需在設計前定義，供後續 skill 引用 |
 | 需求 | vif-prd | Phase 0 | 保留 |
 | 行為 | vif-bdd | Phase 1 的一部分 | 抽出：BDD 是可選的 |
 | 規劃 | vif-spec | Phase 1 | 重新定義：聚焦影響分析 |
+| 原型 | vif-prototype | 無 | 新增：無 Figma 時需要視覺確認，原型用完即丟 |
 | 設計 | vif-ui-spec | Phase 1 的一部分 | 抽出：Frontend 獨立產出 |
 | 設計 | vif-api-spec | Phase 1 的一部分 | 抽出：Backend 獨立產出 |
 | 開發 | vif-develop | Phase 2 | 加入測試策略選擇 |
 | 驗證 | vif-verify | Phase 3 | 重構為 Core + Optional |
 | 審查 | vif-review | Phase 4 | 加入設計文件合規 |
 | 收尾 | vif-close | Phase 5 | 移除重複驗證，加入 Design Doc Sync |
+| 規範 | vif-guideline | 無 | 新增：guideline 解析邏輯跨 skill 共用，抽為獨立 skill 避免重複 |
 | 總覽 | vif-flow | 無 | 新增：兩種模式的 routing |
 
 ## 兩種模式的設計決策

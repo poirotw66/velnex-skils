@@ -143,6 +143,7 @@ Date: YYYY-MM-DD
 | Lint | ✅/❌ | [N warnings, M errors] |
 | Test Suite | ✅/❌ | [N pass, M fail, coverage: X%] |
 | Diff Review | ✅/❌ | [N files changed] |
+| Dependency Audit | ✅/❌ | [N vulnerabilities] |
 
 ## Issues
 

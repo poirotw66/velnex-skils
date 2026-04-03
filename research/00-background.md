@@ -16,13 +16,13 @@
 3. 分析五大框架：Spec Kit、Superpowers、OpenSpec、ECC、gstack
 4. 釐清 SDD、BDD、TDD、EDD 四者的關聯性
 5. 基於現有專案實踐基礎，設計統一開發流程
-6. 產出 vif plugin（11 skills + 6 agents），支援完全自動化與輔助自動化兩種模式
+6. 產出 vif plugin（14 skills + 6 agents），支援完全自動化與輔助自動化兩種模式
 
 ## 研究成果
 
 本研究的最終成果為 **vif**（AI-Driven Development Flow），一個 Claude Code plugin：
 
-- 11 個 skills 涵蓋從架構決策到收尾的完整開發生命週期
+- 14 個 skills 涵蓋從架構決策到收尾的完整開發生命週期
 - 6 個 agents 提供 TDD 紀律、獨立審查、安全檢查
 - 兩種模式：完全自動化（Solo）+ 輔助自動化（企業團隊）
 - 整合五大框架的精華
