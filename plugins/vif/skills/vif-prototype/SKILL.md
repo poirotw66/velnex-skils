@@ -1,14 +1,14 @@
 ---
 name: vif-prototype
 description: >-
-  Generate interactive HTML prototypes for UI review. Trigger on: "prototype",
+  Phase 1 - Generate interactive HTML prototypes for UI review. Trigger on: "prototype",
   "原型", "mockup", "wireframe", "畫面原型", "HTML prototype", "頁面原型",
   "先出畫面看看", "做個原型".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# Prototype — HTML 原型
+# Phase 1 — Prototype HTML 原型
 
 根據 PRD / Spec / UI Spec 產出可互動的 HTML 原型，讓 Human 在瀏覽器裡實際看到畫面、操作互動後再進入開發。
 

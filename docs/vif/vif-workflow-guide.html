@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vif — AI-Driven Development Flow 完整指南</title>
+<style>
+  :root {
+    --c-bg: #fafafa;
+    --c-surface: #ffffff;
+    --c-text: #1a1a2e;
+    --c-text-secondary: #555770;
+    --c-border: #e2e4ea;
+    --c-accent: #4f46e5;
+    --c-accent-light: #eef2ff;
+    --c-accent-dark: #3730a3;
+    --c-green: #059669;
+    --c-green-bg: #ecfdf5;
+    --c-red: #dc2626;
+    --c-red-bg: #fef2f2;
+    --c-yellow: #d97706;
+    --c-yellow-bg: #fffbeb;
+    --c-blue: #2563eb;
+    --c-blue-bg: #eff6ff;
+    --c-phase0: #8b5cf6;
+    --c-phase1: #2563eb;
+    --c-phase2: #059669;
+    --c-phase3: #d97706;
+    --c-phase4: #dc2626;
+    --c-phase5: #64748b;
+    --radius: 10px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    background: var(--c-bg);
+    color: var(--c-text);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #312e81 0%, #4f46e5 50%, #7c3aed 100%);
+    color: white;
+    padding: 80px 24px 60px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -.02em; margin-bottom: 12px; }
+  .hero .subtitle { font-size: 1.25rem; opacity: .85; max-width: 600px; margin: 0 auto 32px; }
+  .hero-pills { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-pill {
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: .9rem;
+    font-weight: 500;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Section ── */
+  section { padding: 56px 0; }
+  section + section { border-top: 1px solid var(--c-border); }
+
+  h2 {
+    font-size: 1.75rem; font-weight: 700; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2 .badge {
+    font-size: .75rem; font-weight: 600; padding: 3px 10px;
+    border-radius: 999px; color: white; text-transform: uppercase; letter-spacing: .04em;
+  }
+  h3 { font-size: 1.2rem; font-weight: 650; margin: 28px 0 10px; color: var(--c-text); }
+  h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; }
+  p { margin-bottom: 14px; color: var(--c-text-secondary); }
+  p.lead { font-size: 1.05rem; color: var(--c-text); }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card.highlight {
+    border-left: 4px solid var(--c-accent);
+  }
+
+  /* ── Flow diagram ── */
+  .flow-track {
+    display: flex; gap: 0; overflow-x: auto; padding: 20px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .flow-node {
+    flex: 0 0 auto;
+    text-align: center;
+    position: relative;
+    min-width: 110px;
+  }
+  .flow-node .dot {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 8px;
+    font-size: 1.1rem;
+    color: white;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+  }
+  .flow-node .label { font-size: .8rem; font-weight: 600; color: var(--c-text-secondary); }
+  .flow-node .skill { font-size: .72rem; color: var(--c-text-secondary); opacity: .7; margin-top: 2px; }
+  .flow-node:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 21px;
+    left: calc(50% + 21px);
+    width: calc(100% - 42px);
+    height: 3px;
+    background: var(--c-border);
+    z-index: 0;
+  }
+  .flow-node.gate::before {
+    content: '🔒';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: .85rem;
+  }
+
+  /* ── Phase cards ── */
+  .phase-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .phase-header {
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s;
+  }
+  .phase-header:hover { background: var(--c-bg); }
+  .phase-num {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1rem; color: white;
+    flex-shrink: 0;
+  }
+  .phase-header h3 { margin: 0; flex: 1; }
+  .phase-header .arrow {
+    font-size: 1.2rem;
+    transition: transform .25s;
+    color: var(--c-text-secondary);
+  }
+  .phase-header.open .arrow { transform: rotate(180deg); }
+  .phase-body { padding: 0 28px 28px; display: none; }
+  .phase-body.open { display: block; }
+
+  /* ── Skill block ── */
+  .skill-block {
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .skill-title {
+    padding: 14px 20px;
+    background: var(--c-bg);
+    font-weight: 650;
+    font-size: .95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .skill-title code {
+    background: var(--c-accent-light);
+    color: var(--c-accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: .85rem;
+    font-weight: 600;
+  }
+  .skill-title .opt {
+    background: var(--c-yellow-bg);
+    color: var(--c-yellow);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: .72rem;
+    font-weight: 600;
+  }
+  .skill-content { padding: 16px 20px; }
+  .skill-content p:last-child { margin-bottom: 0; }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: .9rem; }
+  th { text-align: left; padding: 10px 14px; background: var(--c-bg); font-weight: 600; color: var(--c-text); border-bottom: 2px solid var(--c-border); }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--c-border); color: var(--c-text-secondary); }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── Code ── */
+  pre {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    border-radius: 8px;
+    padding: 18px 22px;
+    overflow-x: auto;
+    font-size: .85rem;
+    line-height: 1.6;
+    margin: 14px 0 18px;
+  }
+  code {
+    font-family: "SF Mono", "Fira Code", "JetBrains Mono", Menlo, monospace;
+    font-size: .88em;
+  }
+  p code, li code, td code {
+    background: #f1f5f9;
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--c-accent-dark);
+    font-size: .85em;
+  }
+
+  /* ── Callout ── */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: .92rem;
+  }
+  .callout.info { background: var(--c-blue-bg); border-left: 4px solid var(--c-blue); }
+  .callout.success { background: var(--c-green-bg); border-left: 4px solid var(--c-green); }
+  .callout.warn { background: var(--c-yellow-bg); border-left: 4px solid var(--c-yellow); }
+  .callout.danger { background: var(--c-red-bg); border-left: 4px solid var(--c-red); }
+  .callout strong { color: var(--c-text); }
+
+  /* ── Tag / Pill ── */
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .tag.green { background: var(--c-green-bg); color: var(--c-green); }
+  .tag.blue { background: var(--c-blue-bg); color: var(--c-blue); }
+  .tag.yellow { background: var(--c-yellow-bg); color: var(--c-yellow); }
+  .tag.red { background: var(--c-red-bg); color: var(--c-red); }
+  .tag.gray { background: #f1f5f9; color: #64748b; }
+
+  /* ── File tree ── */
+  .file-tree {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: .82rem;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin: 14px 0 18px;
+  }
+  .file-tree .dir { color: #89b4fa; }
+  .file-tree .file { color: #a6adc8; }
+  .file-tree .comment { color: #6c7086; }
+
+  /* ── Grid ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 680px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ── Agent cards ── */
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+  .agent-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .agent-card h4 { margin: 0 0 6px; font-size: .95rem; }
+  .agent-card p { margin: 0; font-size: .85rem; }
+
+  /* ── TDD cycle ── */
+  .tdd-cycle {
+    display: flex; gap: 0; align-items: stretch; margin: 20px 0;
+  }
+  .tdd-step {
+    flex: 1;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+  }
+  .tdd-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: var(--c-text-secondary);
+    z-index: 1;
+  }
+  .tdd-step .icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .tdd-step .name { font-weight: 700; font-size: .9rem; margin-bottom: 4px; }
+  .tdd-step .desc { font-size: .78rem; color: var(--c-text-secondary); }
+  .tdd-red { background: var(--c-red-bg); border-radius: 8px 0 0 8px; }
+  .tdd-green { background: var(--c-green-bg); }
+  .tdd-refactor { background: var(--c-blue-bg); border-radius: 0 8px 8px 0; }
+
+  /* ── Status dots ── */
+  .status { display: inline-flex; align-items: center; gap: 6px; }
+  .status::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .status.pass::before { background: var(--c-green); }
+  .status.warn::before { background: var(--c-yellow); }
+  .status.fail::before { background: var(--c-red); }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--c-text-secondary);
+    font-size: .85rem;
+    border-top: 1px solid var(--c-border);
+  }
+  footer a { color: var(--c-accent); text-decoration: none; }
+
+  /* ── Misc ── */
+  ul, ol { margin: 8px 0 14px 20px; color: var(--c-text-secondary); }
+  li { margin-bottom: 4px; }
+  li strong { color: var(--c-text); }
+  a { color: var(--c-accent); }
+  .mt-0 { margin-top: 0; }
+  .mb-0 { margin-bottom: 0; }
+  .text-sm { font-size: .88rem; }
+  .text-center { text-align: center; }
+
+  .ascii-box {
+    background: #1e1e2e;
+    color: #89dceb;
+    border-radius: 8px;
+    padding: 18px 22px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: .8rem;
+    line-height: 1.55;
+    overflow-x: auto;
+    margin: 14px 0 18px;
+    white-space: pre;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ Hero ═══ -->
+<div class="hero">
+  <div class="container">
+    <h1>vif</h1>
+    <p class="subtitle">AI-Driven Development Flow — 從需求探索到交付收尾的完整軟體開發框架</p>
+    <div class="hero-pills">
+      <span class="hero-pill">14 Skills</span>
+      <span class="hero-pill">6 AI Agents</span>
+      <span class="hero-pill">5 Phases</span>
+      <span class="hero-pill">TDD 強制</span>
+      <span class="hero-pill">Spec-First</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ What is vif ═══ -->
+<section>
+  <div class="container">
+    <h2>什麼是 vif？</h2>
+    <p class="lead">vif 是一套以 Claude Code plugin 形式運作的 <strong>AI 驅動軟體開發流程框架</strong>。它將軟體開發從需求探索到交付收尾，拆解為明確的階段，每個階段由專屬的 skill 驅動，搭配 6 個專職 AI subagent 執行具體工作。</p>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <h4 class="mt-0">核心理念</h4>
+        <ul class="mb-0">
+          <li><strong>Spec-First</strong> — 沒有核准的規格，就不寫程式</li>
+          <li><strong>TDD 強制</strong> — 沒有失敗的測試，就不寫產品程式碼</li>
+          <li><strong>Impact Analysis</strong> — 每次變更先釐清新增 vs. 修改</li>
+          <li><strong>驗證 = 誠實</strong> — 只宣稱有新鮮證據支持的結論</li>
+          <li><strong>文件即合約</strong> — 設計文件是施工藍圖，不是擺設</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 class="mt-0">三個 Hard Gate</h4>
+        <table class="mb-0">
+          <tr><td><strong>Gate 1</strong></td><td>PRD → Spec</td><td>確認問題定義與方向</td></tr>
+          <tr><td><strong>Gate 2</strong></td><td>Spec → Develop</td><td>確認技術範圍與設計文件</td></tr>
+          <tr><td><strong>Gate 3</strong></td><td>Review → Close</td><td>確認品質與規格符合度</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Flow overview ═══ -->
+<section>
+  <div class="container">
+    <h2>流程總覽</h2>
+    <p>從左到右，經過 5 個階段，3 個必須人工核准的 Gate。</p>
+
+    <div class="flow-track">
+      <div class="flow-node">
+        <div class="dot" style="background:var(--c-phase0)">0</div>
+        <div class="label">PRD</div>
+        <div class="skill">/vif-prd</div>
+      </div>
+      <div class="flow-node">
+        <div class="dot" style="background:var(--c-phase0)">0</div>
+        <div class="label">架構</div>
+        <div class="skill">/vif-arch</div>
+      </div>
+      <div class="flow-node">
+        <div class="dot" style="background:var(--c-phase0)">0</div>
+        <div class="label">UI/UX</div>
+        <div class="skill">/vif-uiux</div>
+      </div>
+      <div class="flow-node">
+        <div class="dot" style="background:var(--c-phase0);opacity:.6">0</div>
+        <div class="label">BDD</div>
+        <div class="skill">可選</div>
+      </div>
+      <div class="flow-node gate">
+        <div class="dot" style="background:var(--c-phase1)">1</div>
+        <div class="label">Spec</div>
+        <div class="skill">/vif-spec</div>
+      </div>
+      <div class="flow-node">
+        <div class="dot" style="background:var(--c-phase1)">1</div>
+        <div class="label">API Spec</div>
+        <div class="skill">/vif-api-spec</div>
+      </div>
+      <div class="flow-node">
+        <div class="dot" style="background:var(--c-phase1)">1</div>
+        <div class="label">UI Spec</div>
+        <div class="skill">/vif-ui-spec</div>
+      </div>
+      <div class="flow-node gate">
+        <div class="dot" style="background:var(--c-phase2)">2</div>
+        <div class="label">開發</div>
+        <div class="skill">/vif-develop</div>
+      </div>
+      <div class="flow-node">
+        <div class="dot" style="background:var(--c-phase3)">3</div>
+        <div class="label">驗證</div>
+        <div class="skill">/vif-verify</div>
+      </div>
+      <div class="flow-node gate">
+        <div class="dot" style="background:var(--c-phase4)">4</div>
+        <div class="label">審查</div>
+        <div class="skill">/vif-review</div>
+      </div>
+      <div class="flow-node">
+        <div class="dot" style="background:var(--c-phase5)">5</div>
+        <div class="label">收尾</div>
+        <div class="skill">/vif-close</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Operating Modes ═══ -->
+<section>
+  <div class="container">
+    <h2>兩種使用模式</h2>
+
+    <div class="grid-2">
+      <div class="card highlight">
+        <h4 class="mt-0">模式一：完全自動化 <span class="tag green">Solo / 小團隊</span></h4>
+        <p>AI 驅動所有階段，人類在 Gate 點審核決策。</p>
+        <p><strong>技術先行：</strong><br>
+          <code>/vif-arch</code> + <code>/vif-uiux</code> → <code>/vif-prd</code> → <code>/vif-spec</code> → 設計 → 開發 → 驗證 → 審查 → 收尾</p>
+        <p class="mb-0"><strong>產品先行：</strong><br>
+          <code>/vif-prd</code> → <code>/vif-arch</code> + <code>/vif-uiux</code> → <code>/vif-spec</code> → ...</p>
+      </div>
+      <div class="card highlight">
+        <h4 class="mt-0">模式二：輔助自動化 <span class="tag blue">企業團隊</span></h4>
+        <p>各角色各自驅動對應的 skill。</p>
+        <table class="mb-0 text-sm">
+          <tr><td>架構師</td><td><code>/vif-arch</code></td></tr>
+          <tr><td>PM / PD</td><td><code>/vif-prd</code>、<code>/vif-bdd</code></td></tr>
+          <tr><td>設計師</td><td><code>/vif-uiux</code>、<code>/vif-prototype</code></td></tr>
+          <tr><td>前端</td><td><code>/vif-ui-spec</code>、<code>/vif-develop</code></td></tr>
+          <tr><td>後端</td><td><code>/vif-api-spec</code>、<code>/vif-develop</code></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout info" style="margin-top:16px;">
+      <strong>彈性跳過機制：</strong>不是每個任務都需要走完全部階段。Bug 修復可跳過 PRD/BDD；設定檔變更可跳過 PRD/BDD/Spec；只有新功能開發需要完整流程。
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Phase 0 ═══ -->
+<section>
+  <div class="container">
+    <h2>
+      <span class="badge" style="background:var(--c-phase0)">Phase 0</span>
+      探索與定義
+    </h2>
+    <p>釐清問題、建立技術與設計基礎。</p>
+
+    <!-- PRD -->
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-prd</code> 產品需求文件</div>
+      <div class="skill-content">
+        <p><strong>做什麼：</strong>釐清「要解決什麼問題」和「為什麼值得解決」。vif-prd 是思考夥伴，不是表格填寫機。</p>
+
+        <h4>流程</h4>
+        <ol>
+          <li><strong>問題探索</strong> — 從四個維度深入對話：問題本身、證據、預期成果、方案選項</li>
+          <li><strong>撰寫 PRD</strong> — 依模板產出結構化文件</li>
+          <li><strong>Human 審核</strong> — 核准後才能進入 Spec 階段</li>
+        </ol>
+
+        <h4>產出檔案</h4>
+        <p><code>docs/prd-NNN.md</code></p>
+
+        <h4>實際範例（Velora PRD-001 節錄）</h4>
+<pre>
+# PRD-001: Velora GUI 桌面應用
+
+## 1. 問題描述
+使用者在完成語音轉錄後，需要花費大量時間進行逐字稿後處理...
+
+## 4. 方案選項
+| 方案 | 優點 | 缺點 |
+|------|------|------|
+| A. Tauri v2 + Svelte | 安裝包小、跨平台 | 生態較年輕 |
+| B. Electron + React  | 生態成熟       | 安裝包大   |
+| C. Python GUI (PyQt) | 直接呼叫 pipeline | UI 開發效率低 |
+
+> 決定：A. Tauri v2 + Svelte
+
+## 6. Spec 拆解建議
+| Spec | 名稱 | 優先級 |
+|------|------|--------|
+| spec-001 | 基礎轉錄 + 結果瀏覽 | P0 |
+| spec-002 | Process Overlay | P0 |
+| ...
+</pre>
+        <div class="callout info">
+          <strong>PRD 的精髓</strong>在於「方案選項比較表」— 不只記錄選了什麼，更記錄為什麼不選其他方案。
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCH -->
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-arch</code> 架構決策記錄（ADR）</div>
+      <div class="skill-content">
+        <p><strong>做什麼：</strong>記錄架構決策的「為什麼」。寫給六個月後的自己看。</p>
+
+        <h4>使用時機</h4>
+        <ul>
+          <li><strong>專案啟動時</strong>：技術棧選型、目錄結構、測試策略</li>
+          <li><strong>開發過程中</strong>：引入新技術、重構模組、效能優化</li>
+        </ul>
+
+        <h4>產出檔案</h4>
+        <p><code>docs/architecture/adr-NNN-name.md</code></p>
+
+        <h4>實際範例（Velora ADR-001 節錄）</h4>
+<pre>
+# ADR-001: Pipeline 步驟進度回報策略
+
+## 各引擎進度能力
+| 引擎 | 進度機制 | 原生 callback |
+|------|---------|--------------|
+| faster-whisper | whisperx progress_callback | Yes |
+| whisper-cpp | new_segment_callback | Yes（間接）|
+| mlx-whisper | tqdm 輸出到 stderr | No |
+
+## 決策
+優先使用引擎原生 callback，無 callback 時
+parse stderr 的 tqdm 輸出作為 fallback。
+</pre>
+
+        <div class="callout success">
+          <strong>設定彈性：</strong>可在專案任何時間點觸發；會自動偵測是否已有 PRD 作為技術選型參考。
+        </div>
+      </div>
+    </div>
+
+    <!-- UIUX -->
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-uiux</code> UI/UX 設計基礎</div>
+      <div class="skill-content">
+        <p><strong>做什麼：</strong>從產品意圖出發，建立有辨識度的設計系統（不是套用 AI 預設風格）。</p>
+
+        <h4>Intent First 三問</h4>
+        <ol>
+          <li><strong>誰在用這個？</strong>（具體場景）</li>
+          <li><strong>他們在完成什麼？</strong>（一個動詞）</li>
+          <li><strong>應該有什麼感覺？</strong>（溫度、密度、個性）</li>
+        </ol>
+
+        <h4>設計決策涵蓋</h4>
+        <table>
+          <tr><th>面向</th><th>內容</th></tr>
+          <tr><td>色彩系統</td><td>主色、輔色、功能色、中性色</td></tr>
+          <tr><td>字型</td><td>字型家族與個性、大小級距</td></tr>
+          <tr><td>間距</td><td>基礎單位、密度選擇</td></tr>
+          <tr><td>深度策略</td><td>四選一：純邊框 / 淺陰影 / 層疊陰影 / 色差</td></tr>
+          <tr><td>元件規格</td><td>按鈕、表格、表單、Modal</td></tr>
+          <tr><td>狀態表現</td><td>default/hover/active/focus/disabled + loading/empty/error</td></tr>
+        </table>
+
+        <h4>品質檢驗（四項測試）</h4>
+        <ul>
+          <li><strong>Swap test</strong> — 換掉字型/排版，看起來還有差異嗎？</li>
+          <li><strong>Squint test</strong> — 模糊螢幕，還能看出層級嗎？</li>
+          <li><strong>Signature test</strong> — 找 5 個體現設計方向的元素</li>
+          <li><strong>Token test</strong> — CSS 變數名稱能聯想到產品世界嗎？</li>
+        </ul>
+
+        <h4>產出檔案</h4>
+        <p><code>guideline/ui/ui-guideline.md</code></p>
+      </div>
+    </div>
+
+    <!-- BDD -->
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-bdd</code> BDD 行為探索 <span class="opt">可選</span></div>
+      <div class="skill-content">
+        <p><strong>做什麼：</strong>用具體範例取代抽象描述。三視角探索 + Example Mapping 四色卡片法。</p>
+        <ul>
+          <li>🟡 <strong>Story</strong>：要實作的功能</li>
+          <li>🔵 <strong>Rule</strong>：業務規則 / 驗收條件</li>
+          <li>🟢 <strong>Example</strong>：具體情境 → 變成 Scenario</li>
+          <li>🔴 <strong>Question</strong>：未解決的疑問</li>
+        </ul>
+        <h4>產出檔案</h4>
+        <p><code>docs/features/[domain]/[name].feature</code>（Gherkin 格式）</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Phase 1 ═══ -->
+<section>
+  <div class="container">
+    <h2>
+      <span class="badge" style="background:var(--c-phase1)">Phase 1</span>
+      規劃與設計
+    </h2>
+    <p>產出技術規格與詳細的設計藍圖。</p>
+
+    <!-- Spec -->
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-spec</code> 技術規格與影響分析 <span class="tag red">Hard Gate</span></div>
+      <div class="skill-content">
+        <p><strong>做什麼：</strong>整個流程的<strong>戰略核心</strong> — 產出 spec.md（作戰計畫）和 progress.md（追蹤表）。</p>
+
+        <div class="callout danger">
+          <strong>最重要的步驟：Impact Analysis</strong> — 掃描 PRD + 現有程式碼 + 設計文件，產出「新增 vs. 修改」的影響表格。這一步決定了整個 Spec 的品質。
+        </div>
+
+        <h4>實際範例（Velora Spec-001 涉及範圍）</h4>
+<pre>
+## 頁面清單
+| 動作 | 頁面 | 說明 | UISpec |
+|------|------|------|--------|
+| 新增 | TranscribeView | 拖放音檔、參數設定 | docs/ui-specs/... |
+| 新增 | EditorView | 逐字稿段落列表 | docs/ui-specs/... |
+
+## Tauri Commands
+| 動作 | Command | 說明 | ApiSpec |
+|------|---------|------|---------|
+| 新增 | start_transcription | 啟動 sidecar | docs/api-specs/... |
+| 新增 | save_project | 寫入 .velora | docs/api-specs/... |
+</pre>
+
+        <h4>產出檔案</h4>
+        <ul>
+          <li><code>docs/specs/NNN-name/spec.md</code> — 技術規劃</li>
+          <li><code>docs/specs/NNN-name/progress.md</code> — 進度追蹤</li>
+          <li>更新 <code>docs/specs/specs-overview.md</code> — 全域索引</li>
+        </ul>
+
+        <h4>specs-overview 實際範例</h4>
+<pre>
+| # | 名稱 | 狀態 | PRD | 依賴 |
+|---|------|------|-----|------|
+| 001 | 基礎轉錄 + 結果瀏覽 | ✔️ | prd-001 | — |
+| 002 | Process Overlay | ✔️ | prd-001 | 001 |
+| 003 | 音訊播放 + 講者管理 | ✔️ | prd-001 | 001, 002 |
+| ...
+| 007 | 帳號系統 + Supabase | ✅ | prd-002 | 004 |
+</pre>
+
+        <div class="callout success">
+          <strong>設定彈性：</strong>任務拆解可由 AI 驅動（2-5 分鐘粒度）或團隊自行拆解。設計展開可全部、部分、或延後。
+        </div>
+      </div>
+    </div>
+
+    <!-- API Spec -->
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-api-spec</code> API 規格 + DB Schema</div>
+      <div class="skill-content">
+        <p><strong>做什麼：</strong>後端的完整施工藍圖 — 不只是 endpoint 清單，包含所有失敗情境。</p>
+
+        <h4>每份 API Spec 包含</h4>
+        <ul>
+          <li>方法、路徑、請求參數（含驗證規則）</li>
+          <li>回應（成功 + 每種錯誤）</li>
+          <li>完整業務邏輯流程</li>
+          <li>邊界條件</li>
+          <li><strong>錯誤映射表</strong>（所有可能的失敗情境）</li>
+          <li>呼叫範例（成功 + 錯誤）</li>
+        </ul>
+
+        <h4>實際範例（Velora list_cached_models）</h4>
+<pre>
+## 錯誤處理
+| 操作 | 錯誤情境 | Error Code | 使用者看到 |
+|------|---------|------------|-----------|
+| invoke | 無法啟動 Python | PYTHON_SPAWN_FAILED | 無法啟動：{detail} |
+| invoke | 逾時（15 秒） | PYTHON_TIMEOUT | 模型管理操作逾時 |
+| invoke | 回傳非 JSON | MODEL_LIST_FAILED | 無法載入：{detail} |
+
+## 邊界條件
+- HuggingFace cache 不存在 → 回傳空陣列
+- 大量非 Velora 模型 → 只回傳已知 repo_id
+- Python stderr 有 warning → 忽略，只讀 stdout
+</pre>
+
+        <h4>產出檔案</h4>
+        <ul>
+          <li><code>docs/api-specs/[module]/[domain]/[name].md</code></li>
+          <li><code>docs/api-specs/[module]/openapi.yaml</code>（REST API 時）</li>
+          <li><code>docs/schema/[domain].md</code>（DDL + 索引 + 關聯 + Migration）</li>
+        </ul>
+
+        <div class="callout success">
+          <strong>設定彈性：</strong>非 REST API 專案（如 Tauri IPC）可在 CLAUDE.md 自訂規範，例如取消 openapi.yaml、合併錯誤處理表格。
+        </div>
+      </div>
+    </div>
+
+    <!-- UI Spec -->
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-ui-spec</code> UI 頁面規格</div>
+      <div class="skill-content">
+        <p><strong>做什麼：</strong>Figma 告訴你「長什麼樣」，UI Spec 告訴你「怎麼運作」。</p>
+        <p>每份包含：頁面結構（ASCII 線框圖）、元件清單、欄位資料來源（對應哪支 API）、互動行為、驗證規則、權限控制、Responsive 設計。</p>
+
+        <h4>實際範例（Velora EditorView 線框圖）</h4>
+<div class="ascii-box">┌────────────────────────────────────────────┐
+│ Header                                      │
+│ 專案名稱                    🔍  📥  👥 4   │
+├────────────────────────────────────────────┤
+│ WaveformPlayer（固定高度）                  │
+│ ▁▂▃▅▇▅▃▂▁  波形  ▁▂▃▅▆▅▃▂▁               │
+│ ▶ 00:32/05:00  1.0x  👥  🔊               │
+├────────────────────────────────────────────┤
+│ TranscriptList（scrollable）                │
+│ ┌─────────────────────────────────────────┐│
+│ │ 00:00→00:03  SPEAKER_00          ▶     ││
+│ │ 我們今天來討論系統架構                   ││
+│ ├─────────────────────────────────────────┤│
+│ │ 00:03→00:07  SPEAKER_01  ★高亮   ▶    ││
+│ │ 好的，我先說明目前的進度                 ││
+│ └─────────────────────────────────────────┘│
+├────────────────────────────────────────────┤
+│ Footer                                      │
+│ meeting.wav · 5:30 · 42 個段落  engine · zh │
+└────────────────────────────────────────────┘</div>
+
+        <h4>產出檔案</h4>
+        <p><code>docs/ui-specs/[module]/[page]/[name].md</code></p>
+      </div>
+    </div>
+
+    <!-- Prototype -->
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-prototype</code> 互動式 HTML 原型 <span class="opt">可選</span></div>
+      <div class="skill-content">
+        <p><strong>做什麼：</strong>在投入完整開發前，用互動式 HTML 原型確認方向。單檔、內嵌 CSS/JS、可互動。</p>
+        <p><strong>核心原則：</strong>原型是用來確認方向後丟掉的，不是產品程式碼。</p>
+        <h4>產出檔案</h4>
+        <p><code>docs/prototypes/[name].html</code>（確認後通常丟棄）</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Phase 2 ═══ -->
+<section>
+  <div class="container">
+    <h2>
+      <span class="badge" style="background:var(--c-phase2)">Phase 2</span>
+      實作
+    </h2>
+    <p>以嚴格的 TDD 紀律執行 spec.md 的任務清單。</p>
+
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-develop</code> TDD 開發</div>
+      <div class="skill-content">
+
+        <h4>進入條件</h4>
+        <ul>
+          <li>spec.md 已核准</li>
+          <li>progress.md 的設計文件表全部完成（無「待撰寫」）</li>
+          <li>所有設計文件已通過自審</li>
+        </ul>
+
+        <h4>核心循環：RED → GREEN → REFACTOR</h4>
+        <div class="tdd-cycle">
+          <div class="tdd-step tdd-red">
+            <div class="icon">🔴</div>
+            <div class="name">RED</div>
+            <div class="desc">test-writer agent<br>撰寫失敗的測試<br>確認失敗是合法的</div>
+          </div>
+          <div class="tdd-step tdd-green">
+            <div class="icon">🟢</div>
+            <div class="name">GREEN</div>
+            <div class="desc">implementer agent<br>寫最少的程式碼<br>讓測試通過</div>
+          </div>
+          <div class="tdd-step tdd-refactor">
+            <div class="icon">🔵</div>
+            <div class="name">REFACTOR</div>
+            <div class="desc">消除重複<br>改善命名<br>保持測試通過</div>
+          </div>
+        </div>
+
+        <h4>Implementer 回報狀態</h4>
+        <table>
+          <tr><th>狀態</th><th>意義</th><th>後續動作</th></tr>
+          <tr><td><code>DONE</code></td><td>完成，測試通過</td><td>繼續下一個任務</td></tr>
+          <tr><td><code>DONE_WITH_CONCERNS</code></td><td>完成但有疑慮</td><td>記錄疑慮，繼續</td></tr>
+          <tr><td><code>NEEDS_CONTEXT</code></td><td>需要更多資訊</td><td>回饋迴圈（最多 1 次）</td></tr>
+          <tr><td><code>BLOCKED</code></td><td>無法繼續</td><td>升級給 Human</td></tr>
+        </table>
+
+        <h4>實際的 progress.md 追蹤（Velora Spec-006）</h4>
+<pre>
+- [x] Task 1: model_registry.py — 共用模型映射
+  - RED: 19 tests，失敗原因：ModuleNotFoundError ✓
+  - GREEN: 建立純資料映射模組 ✓
+  - Test: Unit ✓（22 passed + 全部 81 passed）
+- [x] Task 2: model_manager.py — 模型列舉
+  - RED: 8 tests，失敗原因：ModuleNotFoundError ✓
+  - GREEN: 實作 list_cached_models() ✓
+  - Test: Unit ✓（8 passed）
+- [x] Task 3: model_manager.py — 模型刪除
+  - RED: 9 tests，失敗原因：ModuleNotFoundError ✓
+  - GREEN: 實作 delete_cached_model() ✓
+  - Test: Unit ✓（13 passed + 全部 102 passed）
+</pre>
+
+        <h4>完成後的 De-Sloppify Pass</h4>
+        <p>移除 <code>console.log</code> / <code>debugger</code>、註解掉的程式碼、清理 import、檢查不必要的 <code>any</code>、移除 TODO hack。</p>
+
+        <div class="callout success">
+          <strong>設定彈性：</strong>測試策略可在 CLAUDE.md 預設或每次選擇（Unit / Integration / E2E）。獨立任務可並行執行。TDD 例外需 Human 核准。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Phase 3 ═══ -->
+<section>
+  <div class="container">
+    <h2>
+      <span class="badge" style="background:var(--c-phase3)">Phase 3</span>
+      驗證
+    </h2>
+
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-verify</code> 自動化驗證 Pipeline</div>
+      <div class="skill-content">
+        <p><strong>原則：</strong>沒有新鮮的驗證證據，就不能宣稱完成。</p>
+
+        <h4>驗證階段（全部執行，即使前面的失敗了）</h4>
+        <table>
+          <tr><th>#</th><th>階段</th><th>內容</th></tr>
+          <tr><td>1</td><td>Build</td><td>建構專案</td></tr>
+          <tr><td>2</td><td>Type Check</td><td>型別檢查</td></tr>
+          <tr><td>3</td><td>Lint</td><td>程式碼風格</td></tr>
+          <tr><td>4</td><td>Test Suite</td><td>完整測試</td></tr>
+          <tr><td>5</td><td>Diff Review</td><td>變更分析</td></tr>
+          <tr><td>6</td><td>Dependency Audit</td><td>依賴安全</td></tr>
+          <tr><td>7</td><td>Security Review</td><td>OWASP Top 10 靜態分析</td></tr>
+        </table>
+
+        <h4>結果分類</h4>
+        <p>
+          <span class="status pass">PASS — 無問題</span>&nbsp;&nbsp;
+          <span class="status warn">WARN — 需評估</span>&nbsp;&nbsp;
+          <span class="status fail">FAIL — 必須修復</span>
+        </p>
+
+        <div class="callout warn">
+          <strong>WARN 處理：</strong>每個 WARN 必須被評估 — 修復或記錄接受原因。沒有記錄原因的 WARN = 未評估 = 不算通過。
+        </div>
+
+        <h4>驗證報告範例</h4>
+<pre>
+## 結果摘要
+| 階段 | 狀態 | 說明 |
+|------|------|------|
+| Build | ✅ | 成功 |
+| Lint | ⚠️ | 4 unused imports |
+| Test | ✅ | 102 passed |
+| Security | ✅ | 0 critical, 0 major |
+
+## WARN 評估
+- Lint: 4 unused imports → auto-fixed ✓
+- Audit: pre-existing 上游依賴 → 接受 ✓
+
+## 判定：READY for Code Review
+</pre>
+
+        <p>失敗時回到 develop 修復，<strong>必須重跑完整 pipeline</strong>（不能只跑失敗的階段）。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Phase 4 ═══ -->
+<section>
+  <div class="container">
+    <h2>
+      <span class="badge" style="background:var(--c-phase4)">Phase 4</span>
+      審查
+    </h2>
+
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-review</code> 兩階段程式碼審查 <span class="tag red">Hard Gate</span></div>
+      <div class="skill-content">
+        <p><strong>原則：</strong>不信任報告，自己驗證。</p>
+
+        <h4>Stage 1：規格符合度（不通過不進 Stage 2）</h4>
+        <ul>
+          <li><strong>驗收條件核對</strong> — 每個 AC 都有對應的實作 + 測試 + 實際行為</li>
+          <li><strong>設計文件一致性</strong> — API 實作 vs. api-spec、UI 實作 vs. ui-spec</li>
+          <li><strong>範圍確認</strong> — 變更的檔案是否在 spec 計畫內</li>
+        </ul>
+
+        <h4>Stage 2：程式碼品質</h4>
+        <ul>
+          <li>架構（模組切分、依賴方向）</li>
+          <li>可讀性（命名、結構）</li>
+          <li>測試品質（行為驗證、邊界案例）</li>
+        </ul>
+
+        <h4>Issue 嚴重度</h4>
+        <table>
+          <tr><th>等級</th><th>含義</th><th>處理</th></tr>
+          <tr><td><span class="tag red">Critical</span></td><td>違反規格或破壞功能</td><td>必須修復</td></tr>
+          <tr><td><span class="tag yellow">Major</span></td><td>影響維護性/效能</td><td>應該修復</td></tr>
+          <tr><td><span class="tag green">Minor</span></td><td>規格外的改善建議</td><td>可選</td></tr>
+        </table>
+
+        <p>審查通過後產出 <strong>Manual Testing Checklist</strong>，Human 完成手動測試並最終核准。</p>
+        <p>修復迴圈：發現問題 → develop 修復 → 重跑 verify → 重跑 review，最多 3 次。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Phase 5 ═══ -->
+<section>
+  <div class="container">
+    <h2>
+      <span class="badge" style="background:var(--c-phase5)">Phase 5</span>
+      收尾
+    </h2>
+
+    <div class="skill-block">
+      <div class="skill-title"><code>/vif-close</code> 開發完成與文件同步</div>
+      <div class="skill-content">
+        <h4>工作內容</h4>
+        <ol>
+          <li><strong>設計文件同步</strong> — 如果實作偏離設計，更新 api-spec / ui-spec / schema，讓下一個讀者不被誤導</li>
+          <li><strong>完成檢查清單</strong>：
+            <ul>
+              <li>所有 scenario 已實作 + 測試通過</li>
+              <li>測試覆蓋率 ≥ 80%（核心路徑 ≥ 90%）</li>
+              <li>所有 Critical / Major issue 已解決</li>
+              <li>Security review 通過</li>
+              <li>progress.md 所有階段打勾</li>
+              <li>specs-overview.md 狀態更新為 done</li>
+            </ul>
+          </li>
+          <li><strong>版本控制</strong> — 所有變更 commit，必要時打 git tag</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Support skills ═══ -->
+<section>
+  <div class="container">
+    <h2>支援機制</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4 class="mt-0"><code>/vif-guideline</code> 專案規範解析</h4>
+        <p>被其他 skill 呼叫的服務，自動找到並注入專案特定的 coding guideline。</p>
+        <table class="mb-0 text-sm">
+          <tr><th>Context</th><th>載入 Guideline</th></tr>
+          <tr><td><code>api-spec</code></td><td><code>guideline/backend/</code></td></tr>
+          <tr><td><code>ui-spec</code></td><td><code>guideline/frontend/</code> + <code>ui/</code></td></tr>
+          <tr><td><code>schema</code></td><td><code>guideline/database/</code></td></tr>
+          <tr><td><code>testing</code></td><td><code>guideline/testing/</code></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h4 class="mt-0"><code>/vif-flow</code> 流程編排與初始化</h4>
+        <p>專案初始化、流程導航、workspace 設定。</p>
+        <ul class="mb-0">
+          <li><strong>Monorepo</strong>（預設）：docs/ 和 src/ 在同一 repo</li>
+          <li><strong>Multi-Repo</strong>：文件、前端、後端分別在不同 repo</li>
+          <li>升級協定：方法失敗最多重試 3 次</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Agents ═══ -->
+<section>
+  <div class="container">
+    <h2>6 個 AI Subagent</h2>
+    <p>每個 agent 有明確的職責範圍和工具權限。</p>
+
+    <div class="agent-grid">
+      <div class="agent-card">
+        <h4>test-writer</h4>
+        <p>TDD 的 RED 階段。從設計文件（api-spec / ui-spec / .feature）出發，撰寫失敗的測試。</p>
+        <p><span class="tag green">Phase 2</span> <span class="tag gray">完整權限</span></p>
+      </div>
+      <div class="agent-card">
+        <h4>implementer</h4>
+        <p>TDD 的 GREEN + REFACTOR 階段。寫最少的程式碼讓測試通過，然後重構。</p>
+        <p><span class="tag green">Phase 2</span> <span class="tag gray">完整權限</span></p>
+      </div>
+      <div class="agent-card">
+        <h4>spec-auditor</h4>
+        <p>文件一致性三階段審查：內部一致性 → 完整性 → 外部比對。</p>
+        <p><span class="tag blue">Phase 1</span> <span class="tag gray">完整權限</span></p>
+      </div>
+      <div class="agent-card">
+        <h4>verifier</h4>
+        <p>驗證 Pipeline 執行：Build → Type → Lint → Test → Diff → Audit。</p>
+        <p><span class="tag yellow">Phase 3</span> <span class="tag gray">Bash + Read only</span></p>
+      </div>
+      <div class="agent-card">
+        <h4>reviewer</h4>
+        <p>兩階段程式碼審查：規格符合度 + 程式碼品質。</p>
+        <p><span class="tag red">Phase 4</span> <span class="tag gray">完整權限</span></p>
+      </div>
+      <div class="agent-card">
+        <h4>security-reviewer</h4>
+        <p>OWASP Top 10 靜態程式碼分析。唯讀，不能修改任何檔案。</p>
+        <p><span class="tag yellow">Phase 3</span> <span class="tag gray">Read only</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ File structure ═══ -->
+<section>
+  <div class="container">
+    <h2>文件結構總覽</h2>
+    <p>vif 在專案中產生的完整文件結構：</p>
+
+<div class="file-tree"><span class="dir">docs/</span>
+├── <span class="file">prd-001.md</span>                          <span class="comment">← 產品需求文件</span>
+├── <span class="dir">architecture/</span>
+│   └── <span class="file">adr-001-decision-name.md</span>        <span class="comment">← 架構決策記錄</span>
+├── <span class="dir">features/</span>                           <span class="comment">← BDD 行為規格（可選）</span>
+│   └── <span class="dir">[domain]/</span>
+│       └── <span class="file">[name].feature</span>
+├── <span class="dir">specs/</span>
+│   ├── <span class="file">specs-overview.md</span>               <span class="comment">← 全域索引</span>
+│   └── <span class="dir">NNN-name/</span>
+│       ├── <span class="file">spec.md</span>                     <span class="comment">← 技術規劃（作戰計畫）</span>
+│       └── <span class="file">progress.md</span>                 <span class="comment">← TDD + 階段追蹤</span>
+├── <span class="dir">api-specs/</span>
+│   └── <span class="dir">[module]/[domain]/</span>
+│       └── <span class="file">[name].md</span>                   <span class="comment">← 單支 API 完整規格</span>
+├── <span class="dir">ui-specs/</span>
+│   └── <span class="dir">[module]/[page]/</span>
+│       └── <span class="file">[name].md</span>                   <span class="comment">← 單頁面完整規格</span>
+├── <span class="dir">schema/</span>
+│   └── <span class="file">[domain].md</span>                     <span class="comment">← DB Schema</span>
+└── <span class="dir">prototypes/</span>
+    └── <span class="file">[name].html</span>                     <span class="comment">← 互動式原型（可選）</span>
+
+<span class="dir">guideline/</span>
+├── <span class="dir">backend/</span>                            <span class="comment">← 後端開發規範</span>
+├── <span class="dir">frontend/</span>                           <span class="comment">← 前端開發規範</span>
+├── <span class="dir">ui/</span>
+│   └── <span class="file">ui-guideline.md</span>                 <span class="comment">← UI 設計基礎</span>
+├── <span class="dir">database/</span>                           <span class="comment">← 資料庫規範</span>
+└── <span class="dir">testing/</span>                            <span class="comment">← 測試規範</span></div>
+  </div>
+</section>
+
+<!-- ═══ Configuration ═══ -->
+<section>
+  <div class="container">
+    <h2>設定與彈性</h2>
+    <p>在專案的 <code>.claude/CLAUDE.md</code> 中設定 vif。</p>
+
+    <h3>基本設定範例</h3>
+<pre>
+## AI-Driven Development Flow
+
+本專案採用 vif。
+
+### 技術棧
+- 語言：Python
+- 測試：pytest
+- 建構：uv
+
+### 專案指令
+- Build: `uv build`
+- Test: `uv run pytest`
+- Lint: `uv run ruff check`
+
+### Human 介入點
+| Gate | Human 行為 | 說明 |
+|------|-----------|------|
+| PRD → Spec | Approve PRD | 確認問題定義 |
+| Spec → Develop | Approve Spec | 確認技術範圍 |
+| Review → Close | Approve Code | 最終審查 |
+</pre>
+
+    <h3>可設定項目一覽</h3>
+    <table>
+      <tr><th>設定項</th><th>選項</th><th>設定位置</th></tr>
+      <tr><td>Workspace 模式</td><td>Monorepo（預設）/ Multi-Repo</td><td>CLAUDE.md</td></tr>
+      <tr><td>測試策略</td><td>預設 / 每次選擇</td><td>CLAUDE.md 或互動</td></tr>
+      <tr><td>任務粒度</td><td>AI 驅動（2-5 分鐘）/ 團隊自行拆解</td><td>spec.md</td></tr>
+      <tr><td>設計展開</td><td>全部 / 部分 / 延後</td><td>互動選擇</td></tr>
+      <tr><td>Code Quality</td><td>啟用 / 不啟用</td><td>CLAUDE.md 或互動</td></tr>
+      <tr><td>AI Cross-Review</td><td>team mode / solo mode</td><td>CLAUDE.md</td></tr>
+      <tr><td>Guideline 映射</td><td>預設目錄 / 自訂路徑</td><td>CLAUDE.md</td></tr>
+      <tr><td>API Spec 格式</td><td>REST API / Tauri IPC / 自訂</td><td>CLAUDE.md</td></tr>
+      <tr><td>可跳過的階段</td><td>依任務類型決定</td><td>vif-flow 判斷</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ Real case ═══ -->
+<section>
+  <div class="container">
+    <h2>實際案例：Velora 專案</h2>
+    <p>Velora 是一個語音轉錄桌面應用（Tauri v2 + Svelte + Python），完整使用 vif 流程開發。</p>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <h4 class="mt-0">開發成果</h4>
+        <ul class="mb-0">
+          <li><strong>2</strong> 份 PRD（桌面應用 + 訂閱付費）</li>
+          <li><strong>3</strong> 份 ADR</li>
+          <li><strong>10</strong> 份 Spec（7 完成、1 進行中、2 規劃中）</li>
+          <li><strong>20+</strong> 份 API Spec</li>
+          <li><strong>10+</strong> 份 UI Spec</li>
+          <li><strong>2</strong> 份 DB Schema</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 class="mt-0">依賴圖</h4>
+<pre style="margin:0;font-size:.75rem;line-height:1.5">
+prd-001 (桌面應用)
+ 001 基礎轉錄
+  ├── 002 Overlay
+  │    └── 005 模型下載 ── 006 模型管理
+  └── 003 音訊播放
+       └── 004 編輯匯出 ──┐
+                           │
+prd-002 (訂閱付費)         │
+ 007 帳號系統 ◄────── 依賴 004
+  └── 008 訂閱管理
+       └── 009 AI 點數
+</pre>
+      </div>
+    </div>
+
+    <h3>Spec-006 完整追蹤（模型管理）</h3>
+    <table>
+      <tr><th>階段</th><th>狀態</th><th>細節</th></tr>
+      <tr><td>Phase 1: Spec</td><td><span class="tag green">Done</span></td><td>12 個驗收條件、6 個任務、完整錯誤處理表</td></tr>
+      <tr><td>Phase 2: Develop</td><td><span class="tag green">Done</span></td><td>6 個任務完成、102 個測試全部通過</td></tr>
+      <tr><td>Phase 3: Verify</td><td><span class="tag green">PASS</span></td><td>4 個 lint issue auto-fixed、Security PASS</td></tr>
+      <tr><td>Phase 4: Review</td><td><span class="tag green">APPROVED</span></td><td>0 Critical、2 Major（記錄後續改善）</td></tr>
+      <tr><td>Phase 5: Close</td><td><span class="tag green">Done</span></td><td>文件同步完成</td></tr>
+    </table>
+
+    <h4>progress.md 中的決策紀錄</h4>
+<pre>
+### 2026-03-27: 移除 diarize 模型管理
+- 考慮：講者辨識模型只有一個（~32 MB），使用者無替代選擇
+- 決定：v1 不列入管理範圍，聚焦佔用空間大的轉錄模型
+
+### 2026-03-27: 模型列表改用 Table + 排序
+- 考慮：原設計為 list view，使用者反饋希望用 table 方式
+- 決定：改為三欄 table，支援排序
+</pre>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer>
+  <div class="container">
+    <p>vif v2.10.0 &mdash; AI-Driven Development Flow</p>
+    <p>Built as a <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> plugin</p>
+  </div>
+</footer>
+
+<script>
+// Accordion for phase cards (if needed in future)
+document.querySelectorAll('.phase-header').forEach(header => {
+  header.addEventListener('click', () => {
+    header.classList.toggle('open');
+    header.nextElementSibling.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>

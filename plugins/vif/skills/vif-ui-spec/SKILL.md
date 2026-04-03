@@ -1,14 +1,14 @@
 ---
 name: vif-ui-spec
 description: >-
-  UI page/component specification writing. Trigger on: "UI spec", "UISpec",
+  Phase 1 - UI page/component specification writing. Trigger on: "UI spec", "UISpec",
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# UI Spec — 頁面規格
+# Phase 1 — UI Spec 頁面規格
 
 根據 Figma 畫面（或其他設計稿）撰寫 UI 頁面規格，定義每個頁面的欄位、操作、邏輯。
 

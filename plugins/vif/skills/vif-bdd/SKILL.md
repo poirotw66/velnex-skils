@@ -1,15 +1,15 @@
 ---
 name: vif-bdd
 description: >-
-  BDD Discovery — Three perspectives exploration, Example Mapping, and Gherkin
-  feature writing. Trigger on: "BDD", "行為驅動", "feature file", ".feature",
+  Phase 0 - BDD Discovery, three perspectives exploration, Example Mapping, and
+  Gherkin feature writing. Trigger on: "BDD", "行為驅動", "feature file", ".feature",
   "Example Mapping", "三視角", "discovery", "Gherkin", "寫 feature",
   "行為規格".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# BDD Discovery — 行為驅動探索
+# Phase 0 — BDD Discovery 行為驅動探索
 
 從需求出發，透過三視角探索與 Example Mapping 建立行為共識，產出 .feature 行為規格。
 

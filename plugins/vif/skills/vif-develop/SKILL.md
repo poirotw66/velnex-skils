@@ -1,14 +1,14 @@
 ---
 name: vif-develop
 description: >-
-  TDD development loop with subagent dispatch. Trigger on: "develop", "開發",
+  Phase 2 - TDD development loop with subagent dispatch. Trigger on: "develop", "開發",
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# Develop — TDD 開發
+# Phase 2 — Develop TDD 開發
 
 按 spec.md 任務清單（或自行拆解的任務），逐任務執行 TDD，直到所有任務完成。
 

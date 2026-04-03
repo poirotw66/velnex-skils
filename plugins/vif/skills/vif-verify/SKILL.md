@@ -1,14 +1,14 @@
 ---
 name: vif-verify
 description: >-
-  Automated verification pipeline. Trigger on: "verify", "驗證",
+  Phase 3 - Automated verification pipeline. Trigger on: "verify", "驗證",
   "verification", "pipeline", "驗證流水線", "跑驗證", "品質檢查",
   "build check", "pre-review check".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# Verify — 自動化驗證
+# Phase 3 — Verify 自動化驗證
 
 全面驗證程式碼品質，產出 Verification Report。
 

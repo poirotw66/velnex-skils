@@ -1,14 +1,14 @@
 ---
 name: vif-arch
 description: >-
-  Architecture decisions and ADR records. Trigger on: "architecture", "架構",
+  Phase 0 - Architecture decisions and ADR records. Trigger on: "architecture", "架構",
   "tech stack", "技術棧", "ADR", "架構決策", "技術選型", "project setup",
   "專案架構", "architecture decision".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# Architecture — 架構決策
+# Phase 0 — Architecture 架構決策
 
 專案架構設定與決策記錄。可在專案啟動時使用，也可在開發過程中記錄重大架構決策。
 

@@ -1,14 +1,14 @@
 ---
 name: vif-api-spec
 description: >-
-  API specification, OpenAPI, and DB schema writing. Trigger on: "API spec",
+  Phase 1 - API specification, OpenAPI, and DB schema writing. Trigger on: "API spec",
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# API Spec — API 規格 + OpenAPI + DB Schema
+# Phase 1 — API Spec 規格 + OpenAPI + DB Schema
 
 撰寫 API 完整規格（Request/Response/檢核/商業邏輯），維護 openapi.yaml，設計 DB Schema。
 

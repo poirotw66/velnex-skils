@@ -1,39 +1,54 @@
-# Velnex — vif Plugin 開發規範
+# Velnex — Plugin Marketplace 開發規範
 
-Velnex 是 vif plugin 的 marketplace repo。
+Velnex 是 Agentic Engineering Lifecycles 的 plugin marketplace，包含 3 個 plugin。
 
-## Plugin 結構
+## Repo 結構
 
 ```
 velnex/
 ├── .claude-plugin/
-│   └── marketplace.json           ← marketplace 定義
-├── plugins/vif/
-│   ├── .claude-plugin/
-│   │   └── plugin.json            ← plugin manifest
-│   ├── skills/                    ← 14 個 skills
-│   │   ├── vif-arch/              ← 架構決策 + ADR
-│   │   ├── vif-uiux/             ← UI/UX 設計基礎
-│   │   ├── vif-prd/               ← PRD 撰寫
-│   │   ├── vif-bdd/               ← BDD Discovery（可選）
-│   │   ├── vif-spec/              ← 影響分析 + 技術規劃
-│   │   ├── vif-prototype/         ← HTML 原型（可選）
-│   │   ├── vif-ui-spec/           ← UI 頁面規格
-│   │   ├── vif-api-spec/          ← API 規格 + openapi + dbschema
-│   │   ├── vif-guideline/         ← 專案規範解析
-│   │   ├── vif-develop/           ← TDD 開發
-│   │   ├── vif-verify/            ← 自動化驗證
-│   │   ├── vif-review/            ← 程式碼審查
-│   │   ├── vif-close/             ← 收尾
-│   │   └── vif-flow/              ← 流程編排 + routing
-│   └── agents/                    ← 6 個 agents
-│       ├── test-writer.md
-│       ├── implementer.md
-│       ├── spec-auditor.md
-│       ├── reviewer.md
-│       ├── verifier.md
-│       └── security-reviewer.md
-├── research/                      ← 研究資料
+│   └── marketplace.json               ← marketplace 定義
+├── .claude/
+│   └── CLAUDE.md                      ← repo 開發規範（本文件）
+├── docs/
+│   └── vif/                           ← vif 文件
+├── plugins/
+│   ├── vif/                           ← Velocity AI Flow
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── skills/                    ← 14 個 skills
+│   │   │   ├── vif-prd/              ← Phase 0: PRD 撰寫
+│   │   │   ├── vif-arch/             ← Phase 0: 架構決策 + ADR
+│   │   │   ├── vif-uiux/            ← Phase 0: UI/UX 設計基礎
+│   │   │   ├── vif-bdd/             ← Phase 0: BDD Discovery（可選）
+│   │   │   ├── vif-spec/            ← Phase 1: 影響分析 + 技術規劃
+│   │   │   ├── vif-prototype/       ← Phase 1: HTML 原型（可選）
+│   │   │   ├── vif-api-spec/        ← Phase 1: API 規格 + openapi + dbschema
+│   │   │   ├── vif-ui-spec/         ← Phase 1: UI 頁面規格
+│   │   │   ├── vif-develop/         ← Phase 2: TDD 開發
+│   │   │   ├── vif-verify/          ← Phase 3: 自動化驗證
+│   │   │   ├── vif-review/          ← Phase 4: 程式碼審查
+│   │   │   ├── vif-close/           ← Phase 5: 收尾
+│   │   │   ├── vif-guideline/       ← 跨階段: 專案規範解析
+│   │   │   └── vif-flow/            ← 跨階段: 流程編排 + routing
+│   │   └── agents/                    ← 6 個 agents
+│   │       ├── test-writer.md
+│   │       ├── implementer.md
+│   │       ├── spec-auditor.md
+│   │       ├── reviewer.md
+│   │       ├── verifier.md
+│   │       └── security-reviewer.md
+│   ├── vul/                           ← Vulnerability Unified Lifecycle
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/                    ← 5 個 skills
+│   │       ├── vul-analyze/          ← 掃描報告分析
+│   │       ├── vul-decision/         ← 漏洞決策
+│   │       ├── vul-fix/              ← 漏洞修復
+│   │       ├── vul-pr/              ← 建立 PR
+│   │       └── vul-cleanup/          ← Worktree 清理
+│   └── vex/                           ← Velnex Extensions
+│       ├── .claude-plugin/plugin.json
+│       └── agents/                    ← 共用 agents
+│           └── git-commit.md
 └── README.md
 ```
 

@@ -1,14 +1,14 @@
 ---
 name: vif-spec
 description: >-
-  Technical specification and impact analysis. Trigger on: "spec", "規格",
+  Phase 1 - Technical specification and impact analysis. Trigger on: "spec", "規格",
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# Spec — 技術規劃與影響分析
+# Phase 1 — Spec 技術規劃與影響分析
 
 分析需求的技術影響範圍，規劃需要的 API、頁面、DB Table，產出 spec.md 作為開發的作戰計畫。
 

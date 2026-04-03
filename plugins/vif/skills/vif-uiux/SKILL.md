@@ -1,14 +1,14 @@
 ---
 name: vif-uiux
 description: >-
-  UI/UX design foundation and style guide setup. Trigger on: "UI/UX", "設計基礎",
+  Phase 0 - UI/UX design foundation and style guide setup. Trigger on: "UI/UX", "設計基礎",
   "design system", "設計系統", "色系", "color", "字型", "font", "佈局", "layout",
   "style guide", "風格指南", "UI guideline", "design token", "theme".
 metadata:
-  version: 2.10.0
+  version: 2.12.0
 ---
 
-# UI/UX — 設計基礎
+# Phase 0 — UI/UX 設計基礎
 
 建立專案的 UI/UX 設計基礎，定義視覺風格、色彩、字型、元件規範。確保所有頁面有一致的設計語言。
 

@@ -1,0 +1,8 @@
+{
+  "name": "vex",
+  "description": "vex (Velnex Extensions) — Shared utility agents and tools for the Velnex ecosystem",
+  "version": "1.0.0",
+  "author": {
+    "name": "Vito"
+  }
+}

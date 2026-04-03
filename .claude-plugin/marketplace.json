@@ -4,7 +4,7 @@
     "name": "Vito"
   },
   "metadata": {
-    "description": "vif — AI-driven development flow marketplace",
+    "description": "Agentic Engineering Lifecycles",
     "pluginRoot": "./plugins"
   },
   "plugins": [
@@ -12,6 +12,16 @@
       "name": "vif",
       "source": "./plugins/vif",
       "description": "vif (Velocity AI Flow) — AI-driven development flow with 14 skills supporting both fully-automated and team-assisted modes"
+    },
+    {
+      "name": "vul",
+      "source": "./plugins/vul",
+      "description": "vul (Vulnerability Unified Lifecycle) — Vulnerability remediation pipeline with 5 skills from scan analysis to PR and cleanup"
+    },
+    {
+      "name": "vex",
+      "source": "./plugins/vex",
+      "description": "vex (Velnex Extensions) — Shared utility agents and tools for the Velnex ecosystem"
     }
   ]
 }
