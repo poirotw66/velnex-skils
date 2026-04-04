@@ -119,6 +119,7 @@ your-project/
 
 | 符號 | 狀態 |
 |------|------|
+| — | not-started |
 | 📋 | draft |
 | ✅ | approved |
 | 🚧 | in-progress |

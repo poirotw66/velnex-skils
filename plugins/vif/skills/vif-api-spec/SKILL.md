@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 2.12.0
+  version: 2.13.0
 ---
 
 # Phase 1 — API Spec 規格 + OpenAPI + DB Schema

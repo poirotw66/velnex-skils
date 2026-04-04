@@ -5,7 +5,7 @@ description: >-
   "tech stack", "技術棧", "ADR", "架構決策", "技術選型", "project setup",
   "專案架構", "architecture decision".
 metadata:
-  version: 2.12.0
+  version: 2.13.0
 ---
 
 # Phase 0 — Architecture 架構決策

@@ -5,7 +5,7 @@ description: >-
   "product requirement", "問題定義", "需求文件", "要做什麼", "why build",
   "寫 PRD", "新需求".
 metadata:
-  version: 2.12.0
+  version: 2.13.0
 ---
 
 # Phase 0 — PRD 產品探索
@@ -66,11 +66,42 @@ metadata:
 - 不在範圍內
 - Feature/Spec 拆解建議
 
-### Step 4: Deliver & Commit
+### Step 4: Deliver & Approve
 
 - 呈現 PRD 給 Human 審查
 - Human 要求修改 → 修改後重新呈現
-- Human approve → 更新狀態為 `approved` → **commit**（`docs: add prd-NNN [名稱]`）→ 進入 Phase 1（`/vif-spec`）
+- Human approve → 更新狀態為 `approved`
+
+### Step 5: 展開 Spec 清單
+
+PRD approved 後，從 Section 6 的拆解建議展開 specs-overview：
+
+1. 讀取 PRD Section 6 的 spec 清單與依賴關係
+2. 將所有 spec 以 — (not-started)狀態寫入 `docs/specs/specs-overview.md`
+3. 呈現 specs-overview 給 Human 確認：
+
+```
+> PRD 已 approved。以下是拆解的 Spec 清單：
+>
+> | # | 名稱 | 領域 | 狀態 | PRD | 依賴 | 備註 |
+> |---|------|------|------|-----|------|------|
+> | 001 | [名稱] | [領域] | — | prd-NNN | — | [摘要] |
+> | 002 | [名稱] | [領域] | — | prd-NNN | 001 | [摘要] |
+>
+> 請確認：
+>   1. Spec 拆分是否合理？
+>   2. 依賴關係是否正確？
+>   3. 命名與領域分類是否恰當？
+```
+
+4. Human 確認（可調整後再確認）
+
+> 如果 `specs-overview.md` 尚未建立（未執行 `/vif-flow` init），在此步驟一併建立。
+
+### Step 6: Commit & Next
+
+- **commit**（`docs: add prd-NNN [名稱]`）
+- 進入 Phase 1（`/vif-spec`）
 
 ## Skip Conditions
 
@@ -85,5 +116,7 @@ metadata:
 
 - [ ] PRD 文件已建立（`docs/prd-NNN.md`）
 - [ ] 問題定義明確
-- [ ] Human 已 approve
+- [ ] Human 已 approve PRD
+- [ ] specs-overview.md 已展開（Section 6 → — (not-started)條目）
+- [ ] Human 已確認 specs-overview
 - [ ] 已 commit
