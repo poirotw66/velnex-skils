@@ -3,7 +3,7 @@ name: vul-pr
 description: >-
   為漏洞修復建立 Pull Request，支援 Azure DevOps 和 GitHub 平台。用於漏洞修復完成後建立 PR 提交審核。當使用者要求建立 PR、或執行 /vul-pr 時使用此 skill。
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Vul PR
@@ -16,6 +16,10 @@ metadata:
 - 修復分支已 push 到 remote
 - 目前在 worktree 目錄中
 - 已安裝對應 CLI 工具（`az` 或 `gh`）
+
+## Configuration
+
+> 讀取專案 `.claude/CLAUDE.md` 中 `vul 設定` 的 `scan-branch` 值作為 `SCAN_BRANCH` 變數（預設：`develop`）。PR 的 target branch 使用此值。
 
 ## Workflow
 
@@ -178,7 +182,7 @@ az repos pr create \
 EOF
 )" \
   --source-branch "security/fix-{COMMIT_7}" \
-  --target-branch "develop"
+  --target-branch "${SCAN_BRANCH}"
 ```
 
 **GitHub**
@@ -189,7 +193,7 @@ gh pr create \
 {PR_DESCRIPTION}
 EOF
 )" \
-  --base develop \
+  --base "${SCAN_BRANCH}" \
   --head "security/fix-{COMMIT_7}"
 ```
 
@@ -276,7 +280,7 @@ echo "✅ PR 已建立"
 echo "🔗 PR URL: ${PR_URL}"
 echo "📝 PR #${PR_NUMBER}"
 echo "🌿 Source: security/fix-${COMMIT_7}"
-echo "🎯 Target: develop"
+echo "🎯 Target: ${SCAN_BRANCH}"
 
 # 更新 PR 資訊到狀態追蹤
 jq --arg commit "${COMMIT_7}" \

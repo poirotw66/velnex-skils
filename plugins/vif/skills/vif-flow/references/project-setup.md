@@ -59,14 +59,22 @@ your-project/
 
 本專案採用 vif。
 
+模式：完全自動化（Solo）
+流程：技術先行
+
+> 模式選項：完全自動化（Solo）/ 輔助自動化（Team）
+> 流程選項：技術先行 / 產品先行
+
 ### Skills
 
 | 類別 | Skill | 說明 |
 |------|-------|------|
 | 架構 | `/vif-arch` | 架構決策 + ADR |
+| 設計基礎 | `/vif-uiux` | UI/UX 設計基礎 |
 | 需求 | `/vif-prd` | PRD 撰寫 |
 | 行為 | `/vif-bdd` | BDD Discovery（可選） |
 | 規劃 | `/vif-spec` | 影響分析 + 技術規劃 |
+| 原型 | `/vif-prototype` | HTML 原型（可選） |
 | 設計 | `/vif-ui-spec` | UI 頁面規格 |
 | 設計 | `/vif-api-spec` | API + openapi + dbschema |
 | 開發 | `/vif-develop` | TDD 開發 |
@@ -76,12 +84,16 @@ your-project/
 
 ### 技術棧
 
+> /vif-arch 完成後會自動填入此區塊。也可手動填寫。
+
 - 語言：[TypeScript / Python / Go / ...]
 - 框架：[Next.js / FastAPI / Gin / ...]
 - 測試：[Jest / Vitest / pytest / ...]
 - 建構：[npm / bun / cargo / ...]
 
 ### 專案指令
+
+> /vif-arch 完成後會自動填入此區塊。也可手動填寫。
 
 - Build: `[npm run build / ...]`
 - Test: `[npm test / ...]`
@@ -90,22 +102,44 @@ your-project/
 
 ### 測試策略
 
+> /vif-arch 完成後會自動填入此區塊。也可手動填寫。
+
 - Backend: Unit + Integration
 - Frontend: Unit + 關鍵流程 E2E
 
+### 設計基礎
+
+> /vif-uiux 完成後會自動填入此區塊。也可手動填寫。
+
+詳見 `guideline/ui/ui-guideline.md`
+
 ### vif-verify 設定
+
+> 啟用 /vif-verify 的 Code Quality 檢查（Reuse、Quality、Efficiency），使用 Claude Code 內建 /simplify skill。
 
 # - Code Quality: true
 
+### AI Cross-Review（可選，取消註解啟用）
+
+> 使用第二個 AI CLI（如 Codex）對設計文件、安全審查、程式碼審查進行獨立交叉驗證。
+> - **solo**：設計文件在開發前統一審查一次（/vif-develop entry gate）
+> - **team**：設計文件在各 skill 完成時個別審查（/vif-spec, /vif-api-spec, /vif-ui-spec）
+> - **verify / review**：不分 mode，分別在 /vif-verify 和 /vif-review 完成時觸發
+> 完整觸發時機見 vif-flow「AI Cross-Review Trigger Points」。
+
+# - mode: solo
+# - design: codex
+# - verify: codex
+# - review: codex
+
 ### Guideline 映射（可選，覆蓋目錄慣例，支援檔案或資料夾）
+
+> 指定各 context 對應的 guideline 路徑，讓 /vif-guideline 注入正確的開發規範給 agent。未設定時依目錄慣例自動匹配。
 
 # - api-spec → guideline/backend/
 # - ui-spec → guideline/frontend/
 # - testing → guideline/testing/
 
-### Git 設定
-
-# - default-branch: main
 ```
 
 ### 4. 初始化追蹤文件

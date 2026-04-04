@@ -3,7 +3,7 @@ name: vul-fix
 description: >-
   依據決策報告進行漏洞修復，包含 Checkmarx 程式碼漏洞、Mend 套件漏洞和 Docker Image 漏洞。當使用者要求修復安全漏洞、或執行 /vul-fix 時使用此 skill。
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Vul Fix

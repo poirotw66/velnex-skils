@@ -1,7 +1,7 @@
 {
   "name": "vul",
   "description": "vul (Vulnerability Unified Lifecycle) — Vulnerability remediation pipeline with 5 skills from scan analysis to PR and cleanup",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Vito"
   }

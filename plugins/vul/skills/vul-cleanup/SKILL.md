@@ -3,7 +3,7 @@ name: vul-cleanup
 description: >-
   管理和清理漏洞修復的 Git worktree，列出所有 worktree、檢查 PR 狀態、並選擇性刪除。當使用者要求清理 worktree、或執行 /vul-cleanup 時使用此 skill。
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Vul Cleanup
@@ -14,6 +14,10 @@ metadata:
 
 - 在主專案目錄中執行
 - 已安裝 `gh` CLI（用於檢查 PR 狀態）
+
+## Configuration
+
+> 讀取專案 `.claude/CLAUDE.md` 中 `vul 設定` 的 `scan-branch` 值作為 `SCAN_BRANCH` 變數（預設：`develop`）。狀態更新會提交到此分支。
 
 ## Workflow
 
@@ -46,24 +50,11 @@ echo "📍 目前位置: $(pwd)"
 current_branch=$(git branch --show-current)
 echo "🌿 當前分支: $current_branch"
 
-# 檢查是否在主分支（develop 或 main）
-if [ "$current_branch" != "develop" ] && [ "$current_branch" != "main" ]; then
+# 檢查是否在主分支（SCAN_BRANCH）
+if [ "$current_branch" != "${SCAN_BRANCH}" ]; then
     echo ""
-    echo "⚠️  目前不在 develop/main 分支"
-    echo "   狀態更新需要在主分支上進行"
-    echo ""
-
-    # 檢查哪個主分支存在
-    if git show-ref --verify --quiet refs/heads/develop; then
-        main_branch="develop"
-    elif git show-ref --verify --quiet refs/heads/main; then
-        main_branch="main"
-    else
-        echo "❌ 找不到 develop 或 main 分支"
-        exit 1
-    fi
-
-    echo "建議切換到 $main_branch 分支"
+    echo "⚠️  目前不在 ${SCAN_BRANCH} 分支"
+    echo "   狀態更新需要在 ${SCAN_BRANCH} 分支上進行"
     echo ""
 fi
 ```
@@ -72,7 +63,7 @@ fi
 
 | 選項 | 說明 |
 |------|------|
-| 選項 1 | 切換到 ${main_branch} 分支並繼續（推薦） |
+| 選項 1 | 切換到 ${SCAN_BRANCH} 分支並繼續（推薦） |
 | 選項 2 | 留在當前分支並繼續（狀態更新會提交到當前分支） |
 | 選項 3 | 取消執行 |
 
@@ -87,17 +78,17 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
 fi
 
 # 切換到主分支
-git checkout $main_branch
+git checkout ${SCAN_BRANCH}
 
-echo "✅ 已切換到 $main_branch 分支"
+echo "✅ 已切換到 ${SCAN_BRANCH} 分支"
 ```
 
 #### 1.3 同步最新狀態
 
 ```bash
 # 拉取最新變更
-echo "🔄 更新 $main_branch 分支..."
-git pull origin $main_branch
+echo "🔄 更新 ${SCAN_BRANCH} 分支..."
+git pull origin ${SCAN_BRANCH}
 
 if [ $? -ne 0 ]; then
     echo "❌ 拉取失敗，請手動處理衝突或檢查網路連線"
@@ -110,10 +101,10 @@ echo "✅ 分支已同步到最新狀態"
 > [!IMPORTANT]
 > **為什麼要在主分支執行？**
 >
-> vul-cleanup 會更新 scan-status.json 的狀態為 `completed`，這個變更應該提交到主分支（develop/main），因為：
-> 1. PR 已 merge，修復分支的變更已合併到主分支
-> 2. 主分支上的 scan-status.json 狀態目前是 `review`（來自 PR merge）
-> 3. 狀態更新為 `completed` 需要提交到主分支，讓其他人能看到最新狀態
+> vul-cleanup 會更新 scan-status.json 的狀態為 `completed`，這個變更應該提交到 `SCAN_BRANCH` 分支，因為：
+> 1. PR 已 merge，修復分支的變更已合併到 `SCAN_BRANCH`
+> 2. `SCAN_BRANCH` 上的 scan-status.json 狀態目前是 `review`（來自 PR merge）
+> 3. 狀態更新為 `completed` 需要提交到 `SCAN_BRANCH`，讓其他人能看到最新狀態
 
 ### 2. 列出所有 Worktree
 

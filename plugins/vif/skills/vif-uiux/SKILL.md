@@ -5,7 +5,7 @@ description: >-
   "design system", "設計系統", "色系", "color", "字型", "font", "佈局", "layout",
   "style guide", "風格指南", "UI guideline", "design token", "theme".
 metadata:
-  version: 2.13.0
+  version: 2.14.0
 ---
 
 # Phase 0 — UI/UX 設計基礎
@@ -184,7 +184,9 @@ Spacing: [基準單位]
 ## 產出
 
 - `guideline/ui/ui-guideline.md` — 完整設計基礎（含每個決策的 WHY）
-- 更新 `.claude/CLAUDE.md`（加入設計基礎摘要）
+- 更新 `.claude/CLAUDE.md`：
+  - 填入「設計基礎」區塊（摘要）
+  - 啟用「Guideline 映射」中 `ui-spec` 和 `prototype` 的映射（取消註解並指向 `guideline/ui/`）
 
 ## Exit Criteria
 
@@ -192,5 +194,6 @@ Spacing: [基準單位]
 - [ ] 產品領域探索完成（四項產出）
 - [ ] 設計基礎文件已建立
 - [ ] 品質測試四項通過
+- [ ] CLAUDE.md 已更新（設計基礎摘要 + Guideline 映射）
 - [ ] Human 已確認
 - [ ] 已 commit

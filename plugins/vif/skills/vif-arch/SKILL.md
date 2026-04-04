@@ -5,7 +5,7 @@ description: >-
   "tech stack", "技術棧", "ADR", "架構決策", "技術選型", "project setup",
   "專案架構", "architecture decision".
 metadata:
-  version: 2.13.0
+  version: 2.14.0
 ---
 
 # Phase 0 — Architecture 架構決策
@@ -44,7 +44,9 @@ metadata:
 
 產出：
 - `docs/architecture/adr-001-[名稱].md`（使用 `references/adr-template.md`）
-- 更新 `.claude/CLAUDE.md`（技術棧、專案指令）
+- 更新 `.claude/CLAUDE.md`：
+  - 填入「技術棧」、「專案指令」、「測試策略」區塊
+  - 如建立了 `guideline/` 檔案 → 啟用「Guideline 映射」（取消註解並填入實際路徑）
 - 更新 `guideline/`（如需要）
 
 ### B. 架構決策（持續）
@@ -73,5 +75,6 @@ metadata:
 ## Exit Criteria
 
 - [ ] 決策已記錄為 ADR
-- [ ] 相關的 CLAUDE.md / guideline 已更新（如需要）
+- [ ] CLAUDE.md 已更新（技術棧、專案指令、測試策略）
+- [ ] CLAUDE.md Guideline 映射已更新（如有建立 guideline/ 檔案）
 - [ ] 已 commit

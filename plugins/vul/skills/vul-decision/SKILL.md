@@ -3,7 +3,7 @@ name: vul-decision
 description: >-
   審查漏洞分析報告，與 AI 協作決策後續處理方式（修復或不修復），並記錄決策理由。當使用者要求審查漏洞、決定修復策略、或執行 /vul-decision 時使用此 skill。
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Vul Decision

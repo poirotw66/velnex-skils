@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.13.0
+  version: 2.14.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查

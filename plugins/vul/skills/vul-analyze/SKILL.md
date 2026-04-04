@@ -3,7 +3,7 @@ name: vul-analyze
 description: >-
   從 GCS 下載漏洞掃描報告，分析 Checkmarx 和 Mend 掃描結果，產出 3 份漏洞分析報告。當使用者要求分析安全漏洞掃描報告、下載掃描結果、或執行 /vul-analyze 時使用此 skill。
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Vul Analyze

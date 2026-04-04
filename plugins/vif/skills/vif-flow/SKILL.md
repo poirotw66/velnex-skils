@@ -6,7 +6,7 @@ description: >-
   "哪個階段", "下一步", "flow overview", "流程總覽", "init", "初始化",
   "setup", "專案設定", "對齊結構", "align structure".
 metadata:
-  version: 2.13.0
+  version: 2.14.0
 ---
 
 # vif (Velocity AI Flow) — AI-Driven Development Flow
@@ -266,6 +266,21 @@ code repo 路徑: /absolute/path/to/project-frontend
 | 12 | WARN 評估 | `/vif-verify` | 評估 WARN 要修還是記錄理由 |
 | 13 | 手動測試 | `/vif-review` | 執行 reviewer 產出的手動測試清單 |
 | 14 | Escalation | 所有 skill | 3 次失敗後 Human 決定 |
+
+## AI Cross-Review Trigger Points
+
+需在 CLAUDE.md 啟用 `AI Cross-Review` 設定才會觸發。
+
+| 設定 key | 觸發 Skill | 觸發時機 | mode |
+|----------|-----------|---------|------|
+| `design` | `/vif-spec` | spec-auditor + 自我審視通過後 | team only |
+| `design` | `/vif-api-spec` | spec-auditor 通過後 | team only |
+| `design` | `/vif-ui-spec` | spec-auditor 通過後 | team only |
+| `design` | `/vif-develop` | Entry Gate Pass 3 通過後 | solo only |
+| `verify` | `/vif-verify` | security-reviewer 完成後 | — |
+| `review` | `/vif-review` | Stage 1+2 完成後 | — |
+
+> **solo vs team**：solo 在開發前統一審查所有設計文件（效率高）；team 在各 skill 完成時個別審查（回饋快）。verify 和 review 不分 mode。
 
 ## Documents
 
