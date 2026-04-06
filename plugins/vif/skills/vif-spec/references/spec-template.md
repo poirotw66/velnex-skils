@@ -39,6 +39,8 @@
 | 新增 | | | | | docs/api-specs/... 或「待撰寫」 |
 | 修改 | | | | | docs/api-specs/...（既有） |
 
+> Request/Response 定義於 /vif-api-spec，此處僅列清單與路由。
+
 ### DB 清單
 
 | 動作 | Table | 說明 | Schema |
@@ -60,13 +62,14 @@
 
 ### 依賴圖
 
-task-1, task-2 [P] → task-3 (depends: 1,2) → task-4 (depends: 3)
+task-1 → task-3 (depends: 1,2)
+task-2 → task-3 (depends: 1,2) → task-4 (depends: 3)
 
 ### 任務清單
 
-1. [P] [任務描述] — 影響: [檔案]
+1. [ ] [任務描述] — 影響: [檔案]
    - spec ref: docs/api-specs/[module]/[name].md
-2. [P] [任務描述] — 影響: [檔案]
+2. [ ] [任務描述] — 影響: [檔案]
    - spec ref: docs/ui-specs/[module]/[name].md
 3. [ ] [任務描述] — 依賴: 1, 2
    - spec ref: docs/api-specs/[module]/[name].md

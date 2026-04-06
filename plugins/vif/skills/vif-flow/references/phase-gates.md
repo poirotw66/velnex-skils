@@ -22,6 +22,7 @@
 - [ ] PRD 文件已建立（`docs/prd-NNN.md`）
 - [ ] 問題定義明確
 - [ ] Human 已 approve PRD
+- [ ] specs-overview.md 已更新
 - [ ] 已 commit
 
 ### BDD → Spec（如有 BDD）
@@ -63,17 +64,22 @@
 
 ### Verify → Review
 
-- [ ] Core stages 全部 PASS
-- [ ] Security Review 通過
-- [ ] Verification Report 已產出
+- [ ] Core stages 全部 ✅ PASS
+- [ ] 🔴🟠 findings 全部修復
+- [ ] 🟡🟢 findings 已由 Human 決定（修復或跳過）
+- [ ] Verification Report 已儲存並 commit
 
 ### Review → Close
 
 - [ ] Spec + Design Compliance 通過
 - [ ] Code Quality 審查完成
-- [ ] 無 🔴 Critical 未修復
-- [ ] 無 🟡 Major 未修復（或有正當理由）
-- [ ] Human 已 approve
+- [ ] 🔴🟠 findings 全部修復
+- [ ] 🟡🟢 findings 已呈現 Human 決定
+- [ ] Review Report 已儲存
+- [ ] Manual Testing Checklist 已列出
+- [ ] Human 完成人工測試並確認
+- [ ] progress.md Phase 4 已更新
+- [ ] Human approve 後已 commit
 
 ### Close → Done
 

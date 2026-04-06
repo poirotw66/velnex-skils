@@ -67,20 +67,21 @@ Focus on **changed files**. Perform systematic review following OWASP Top 10:
 | Severity | Criteria | Examples |
 |----------|----------|---------|
 | 🔴 Critical | Exploitable, data breach risk | SQL injection, hardcoded credentials |
-| 🟡 Major | Security weakness, exploitable under conditions | Missing input validation, weak hashing |
-| 🟢 Minor | Best practice deviation, low risk | Missing security headers, verbose errors |
+| 🟠 High | Security weakness, exploitable under conditions | Missing input validation, weak hashing |
+| 🟡 Medium | Security improvement, low exploitability | Verbose error messages, missing rate limiting |
+| 🟢 Low | Best practice deviation, minimal risk | Missing security headers, outdated TLS config |
 
 ## Report Format
 
 ```
 # Security Review Report
 
-## Risk Level: LOW / MEDIUM / HIGH / CRITICAL
+## Overall Risk: 🔴 / 🟠 / 🟡 / 🟢
 
 ## Findings
 
 ### [Finding Title]
-- **Severity**: 🔴/🟡/🟢
+- **Severity**: 🔴/🟠/🟡/🟢
 - **Category**: [OWASP category]
 - **Location**: [file:line]
 - **Description**: [what's wrong]
@@ -89,8 +90,9 @@ Focus on **changed files**. Perform systematic review following OWASP Top 10:
 ## Summary
 - Total findings: N
 - 🔴 Critical: N
-- 🟡 Major: N
-- 🟢 Minor: N
+- 🟠 High: N
+- 🟡 Medium: N
+- 🟢 Low: N
 ```
 
 ## Principles

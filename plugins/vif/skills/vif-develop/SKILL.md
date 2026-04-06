@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.14.0
+  version: 2.15.0
 ---
 
 # Phase 2 — Develop TDD 開發
@@ -106,12 +106,12 @@ metadata:
 ├── 有設計文件表 →
 │   ├── 有「待撰寫」→ ❌ 阻擋，列出缺少的文件，提示先完成
 │   ├── 有自審 ⬜ → ❌ 阻擋，列出未自審的文件
-│   ├── Pass 3 未勾選 → 派遣 spec-auditor 交叉比對：
+│   ├── Pass 3 未勾選 → 派遣 spec-auditor 交叉比對（+ AI Cross-Review 如啟用，平行）：
 │   │     scope: cross-check
 │   │     targets: 表中所有已完成的設計文件路徑
-│   │     通過 → 勾選 Pass 3 checkbox，commit，繼續
+│   │     兩方通過 → 勾選 Pass 3 checkbox，commit，繼續
 │   │     失敗 → 列出問題，阻擋開發
-│   ├── 全部 ✓ + Pass 3 ✓ → AI Cross-Review（見下方）→ ✅ 放行
+│   ├── 全部 ✓ + Pass 3 ✓ → ✅ 放行
 └── 無設計文件區塊 → ❌ 阻擋，回 vif-spec 補建 progress.md
 ```
 
@@ -119,9 +119,9 @@ metadata:
 
 **AI Cross-Review（可選，solo mode only）：**
 
-讀取 CLAUDE.md `AI Cross-Review` 設定，`design` 已啟用且 mode 為 solo 時，在 Pass 3 通過後觸發。傳入 progress.md 設計文件表中所有已完成的設計文件。
+讀取 CLAUDE.md `AI Cross-Review` 設定，`design` 已啟用且 mode 為 solo 時，與 spec-auditor Pass 3 同時平行觸發。傳入 progress.md 設計文件表中所有已完成的設計文件。
 
-執行：呼叫設定的 AI CLI → 比對 spec-auditor 結果 → 有新發現則修正後重跑 spec-auditor Pass 3。
+執行：spec-auditor Pass 3 與設定的 AI CLI 平行進行獨立審查 → 兩方完成後比對結果 → 有新發現則修正後重跑。
 
 > team mode 的設計文件 Cross-Review 在各 skill 內個別觸發（見 `/vif-spec`、`/vif-api-spec`、`/vif-ui-spec`）。
 
@@ -170,7 +170,7 @@ For each task:
 │  3. REFACTOR  — implementer 清理（保持綠燈）     │
 │  4. Verify    — 輕量驗證（build + typecheck）     │
 │  5. Update    — 更新 progress.md                 │
-│  6. Commit    — per-scenario 或 per-task         │
+│  6. Commit    — per-task 自動 commit              │
 │                                                  │
 │  → Next task (respect dependency order)          │
 └──────────────────────────────────────────────────┘
@@ -179,9 +179,8 @@ For each task:
 ### Task Execution Order
 
 1. 讀取 spec.md 任務清單和依賴圖（如有）
-2. `[P]` 標記的任務可平行處理（用 Agent tool 並行派遣）
-3. 有依賴的任務必須等依賴完成
-4. 每完成一個任務，更新 progress.md（含 TDD 紀錄）
+2. 依序逐一執行（依賴圖決定順序，無依賴的任務可任意排序）
+3. 每完成一個任務，更新 progress.md（含 TDD 紀錄）→ 自動 commit
 
 ### RED Stage
 
@@ -280,7 +279,7 @@ npm test -- --related  # 執行相關測試
 
 ### Commit
 
-建議以 **scenario 或功能邏輯單元** 為一個 commit：
+每個 task 完成後**自動 commit**（test + implementation + progress.md）。Multi-repo 下各 repo 分別 commit：
 
 ```
 feat: implement login API endpoint (spec-001)
@@ -296,6 +295,14 @@ feat: implement login failure lockout (spec-001)
 - 確保 import 排序整潔
 - 檢查不必要的 `any` 類型
 - 確認無 TODO hack 遺留
+
+### Review Fix Commit
+
+Review 修復回到 Phase 2 時，修復後 commit 使用：
+
+```
+fix: address review feedback (spec-001)
+```
 
 ## Failure Handling
 

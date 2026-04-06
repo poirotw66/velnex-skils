@@ -109,7 +109,7 @@ For each finding:
 
 ```
 ### [file:line] Brief description
-**Severity**: 🔴 Critical / 🟡 Major / 🟢 Minor
+**Severity**: 🔴 Critical / 🟠 High / 🟡 Medium / 🟢 Low
 
 **Problem**: [specific description of the issue]
 
@@ -120,11 +120,12 @@ For each finding:
 
 | Level | Criteria | Action Required |
 |-------|----------|----------------|
-| 🔴 Critical | Affects correctness, security, or spec-required feature not implemented | Must fix, back to Phase 2 |
-| 🟡 Major | Affects maintainability/performance, or spec behavior partially mismatched | Should fix |
-| 🟢 Minor | Improvements NOT required by spec (style, preference, best practice) | Optional, doesn't block approve |
+| 🔴 Critical | Affects correctness, security, or spec-required feature not implemented | Must fix |
+| 🟠 High | Spec behavior partially mismatched, major functionality gap | Must fix |
+| 🟡 Medium | Affects maintainability/performance, naming inconsistency | AI recommends → Human decides |
+| 🟢 Low | Improvements NOT required by spec (style, preference, best practice) | AI recommends → Human decides |
 
-> **Rule: if the spec describes it, it's at least 🟡. Only suggestions beyond spec scope are 🟢.**
+> **Rule: if the spec describes it, it's at least 🟠. Only suggestions beyond spec scope are 🟡 or 🟢.**
 
 ## Manual Testing Checklist
 

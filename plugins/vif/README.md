@@ -157,7 +157,7 @@ AI 為主力開發，Human 為審查角色。適合 solo 或小團隊。
     │  ┌─ RED ────▶ 派遣 test-writer
     │  ├─ GREEN ──▶ 派遣 implementer
     │  ├─ REFACTOR ▶ 派遣 implementer
-    │  └─ commit（per-scenario）
+    │  └─ commit（per-task）
     ▼
 /vif-verify ─────────────────────────── Core stages：
     │  Stage 1-6 ──▶ 派遣 verifier（含 Dependency Audit）
@@ -185,7 +185,7 @@ AI 為主力開發，Human 為審查角色。適合 solo 或小團隊。
 | Spec → Develop | `/vif-spec` | Approve Spec |
 | Review → Close | `/vif-review` | Approve Code |
 
-**14 個互動點（需要 Human 回應）：**
+**15 個互動點（需要 Human 回應）：**
 
 | # | 時機 | Skill | 內容 |
 |---|------|-------|------|
@@ -200,9 +200,10 @@ AI 為主力開發，Human 為審查角色。適合 solo 或小團隊。
 | 9 | UI Spec 確認 | `/vif-ui-spec` | 確認頁面規格 |
 | 10 | 測試策略 | `/vif-develop` | 確認測試策略 |
 | 11 | TDD 例外 | `/vif-develop` | 確認是否可不走 TDD |
-| 12 | WARN 評估 | `/vif-verify` | 評估 WARN 要修還是記錄理由 |
-| 13 | 手動測試 | `/vif-review` | 執行 reviewer 產出的手動測試清單 |
-| 14 | Escalation | 所有 skill | 3 次失敗後 Human 決定 |
+| 12 | 🟡🟢 Findings Review | `/vif-verify` | 選擇 🟡🟢 findings 要修或跳過 |
+| 13 | 🟡🟢 Findings Review | `/vif-review` | 選擇 🟡🟢 findings 要修或跳過 |
+| 14 | 手動測試 | `/vif-review` | 執行 reviewer 產出的手動測試清單 |
+| 15 | Escalation | 所有 skill | 3 次失敗後 Human 決定 |
 
 > 不是每個互動點都會觸發，依專案設定和實際流程決定。
 
@@ -251,7 +252,7 @@ Architect    Designer              PD/PM              SA/SD             Frontend
                                             ▼
                                      PGs: /vif-develop
                                        │  各自開發（選擇測試策略）
-                                       │  per-scenario commit
+                                       │  per-task commit
                                        ▼
                                      PGs: /vif-verify
                                        │  自動化檢核（隨時可跑）
@@ -302,7 +303,9 @@ project/
 │   │   ├── specs-overview.md
 │   │   └── NNN-name/
 │   │       ├── spec.md                ← 作戰計畫
-│   │       └── progress.md
+│   │       ├── progress.md
+│   │       ├── verification-report.md ← Phase 3 驗證報告
+│   │       └── review-report.md       ← Phase 4 審查報告
 │   ├── api-specs/                     ← API 設計（累積型）
 │   │   └── [module]/
 │   │       ├── openapi.yaml
@@ -410,7 +413,9 @@ project/
 | BDD 完成 | `docs: add feature iam/user-login` |
 | Spec approved | `docs: add spec-001 user-login` |
 | 設計文件完成 | `docs: add api-spec iam/auth/login` |
-| 開發 per-scenario | `feat: implement login API (spec-001)` |
+| 開發 per-task | `feat: implement login API (spec-001)` |
+| Verify 完成 | `docs: verify spec-001 PASS` |
+| Review APPROVED | `docs: review spec-001 APPROVED` |
 | Review 修復 | `fix: address review feedback (spec-001)` |
 | 收尾 | `docs: close spec-001` |
 

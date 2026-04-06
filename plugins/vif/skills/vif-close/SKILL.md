@@ -5,7 +5,7 @@ description: >-
   "收尾", "結案", "wrap up", "finish", "done", "closing checklist",
   "merge ready".
 metadata:
-  version: 2.14.0
+  version: 2.15.0
 ---
 
 # Phase 5 — Close 完成
@@ -47,7 +47,7 @@ metadata:
 ### 品質
 
 - [ ] 測試覆蓋率達標（整體 ≥ 80%，核心 ≥ 90%）
-- [ ] 無 🔴 Critical / 🟡 Major 未解決項目
+- [ ] 無 🔴🟠 未解決項目
 - [ ] Security review 通過
 
 ### 文件更新

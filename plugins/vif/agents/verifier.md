@@ -97,13 +97,13 @@ git diff HEAD
 
 > If CLAUDE.md specifies `default-branch`, use that instead of auto-detection.
 
-> Combine both to get the full change scope. Uncommitted files are not a problem (commit timing is decided by the user).
+> Combine both to get the full change scope. Uncommitted files may exist (per-task auto commit may leave in-progress work unstaged).
 
 Check:
 - No leftover debug code (console.log, print, debugger)
 - No commented-out code
 - No hardcoded secrets or credentials
-- Every task in progress.md has RED/GREEN/REFACTOR records (missing records → WARN)
+- Every task in progress.md has RED/GREEN/REFACTOR records (missing records → 🟢)
 
 ### Stage 6: Dependency Audit
 
@@ -132,7 +132,7 @@ The following are handled by other stages:
 # Verification Report
 
 ## Summary
-Overall: PASS / WARN / FAIL
+Overall: PASS / FAIL
 Date: YYYY-MM-DD
 
 ## Core Stage Results
@@ -145,33 +145,33 @@ Date: YYYY-MM-DD
 | Diff Review | ✅/❌ | [N files changed] |
 | Dependency Audit | ✅/❌ | [N vulnerabilities] |
 
-## Issues
+## Findings
 
-For each issue, use this structured format:
+For each finding, classify using the 4-level severity system:
 
-| # | Severity | Stage | Category | File | Description | Auto-fixable |
-|---|----------|-------|----------|------|-------------|-------------|
-| 1 | ❌ FAIL | Lint | F541 | src/cli.py:175 | f-string without placeholders | Yes |
-| 2 | ⚠️ WARN | Build | dead_code | src/commands.rs | 20 unused function warnings | No |
-| 3 | ⚠️ WARN | Diff | tdd_record | progress.md | Task 3 missing RED/GREEN/REFACTOR | No |
-
-> Structured fields help vif-verify evaluate each WARN with enough context.
+| # | 燈號 | Stage | Category | File | Description |
+|---|------|-------|----------|------|-------------|
+| 1 | 🔴 | Lint | F541 | src/cli.py:175 | f-string without placeholders |
+| 2 | 🟠 | Test Suite | assertion | src/auth.ts:42 | login 回傳錯誤狀態碼 |
+| 3 | 🟡 | Build | dead_code | src/commands.rs | 20 unused function warnings |
+| 4 | 🟢 | Diff | tdd_record | progress.md | Task 3 missing RED/GREEN/REFACTOR |
 
 ## Verdict
-READY / NOT READY for Code Review
+PASS / FAIL
 ```
 
-## Result Classification
+## Severity Classification
 
-Each stage result:
+| 燈號 | Level | Description |
+|------|-------|-------------|
+| 🔴 | Critical | Security vulnerability, correctness error, data loss risk |
+| 🟠 | High | Spec violation, major functionality gap |
+| 🟡 | Medium | Maintainability, performance, naming inconsistency |
+| 🟢 | Low | Style preference, optional refactoring, best practice |
 
-| Result | Description |
-|--------|-------------|
-| ✅ PASS | No errors |
-| ⚠️ WARN | Warnings found, requires manual evaluation |
-| ❌ FAIL | Errors found, must fix before entering review |
+Stage result is binary: ✅ PASS / ❌ FAIL. Findings are classified separately using the severity system above.
 
-> WARN items are evaluated by the vif-verify skill, not by you. Just classify and report accurately.
+> 🟡🟢 items are evaluated by the vif-verify skill (Human decides), not by you. Just classify and report accurately.
 
 ## Principles
 

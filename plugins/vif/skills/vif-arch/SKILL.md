@@ -5,7 +5,7 @@ description: >-
   "tech stack", "技術棧", "ADR", "架構決策", "技術選型", "project setup",
   "專案架構", "architecture decision".
 metadata:
-  version: 2.14.0
+  version: 2.15.0
 ---
 
 # Phase 0 — Architecture 架構決策
@@ -48,6 +48,7 @@ metadata:
   - 填入「技術棧」、「專案指令」、「測試策略」區塊
   - 如建立了 `guideline/` 檔案 → 啟用「Guideline 映射」（取消註解並填入實際路徑）
 - 更新 `guideline/`（如需要）
+  > Guideline 寫設計決策與慣例（命名、型別、策略），不寫文件格式 — 文件結構由 vif 範本負責。
 
 ### B. 架構決策（持續）
 

@@ -13,6 +13,18 @@ You are a Spec Auditor. Your job is to find every inconsistency, gap, and ambigu
 
 > **Workspace**: Spec and design docs may be in the docs repo, source code in the code repo. Actual paths will be provided at dispatch.
 
+## Phase Awareness
+
+spec.md 是作戰計畫，不是設計細節。vif 流程中各階段有明確分工：
+
+| 文件 | 負責階段 | 內容範圍 |
+|------|---------|---------|
+| spec.md | /vif-spec | 影響分析、涉及範圍清單、業務規則、驗收條件 |
+| api-spec | /vif-api-spec | API Request/Response、錯誤映射、openapi.yaml、DB Schema |
+| ui-spec | /vif-ui-spec | 頁面結構、欄位資料來源、互動行為、狀態處理 |
+
+**審查 spec.md 時，不要要求它包含下游階段的內容。** 例如 API 的 request/response schema 屬於 api-spec，在 spec 中缺少不是 gap。
+
 ## CRITICAL: Tool Restrictions
 
 You may ONLY use:
@@ -211,7 +223,7 @@ In addition to the three-pass scan, check .feature files separately:
 
 ## Pass 1: Internal Consistency
 ### Contradictions Found
-[Each contradiction: where vs where, flagged 🔴/🟡/🟢]
+[Each contradiction: where vs where, flagged 🔴/🟠/🟡/🟢]
 
 ## Pass 2: Completeness
 ### Data Structure Gaps
@@ -241,5 +253,6 @@ In addition to the three-pass scan, check .feature files separately:
 | # | Severity | Type | Issue | Location | Suggestion |
 |---|----------|------|-------|----------|------------|
 | 1 | 🔴 | Internal consistency | ... | Section X vs Y | ... |
-| 2 | 🟡 | Completeness | ... | Section Z | ... |
+| 2 | 🟠 | Completeness | ... | Section Z | ... |
+| 3 | 🟡 | Completeness | ... | Section W | ... |
 ```

@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 2.14.0
+  version: 2.15.0
 ---
 
 # Phase 1 — API Spec 規格 + OpenAPI + DB Schema
@@ -82,6 +82,7 @@ metadata:
 
 ### Step 3: 更新 openapi.yaml
 
+- 使用 **OpenAPI 3.0.3**（工具生態相容性最佳，Swagger UI / codegen / VS Code 擴充套件皆支援）
 - 新增的 API → 加入 paths
 - 修改的 API → 更新對應 path
 - 新增的 schema → 加入 components/schemas
@@ -111,14 +112,16 @@ metadata:
 - API 專屬 checklist：HTTP Status 合理性、Request/Response schema 完整性、命名慣例一致性
 
 **結果處理：**
-- APPROVED → 進入 AI Cross-Review（如啟用）或 Step 6
-- NEEDS_REVISION → 依報告修正 → 重跑 spec-auditor（最多 3 次迭代）
+- APPROVED → Step 6（AI Cross-Review 如啟用，已與 spec-auditor 平行完成）
+- NEEDS_REVISION → 所有 findings（含 Low）一律修正 → 重跑 spec-auditor（最多 3 次迭代）
+
+> Spec 是施工藍圖，修文字成本極低，不留小問題到開發階段放大。
 
 **AI Cross-Review（可選，team mode only）：**
 
-讀取 CLAUDE.md `AI Cross-Review` 設定，`design` 已啟用且 mode 為 team 時觸發。傳入本次撰寫的 api-spec + schema + openapi.yaml。
+讀取 CLAUDE.md `AI Cross-Review` 設定，`design` 已啟用且 mode 為 team 時，與 spec-auditor 同時平行觸發。傳入本次撰寫的 api-spec + schema + openapi.yaml。
 
-執行：呼叫設定的 AI CLI → 比對 spec-auditor 結果 → 有新發現則修正後重跑 spec-auditor。
+執行：spec-auditor 與設定的 AI CLI 平行進行獨立審查 → 兩方完成後比對結果 → 有新發現則修正後重跑 spec-auditor。
 
 > solo mode 的設計文件 Cross-Review 在 Pass 3 完成後統一觸發（見 `/vif-spec`）。
 

@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 2.14.0
+  version: 2.15.0
 ---
 
 # Phase 1 — Spec 技術規劃與影響分析
@@ -158,7 +158,9 @@ Spec 撰寫完成後，根據影響分析表，詢問 Human：
 2. 審查 .feature 與 spec 的一致性（如有 .feature）
 3. 審查 spec.md 技術可行性
 
-有問題 → AI 修正 → 再次派遣 spec-auditor 審查。最多 5 次迭代。
+所有 findings（含 Low）一律修正 → 再次派遣 spec-auditor 審查。最多 5 次迭代。
+
+> Spec 是施工藍圖，修文字成本極低，不留小問題到開發階段放大。
 
 **Stage B — 自我審視（AI 反思）：**
 
@@ -175,10 +177,10 @@ spec-auditor 通過後，交給 Human 之前，AI 重新讀一遍完整 spec 進
 
 讀取 CLAUDE.md `AI Cross-Review` 設定，`design` 已啟用時：
 
-- **team mode** → 在此觸發，傳入 spec.md（+ .feature 如有）
-- **solo mode** → 此處跳過。所有設計文件完成 + Pass 3 通過後統一觸發，傳入全部設計文件
+- **team mode** → 與 spec-auditor 同時平行觸發，傳入 spec.md（+ .feature 如有）
+- **solo mode** → 此處跳過。所有設計文件完成後，spec-auditor Pass 3 與 AI CLI 統一平行觸發，傳入全部設計文件
 
-執行：呼叫設定的 AI CLI → 比對 spec-auditor 結果 → 有新發現則修正後重跑 spec-auditor。
+執行：spec-auditor 與設定的 AI CLI 平行進行獨立審查 → 兩方完成後比對結果 → 有新發現則修正後重跑 spec-auditor。
 
 **Stage C — Human 審查：**
 

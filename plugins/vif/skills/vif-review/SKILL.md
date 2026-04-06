@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.14.0
+  version: 2.15.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -33,7 +33,7 @@ metadata:
 
 ## Prerequisites
 
-- [ ] Phase 3 Verification Report 為 PASS（或 WARN 已接受）
+- [ ] Phase 3 Verification Report 為 PASS
 - [ ] 所有測試通過
 
 ## Guideline 注入
@@ -93,19 +93,32 @@ metadata:
 
 ### AI Cross-Review（可選）
 
-讀取 CLAUDE.md `AI Cross-Review` 設定，`review` 已啟用時，在 Stage 1+2 完成後觸發。傳入本次變更的 source code + spec.md + 相關設計文件。
+讀取 CLAUDE.md `AI Cross-Review` 設定，`review` 已啟用時，與 Stage 1+2 同時平行觸發。傳入本次變更的 source code + spec.md + 相關設計文件。
 
-執行：呼叫設定的 AI CLI 進行獨立審查 → 比對 reviewer 結果 → 新發現加入 Review Report。
+執行：reviewer (Stage 1+2) 與設定的 AI CLI 平行進行獨立審查 → 兩方完成後比對結果 → 新發現加入 Review Report。
 
-## Severity Levels
+## Severity 分級
 
-| 等級 | 說明 | 處理 |
-|------|------|------|
-| 🔴 Critical | 影響正確性、安全性、或 spec 明確要求但未實作 | 必須修復，回到 Phase 2 |
-| 🟡 Major | 影響可維護性或效能、或 spec 描述的行為與實作不完全一致 | 應該修復 |
-| 🟢 Minor | spec 未要求的改善建議（風格、偏好、最佳實踐） | 可選修復，不阻塞 approve |
+與 verify 統一的四級燈號系統：
 
-> **判斷原則：spec 有寫的 = 至少 🟡，spec 沒寫的建議 = 🟢。**
+| 燈號 | 等級 | 說明 | 處理 |
+|------|------|------|------|
+| 🔴 | Critical | 影響正確性、安全性、或 spec 明確要求但未實作 | 必須修 |
+| 🟠 | High | Spec 描述的行為與實作不一致、重大功能缺失 | 必須修 |
+| 🟡 | Medium | 影響可維護性或效能 | AI 建議 → Human 決定 |
+| 🟢 | Low | spec 未要求的改善建議（風格、偏好、最佳實踐） | AI 建議 → Human 決定 |
+
+> **判斷原則：spec 有寫的 = 至少 🟠，spec 沒寫的建議 = 🟡 或 🟢。**
+
+## Findings 處理流程
+
+```
+Stage 1+2 完成 → 收集 findings
+  ├── 🔴🟠 → 回 Phase 2 修復 → 重跑 verify → 重跑 review
+  └── 🟡🟢 → 🟡🟢 Findings Review → [Human] 選擇修或跳過
+                                       ├── 修復 → 進入 Human 最終審查
+                                       └── 跳過 → 記錄決定，進入 Human 最終審查
+```
 
 ## Giving Feedback
 
@@ -120,8 +133,70 @@ metadata:
 - **不要表演性同意**（"You're absolutely right!", "Great point!"）
 - 對每個建議進行 **YAGNI 檢查** — 這個改動真的需要嗎？
 - 可以用技術理由 pushback — 提供具體的反對理由
-- 處理順序：🔴 Critical → 🟡 Major → 🟢 Minor
-- 修復後重新執行 Phase 3 驗證
+- 處理順序：🔴 Critical → 🟠 High → 🟡 Medium → 🟢 Low（Human 選定的）
+- 🔴🟠 修復後重新執行 Phase 3 → Phase 4（完整 loop）
+- 🟡🟢 修復後直接進入 Human 最終審查（風險低、重跑成本高）
+
+## Report
+
+儲存位置：`docs/specs/NNN-name/review-report.md`（與 spec.md 同層）。重跑時覆蓋。
+
+漸進式儲存：每個階段完成後立即更新 report，確保任何時間點打開都是完整可讀的當前狀態。Skill 負責將 reviewer agent 的 per-finding output 組裝為以下 staged report 格式。
+
+### Format
+
+```
+# Review Report
+
+## Summary
+Result: APPROVED / CHANGES_REQUESTED
+Date: YYYY-MM-DD
+
+## Stage 1: Spec + Design Compliance
+| 驗收條件 | Status | 說明 |
+|---------|--------|------|
+| [條件 1] | ✅/❌ | [details] |
+| [條件 2] | ✅/❌ | [details] |
+
+### Design Consistency
+| 設計文件 | Status | 說明 |
+|---------|--------|------|
+| API Spec | ✅/❌ | [details] |
+| UI Spec | ✅/❌ | [details] |
+| DB Schema | ✅/❌ | [details] |
+
+## Stage 2: Code Quality
+| 類別 | Status | 說明 |
+|------|--------|------|
+| 架構合理性 | ✅/❌ | [details] |
+| 可讀性 | ✅/❌ | [details] |
+| 測試品質 | ✅/❌ | [details] |
+| 可維護性 | ✅/❌ | [details] |
+
+## Findings
+| # | 燈號 | Category | File | Description |
+|---|------|----------|------|-------------|
+| 1 | 🔴 | spec compliance | src/auth.ts:42 | 缺少權限檢查 |
+| 2 | 🟠 | spec compliance | src/api.ts:15 | response 缺少 spec 定義的欄位 |
+| 3 | 🟡 | maintainability | src/handlers/ | 命名不一致 |
+| 4 | 🟢 | style | src/utils.ts:8 | 可抽共用 helper |
+
+## 🟡🟢 Findings Review
+
+🔴 Critical: N 項（已修復） | 🟠 High: N 項（已修復）
+
+| # | 燈號 | 描述 | 影響評估 | 建議做法 | 預估量 | Human 決定 |
+|---|------|------|---------|---------|-------|-----------|
+| 3 | 🟡 | 命名不一致 | 影響可讀性 | 統一為 camelCase | 小 | |
+| 4 | 🟢 | 重複邏輯 | 不影響功能 | 抽出 handleError() | 中 | |
+
+## Manual Testing Checklist
+- [ ] [測試項目 1]
+- [ ] [測試項目 2]
+
+## Verdict
+APPROVED / CHANGES_REQUESTED
+```
 
 ## Fix → Re-verify Loop
 
@@ -133,27 +208,31 @@ Review 發現問題
   → 最多 3 次循環，超過產出 Escalation Report（見 /vif-flow）
 ```
 
-## 更新 progress.md
+## 更新 progress.md 與 Commit
 
 Review 完成後，更新 `progress.md` 的 Phase 4 區塊：
 
 ```markdown
 - [x] Phase 4: Review
   - 結果：APPROVED
-  - 🔴 Critical：0 | 🟡 Major：2（已修復） | 🟢 Minor：3
+  - 🔴 0 | 🟠 0 | 🟡 2（1 修復, 1 跳過） | 🟢 3（1 修復, 2 跳過）
 ```
 
 - **APPROVED** → 勾選 `[x]`，記錄結果、日期、各等級 issue 數量
 - **CHANGES_REQUESTED** → 維持 `[ ]`，記錄結果與待修項目摘要，回 develop 修復後重跑時覆蓋更新
 
+Human approve 後 **commit**（`docs: review spec-NNN APPROVED`），包含 review-report.md + progress.md。
+
 ## Exit Criteria
 
 - [ ] Stage 1 Spec + Design Compliance 通過
 - [ ] Stage 2 Code Quality 審查完成
-- [ ] 🔴 Critical 全部修復
-- [ ] 🟡 Major 全部修復（或有正當理由不修）
+- [ ] 🔴🟠 findings 全部修復
+- [ ] 🟡🟢 findings 已呈現 Human 決定（修復或跳過）
+- [ ] Review Report 已儲存
 - [ ] **人工測試項目已列出**（reviewer 在 APPROVED 時產出 Manual Testing Checklist）
 - [ ] 呈現給 Human 做最終審查（含人工測試項目清單）
 - [ ] Human 完成人工測試並確認
 - [ ] progress.md Phase 4 已更新
-- [ ] Human approve → 進入 Phase 5（`/vif-close`）
+- [ ] Human approve 後已 commit
+- [ ] 進入 Phase 5（`/vif-close`）

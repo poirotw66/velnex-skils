@@ -12,6 +12,7 @@
 ```bash
 /plugin marketplace add [velnex-repo-path-or-url]
 /plugin install vif@velnex
+/plugin install vex@velnex        # git-commit agent（vif 依賴）
 ```
 
 ### 2. 建立目錄結構
@@ -27,7 +28,9 @@ your-project/
 │   │   ├── specs-overview.md
 │   │   └── NNN-name/
 │   │       ├── spec.md
-│   │       └── progress.md
+│   │       ├── progress.md
+│   │       ├── verification-report.md  ← Phase 3 驗證報告
+│   │       └── review-report.md        ← Phase 4 審查報告
 │   │
 │   ├── api-specs/                 ← API 設計（累積型，per-module）  [視需要]
 │   ├── ui-specs/                  ← UI 設計（累積型，per-page）     [視需要]
@@ -107,6 +110,11 @@ your-project/
 - Backend: Unit + Integration
 - Frontend: Unit + 關鍵流程 E2E
 
+### Git 規範
+
+- 使用 git-commit subagent 執行 commit
+- dispatch 時附上當前模型名稱（供 Co-Authored-By 使用）
+
 ### 設計基礎
 
 > /vif-uiux 完成後會自動填入此區塊。也可手動填寫。
@@ -117,28 +125,30 @@ your-project/
 
 > 啟用 /vif-verify 的 Code Quality 檢查（Reuse、Quality、Efficiency），使用 Claude Code 內建 /simplify skill。
 
-# - Code Quality: true
+<!-- - Code Quality: true -->
 
 ### AI Cross-Review（可選，取消註解啟用）
 
-> 使用第二個 AI CLI（如 Codex）對設計文件、安全審查、程式碼審查進行獨立交叉驗證。
+> 原本的 agent 審查（spec-auditor / security-reviewer / reviewer）與第二個 AI CLI（如 Codex）同時平行進行獨立審查，完成後比對兩方結果，將新發現整合回報告。
+>
 > - **solo**：設計文件在開發前統一審查一次（/vif-develop entry gate）
 > - **team**：設計文件在各 skill 完成時個別審查（/vif-spec, /vif-api-spec, /vif-ui-spec）
-> - **verify / review**：不分 mode，分別在 /vif-verify 和 /vif-review 完成時觸發
+> - **verify / review**：不分 mode，分別在 /vif-verify 和 /vif-review 中與原 agent 平行進行
+>
 > 完整觸發時機見 vif-flow「AI Cross-Review Trigger Points」。
 
-# - mode: solo
-# - design: codex
-# - verify: codex
-# - review: codex
+<!-- - mode: solo -->
+<!-- - design: codex -->
+<!-- - verify: codex -->
+<!-- - review: codex -->
 
 ### Guideline 映射（可選，覆蓋目錄慣例，支援檔案或資料夾）
 
 > 指定各 context 對應的 guideline 路徑，讓 /vif-guideline 注入正確的開發規範給 agent。未設定時依目錄慣例自動匹配。
 
-# - api-spec → guideline/backend/
-# - ui-spec → guideline/frontend/
-# - testing → guideline/testing/
+<!-- - api-spec → guideline/backend/ -->
+<!-- - ui-spec → guideline/frontend/ -->
+<!-- - testing → guideline/testing/ -->
 
 ```
 
@@ -252,6 +262,11 @@ workspace/
 
 ### Skills
 （同 monorepo 的 skill 表格）
+
+### Git 規範
+
+- 使用 git-commit subagent 執行 commit
+- dispatch 時附上當前模型名稱（供 Co-Authored-By 使用）
 ```
 
 **frontend repo（project-frontend/.claude/CLAUDE.md）：**
@@ -287,6 +302,11 @@ workspace/
 
 ### 測試策略
 - Frontend: Unit + 關鍵流程 E2E
+
+### Git 規範
+
+- 使用 git-commit subagent 執行 commit
+- dispatch 時附上當前模型名稱（供 Co-Authored-By 使用）
 ```
 
 **backend repo（project-backend/.claude/CLAUDE.md）：**
@@ -322,6 +342,11 @@ workspace/
 
 ### 測試策略
 - Backend: Unit + Integration
+
+### Git 規範
+
+- 使用 git-commit subagent 執行 commit
+- dispatch 時附上當前模型名稱（供 Co-Authored-By 使用）
 ```
 
 > 初始化追蹤文件（specs-overview）只在 docs repo 建立。

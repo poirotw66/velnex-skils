@@ -6,7 +6,7 @@ description: >-
   "哪個階段", "下一步", "flow overview", "流程總覽", "init", "初始化",
   "setup", "專案設定", "對齊結構", "align structure".
 metadata:
-  version: 2.14.0
+  version: 2.15.0
 ---
 
 # vif (Velocity AI Flow) — AI-Driven Development Flow
@@ -263,9 +263,10 @@ code repo 路徑: /absolute/path/to/project-frontend
 | 9 | UI Spec 確認 | `/vif-ui-spec` | 確認頁面規格 |
 | 10 | 測試策略 | `/vif-develop` | 確認測試策略 |
 | 11 | TDD 例外 | `/vif-develop` | 確認是否可不走 TDD |
-| 12 | WARN 評估 | `/vif-verify` | 評估 WARN 要修還是記錄理由 |
-| 13 | 手動測試 | `/vif-review` | 執行 reviewer 產出的手動測試清單 |
-| 14 | Escalation | 所有 skill | 3 次失敗後 Human 決定 |
+| 12 | 🟡🟢 Findings Review | `/vif-verify` | 選擇 🟡🟢 findings 要修或跳過 |
+| 13 | 🟡🟢 Findings Review | `/vif-review` | 選擇 🟡🟢 findings 要修或跳過 |
+| 14 | 手動測試 | `/vif-review` | 執行 reviewer 產出的手動測試清單 |
+| 15 | Escalation | 所有 skill | 3 次失敗後 Human 決定 |
 
 ## AI Cross-Review Trigger Points
 
@@ -273,12 +274,12 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 | 設定 key | 觸發 Skill | 觸發時機 | mode |
 |----------|-----------|---------|------|
-| `design` | `/vif-spec` | spec-auditor + 自我審視通過後 | team only |
-| `design` | `/vif-api-spec` | spec-auditor 通過後 | team only |
-| `design` | `/vif-ui-spec` | spec-auditor 通過後 | team only |
-| `design` | `/vif-develop` | Entry Gate Pass 3 通過後 | solo only |
-| `verify` | `/vif-verify` | security-reviewer 完成後 | — |
-| `review` | `/vif-review` | Stage 1+2 完成後 | — |
+| `design` | `/vif-spec` | 與 spec-auditor 平行進行 | team only |
+| `design` | `/vif-api-spec` | 與 spec-auditor 平行進行 | team only |
+| `design` | `/vif-ui-spec` | 與 spec-auditor 平行進行 | team only |
+| `design` | `/vif-develop` | 與 spec-auditor Pass 3 平行進行 | solo only |
+| `verify` | `/vif-verify` | 與 security-reviewer 平行進行 | — |
+| `review` | `/vif-review` | 與 reviewer Stage 1+2 平行進行 | — |
 
 > **solo vs team**：solo 在開發前統一審查所有設計文件（效率高）；team 在各 skill 完成時個別審查（回饋快）。verify 和 review 不分 mode。
 
@@ -309,15 +310,17 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 ## Commit Points
 
-| 時機 | 內容 | Message 範例 |
-|------|------|-------------|
-| PRD approved | PRD 文件 | `docs: add prd-001 user-login` |
-| BDD 完成 | .feature 文件 | `docs: add feature iam/user-login` |
-| Spec approved | spec.md + progress.md | `docs: add spec-001 user-login` |
-| 設計文件完成 | api-spec / ui-spec / schema | `docs: add api-spec iam/auth/login` |
-| 開發 per-scenario | test + implementation | `feat: implement login API (spec-001)` |
-| Review 修復 | review 修正 | `fix: address review feedback (spec-001)` |
-| 收尾 | 追蹤文件更新 | `docs: close spec-001` |
+| 時機 | 內容 | Message 範例 | 類型 |
+|------|------|-------------|------|
+| PRD approved | PRD 文件 | `docs: add prd-001 user-login` | Human 確認後 |
+| BDD 完成 | .feature 文件 | `docs: add feature iam/user-login` | Human 確認後 |
+| Spec approved | spec.md + progress.md | `docs: add spec-001 user-login` | Human approve 後 |
+| 設計文件完成 | api-spec / ui-spec / schema | `docs: add api-spec iam/auth/login` | Human 確認後 |
+| 開發 per-task | test + implementation + progress.md | `feat: implement login API (spec-001)` | 自動 |
+| Verify 完成 | verification-report.md + progress.md | `docs: verify spec-001 PASS` | 自動 |
+| Review APPROVED | review-report.md + progress.md | `docs: review spec-001 APPROVED` | Human approve 後 |
+| Review 修復 | review 修正 | `fix: address review feedback (spec-001)` | 自動 |
+| 收尾 | 追蹤文件更新 | `docs: close spec-001` | 自動 |
 
 ## Skip Decision
 
@@ -344,7 +347,9 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 ### 迭代改善（spec-auditor）
 
-- spec-auditor 審查 → AI 修正 → 重新審查，最多 5 次迭代
+- spec-auditor 審查 → AI 修正 → 重新審查
+  - spec.md 審查（含 3 pass + 自我審視）：最多 5 次迭代
+  - 設計文件審查（api-spec / ui-spec，僅 Pass 1+2）：最多 3 次迭代
 - 這是改善 loop，不是失敗重試，性質不同
 
 ### Escalation Report 格式

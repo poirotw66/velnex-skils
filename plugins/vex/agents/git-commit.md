@@ -26,7 +26,7 @@ For this project, follow this format:
 
 <detailed description in Traditional Chinese (zh-TW)>    ← 每行不超過 72 字元
 
-Co-Authored-By: <current model name, e.g. Claude Sonnet 4.6>
+Co-Authored-By: <caller 提供的模型名稱>
 ```
 
 **IMPORTANT Language Rules**:
@@ -69,7 +69,7 @@ Co-Authored-By: <current model name, e.g. Claude Sonnet 4.6>
    - vul-pr: 建立 Pull Request
    - vul-cleanup: 清理 worktree
 
-   Co-Authored-By: Claude Sonnet 4.6
+   Co-Authored-By: Claude Opus 4.6
    EOF
    )"
    ```
