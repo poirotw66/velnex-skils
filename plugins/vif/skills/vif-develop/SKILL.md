@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 2.15.0
+  version: 3.0.0
 ---
 
 # Phase 2 — Develop TDD 開發
@@ -18,7 +18,7 @@ metadata:
 
 ### Step 1: 掃描驗收條件
 
-讀取 spec.md Section 4 的驗收條件，分類每一條：
+讀取 spec.md Section 7 的驗收條件，分類每一條：
 
 | 驗收條件特徵 | 需要的測試層級 |
 |-------------|---------------|
@@ -227,6 +227,8 @@ test-writer 完成後，**在派遣 implementer 之前**，自行驗證：
 | `DONE_WITH_CONCERNS` | 完成但有疑慮 | 記錄疑慮，進入 REFACTOR |
 | `NEEDS_CONTEXT` | 需要更多上下文 | 見下方反饋迴路 |
 | `BLOCKED` | 無法繼續 | Escalate |
+| `BLOCKED_BY_ENV` | 環境問題（缺少 dependency / 工具未安裝） | 立即 escalate，不重試 |
+| `BLOCKED_BY_SPEC` | 規格問題（spec 自相矛盾 / 不可能的需求） | 立即 escalate，不重試 |
 
 ### Implementer → Test-Writer 反饋迴路
 

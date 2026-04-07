@@ -30,7 +30,8 @@ your-project/
 │   │       ├── spec.md
 │   │       ├── progress.md
 │   │       ├── verification-report.md  ← Phase 3 驗證報告
-│   │       └── review-report.md        ← Phase 4 審查報告
+│   │       ├── review-report.md        ← Phase 4 審查報告
+│   │       └── god-mode-report.md      ← God Mode Results Report（如使用）
 │   │
 │   ├── api-specs/                 ← API 設計（累積型，per-module）  [視需要]
 │   ├── ui-specs/                  ← UI 設計（累積型，per-page）     [視需要]
@@ -68,6 +69,15 @@ your-project/
 > 模式選項：完全自動化（Solo）/ 輔助自動化（Team）
 > 流程選項：技術先行 / 產品先行
 
+### flow_mode（可選）
+
+> PRD approved 後的預設行為。未設定時，PRD 後會提示選擇。
+>
+> - `god` — 自動跑完 Spec→Review，最後看結果做調整
+> - `normal` — 逐階段手動推進（預設）
+
+<!-- - flow_mode: god -->
+
 ### Skills
 
 | 類別 | Skill | 說明 |
@@ -84,6 +94,7 @@ your-project/
 | 驗證 | `/vif-verify` | 自動化驗證 |
 | 審查 | `/vif-review` | 程式碼審查 |
 | 收尾 | `/vif-close` | 完成檢查清單 |
+| 全自動 | `/vif-god` | God Mode：PRD 確認後全自動開發 |
 
 ### 技術棧
 

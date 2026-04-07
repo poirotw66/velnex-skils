@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 2.15.0
+  version: 3.0.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -56,7 +56,7 @@ metadata:
 
 #### 1-1. 驗收條件核對
 
-讀取 spec.md Section 4 的驗收條件，逐條對照實作與測試結果：
+讀取 spec.md Section 7 的驗收條件，逐條對照實作與測試結果：
 
 - [ ] 每一條驗收條件都有對應的實作
 - [ ] 每一條驗收條件都有對應的測試覆蓋（或 .feature scenario）
@@ -113,11 +113,15 @@ metadata:
 ## Findings 處理流程
 
 ```
-Stage 1+2 完成 → 收集 findings
-  ├── 🔴🟠 → 回 Phase 2 修復 → 重跑 verify → 重跑 review
-  └── 🟡🟢 → 🟡🟢 Findings Review → [Human] 選擇修或跳過
-                                       ├── 修復 → 進入 Human 最終審查
-                                       └── 跳過 → 記錄決定，進入 Human 最終審查
+Stage 1 完成
+  ├── 有 🔴🟠 → 收集 Stage 1 findings → 回 Phase 2 修復 → 重跑 verify → 重跑 review
+  └── 全部 ✅ → 進入 Stage 2
+        │
+Stage 2 完成 → 收集 Stage 1+2 findings
+  ├── 有 🔴🟠 → 回 Phase 2 修復 → 重跑 verify → 重跑 review
+  └── 僅 🟡🟢 → 🟡🟢 Findings Review → [Human] 選擇修或跳過
+                                          ├── 修復 → 進入 Human 最終審查
+                                          └── 跳過 → 記錄決定，進入 Human 最終審查
 ```
 
 ## Giving Feedback

@@ -2,18 +2,20 @@
 
 ## Gate 定義
 
-| 從 | 到 | 觸發條件 | Human 必要 |
-|----|-----|---------|-----------|
-| — | Arch | 專案啟動或重大架構決策 | ✅ 決策 |
-| — | PRD | 使用者提出需求 | ✅ 發起 |
-| PRD | BDD / Spec | PRD approved | ✅ Approve |
-| BDD | Spec | .feature 完成 | ❌（可直接進 Spec） |
-| Spec | Design Docs | Spec approved | ✅ Approve |
-| Spec | Develop | 設計文件完成 | ❌ |
-| Develop | Verify | 所有任務完成 | ❌ |
-| Verify | Review | Verification PASS | ❌ |
-| Review | Close | Code Review approved | ✅ Approve |
-| Close | Done | Checklist 完成 | ❌ |
+| 從 | 到 | 觸發條件 | Human 必要 | God Mode |
+|----|-----|---------|-----------|----------|
+| — | Arch | 專案啟動或重大架構決策 | ✅ 決策 | ⏭ 跳過 |
+| — | PRD | 使用者提出需求 | ✅ 發起 | ✅（God Mode 起點） |
+| PRD | BDD / Spec | PRD approved | ✅ Approve | ✅（God Mode 起點） |
+| BDD | Spec | .feature 完成 | ❌ | ⏭ 跳過 |
+| Spec | Design Docs | Spec approved | ✅ Approve | 🤖 spec-auditor 收斂 |
+| Spec | Develop | 設計文件完成 | ❌ | 🤖 Pass 1+2+3 ✓ |
+| Develop | Verify | 所有任務完成 | ❌ | ❌（同正常） |
+| Verify | Review | Verification PASS | ❌ | ❌（同正常） |
+| Review | Close | Code Review approved | ✅ Approve | 🤖 全部 findings 已處理 |
+| Close | Done | Checklist 完成 | ❌ | ❌（同正常） |
+
+> 🤖 = AI 自動放行（品質門檻取代人工 approve），⏭ = 不適用（God Mode 前提已完成）
 
 ## 各階段進入條件
 
@@ -66,7 +68,7 @@
 
 - [ ] Core stages 全部 ✅ PASS
 - [ ] 🔴🟠 findings 全部修復
-- [ ] 🟡🟢 findings 已由 Human 決定（修復或跳過）
+- [ ] 🟡🟢 findings 已由 Human 決定（修復或跳過）｜**God Mode: AI 直接修復**
 - [ ] Verification Report 已儲存並 commit
 
 ### Review → Close
@@ -74,12 +76,12 @@
 - [ ] Spec + Design Compliance 通過
 - [ ] Code Quality 審查完成
 - [ ] 🔴🟠 findings 全部修復
-- [ ] 🟡🟢 findings 已呈現 Human 決定
+- [ ] 🟡🟢 findings 已呈現 Human 決定｜**God Mode: AI 直接修復**
 - [ ] Review Report 已儲存
 - [ ] Manual Testing Checklist 已列出
-- [ ] Human 完成人工測試並確認
+- [ ] Human 完成人工測試並確認｜**God Mode: 列入 Results Report，使用者最終驗測**
 - [ ] progress.md Phase 4 已更新
-- [ ] Human approve 後已 commit
+- [ ] Human approve 後已 commit｜**God Mode: 全部 findings 已處理，自動 commit**
 
 ### Close → Done
 

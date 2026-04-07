@@ -1,10 +1,11 @@
 # vif (Velocity AI Flow) — AI-Driven Development Flow
 
-Claude Code plugin，提供 14 個 skills + 6 個 agents 的結構化開發流程。針對 LLM 的運作特性設計，覆蓋從需求到交付的完整 SDLC。
+Claude Code plugin，提供 15 個 skills + 6 個 agents 的結構化開發流程。針對 LLM 的運作特性設計，覆蓋從需求到交付的完整 SDLC。
 
-支援兩種模式：
+支援三種模式：
 - **完全自動化** — 一人驅動 AI 完成整個開發流程（Solo / 小團隊）
 - **輔助自動化** — 各角色各自驅動 AI 處理自己負責的工作（企業團隊）
+- **God Mode** — PRD 確認後全自動執行 Spec→Review，最終看結果做調整（既有專案）
 
 ## 安裝
 
@@ -100,6 +101,7 @@ progress.md 不只是追蹤文件 — 它就是 Phase Gate 的判斷依據。有
 | 3 — 驗證 | `/vif-verify` | 自動化驗證（Core + Optional） |
 | 4 — 審查 | `/vif-review` | 程式碼審查（合規 + 品質） |
 | 5 — 收尾 | `/vif-close` | 文件同步 + 完成檢查清單 |
+| 跨階段 | `/vif-god` | God Mode：PRD 確認後全自動開發 |
 | 跨階段 | `/vif-guideline` | 專案規範解析（被其他 skill 引用） |
 | 跨階段 | `/vif-flow` | 流程編排 + routing |
 
@@ -282,6 +284,62 @@ Architect    Designer              PD/PM              SA/SD             Frontend
 | **PGs** | `/vif-verify` | 程式碼 | Verification Report |
 | **PGs** | `/vif-review` | 程式碼 + Spec | Review Report |
 
+### 模式三：God Mode
+
+既有專案（架構 ✓、UI/UX ✓、Guideline ✓），PRD 確認後全自動執行。適合基底穩定、只需決定做什麼的場景。
+
+```
+/vif-prd
+    │ Human approve → commit
+    ▼
+/vif-god ───────────────────────────── 全自動（無 Human 介入）
+    │
+    │  Phase 1: Spec + Design Docs
+    │    影響分析 → spec.md → progress.md
+    │    spec-auditor 自動審查（max 5 輪）
+    │    撰寫全部設計文件 → spec-auditor Pass 1+2+3
+    │    自動 commit
+    │
+    │  Phase 2: Develop
+    │    測試策略自動決定
+    │    per-task TDD: test-writer → implementer → refactor
+    │    per-task 自動 commit
+    │
+    │  Phase 3: Verify
+    │    verifier（Stage 1-7）+ security-reviewer
+    │    所有 findings（🔴🟠🟡🟢）AI 直接修復
+    │    自動 commit
+    │
+    │  Phase 4: Review
+    │    reviewer（Stage 1+2）
+    │    所有 findings AI 直接修復
+    │    自動 commit
+    │
+    │  Results Report
+    │    god-mode-report.md 彙整所有決策與修復紀錄
+    │
+    ▼
+Human 檢視結果
+    │  審查 AI 決策、確認修復合理、執行 Manual Testing
+    │  不滿意 → 直接調整
+    ▼
+/vif-close ──────────────────────────── AI 直接
+    │  Design Doc Sync + Checklist → commit
+    ▼
+  Done
+```
+
+**God Mode vs 正常流程：**
+
+| 項目 | 正常流程 | God Mode |
+|------|---------|----------|
+| Approval Gate | Human approve | 品質門檻自動放行 |
+| 🟡🟢 Findings | Human 決定修或跳 | AI 直接修復 |
+| Manual Testing | Human 執行後再 close | 列入報告，close 前執行 |
+| 互動點 | 15 個 | 0 個（PRD approve 後全自動） |
+
+> CLAUDE.md 可設定 `flow_mode: god` 預設走 God Mode。詳見 `/vif-god`。
+
 ---
 
 ## 導入新專案
@@ -305,7 +363,8 @@ project/
 │   │       ├── spec.md                ← 作戰計畫
 │   │       ├── progress.md
 │   │       ├── verification-report.md ← Phase 3 驗證報告
-│   │       └── review-report.md       ← Phase 4 審查報告
+│   │       ├── review-report.md       ← Phase 4 審查報告
+│   │       └── god-mode-report.md     ← God Mode Results Report（如使用）
 │   ├── api-specs/                     ← API 設計（累積型）
 │   │   └── [module]/
 │   │       ├── openapi.yaml
@@ -369,6 +428,7 @@ project/
 | 驗證 | `/vif-verify` | 自動化驗證 |
 | 審查 | `/vif-review` | 程式碼審查 |
 | 收尾 | `/vif-close` | 完成檢查清單 |
+| 全自動 | `/vif-god` | God Mode：PRD 確認後全自動開發 |
 | 規範 | `/vif-guideline` | 專案規範解析 |
 
 ### 技術棧

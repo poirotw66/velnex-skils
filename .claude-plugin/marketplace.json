@@ -11,7 +11,7 @@
     {
       "name": "vif",
       "source": "./plugins/vif",
-      "description": "vif (Velocity AI Flow) — AI-driven development flow with 14 skills supporting both fully-automated and team-assisted modes"
+      "description": "vif (Velocity AI Flow) — AI-driven development flow with 15 skills supporting fully-automated, team-assisted, and god modes"
     },
     {
       "name": "vul",

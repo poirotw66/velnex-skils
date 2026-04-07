@@ -6,7 +6,7 @@ description: >-
   "哪個階段", "下一步", "flow overview", "流程總覽", "init", "初始化",
   "setup", "專案設定", "對齊結構", "align structure".
 metadata:
-  version: 2.15.0
+  version: 3.0.0
 ---
 
 # vif (Velocity AI Flow) — AI-Driven Development Flow
@@ -56,6 +56,44 @@ Backend:    /vif-api-spec（PRD + Figma + Spec → API + openapi + dbschema）
 PGs:        /vif-develop → /vif-verify → /vif-review
 All:        /vif-close
 ```
+
+### 模式三：God Mode（PRD-to-Review 全自動）
+
+既有專案（架構 ✓、UI/UX ✓、Guideline ✓），PRD approved 後一路自動執行到 Review。
+
+```
+/vif-prd → Human approve → /vif-god（Spec → Design Docs → Develop → Verify → Review）→ Results Report → Human 檢視 → /vif-close
+```
+
+> God Mode 以品質門檻（spec-auditor 通過、unresolved findings = 0）取代人工 approval gate。🟡🟢 findings 由 AI 直接修復做最佳處理，最終產出 Results Report 供使用者驗測與調整。適用於基底穩定、只需決定做什麼的場景。詳見 `/vif-god`。
+
+## flow_mode 設定
+
+CLAUDE.md 可設定 `flow_mode` 決定 PRD approved 後的預設行為：
+
+```markdown
+### flow_mode（可選）
+<!-- - flow_mode: god -->
+```
+
+| flow_mode | PRD 後「下一步」行為 |
+|-----------|-------------------|
+| `god` | 直接建議 `/vif-god` |
+| `normal` | 建議 `/vif-spec`（正常流程） |
+| 未設定 | 提示選擇 |
+
+**PRD → 下一步 Routing：**
+
+```
+PRD approved →
+├── CLAUDE.md flow_mode: god    → 「PRD 已 approved，啟動 God Mode（/vif-god）？」
+├── CLAUDE.md flow_mode: normal → 「PRD 已 approved，下一步 /vif-spec。」
+└── 未設定                       → 「PRD 已 approved。下一步：
+                                      A. 正常流程（/vif-spec）
+                                      B. God Mode（/vif-god）— 自動跑完 Spec→Review，最後看結果」
+```
+
+> 無論 flow_mode 設定為何，使用者可隨時直接呼叫 `/vif-god` 或 `/vif-spec` 覆蓋預設。
 
 ## Workspace Mode
 
@@ -227,6 +265,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 | 驗證 | `/vif-verify` | 自動化驗證（Core + Optional） |
 | 審查 | `/vif-review` | 程式碼審查（合規 + 品質） |
 | 收尾 | `/vif-close` | 文件同步 + 完成檢查清單 |
+| 全自動 | `/vif-god` | God Mode：PRD 確認後全自動開發 |
 | 規範 | `/vif-guideline` | 專案規範解析（被其他 skill 引用） |
 
 ## Core Principles
