@@ -23,7 +23,8 @@ your-project/
 │   └── CLAUDE.md                  ← 專案規範 + vif 設定
 │
 ├── docs/
-│   ├── prd-NNN.md                 ← PRD 文件（per-feature）        [必要]
+│   ├── prds/                      ← PRD 文件（per-feature）        [必要]
+│   │   └── prd-NNN.md
 │   ├── specs/                     ← 技術規劃（per-feature）        [必要]
 │   │   ├── specs-overview.md
 │   │   └── NNN-name/
@@ -224,17 +225,17 @@ AI：讓我用 /vif-spec 來分析影響範圍...
 
 ```
 workspace/
-├── project-docs/                  ← docs repo
+├── project-docs/                  ← docs repo（根目錄即 docs/）
 │   ├── .claude/
 │   │   └── CLAUDE.md              ← workspace 設定 + vif 設定
-│   ├── docs/
-│   │   ├── prd-NNN.md             [必要]
-│   │   ├── specs/                 [必要]
-│   │   ├── api-specs/             [視需要]
-│   │   ├── ui-specs/              [視需要]
-│   │   ├── schema/                [視需要]
-│   │   ├── architecture/          [視需要]
-│   │   └── features/              [視需要]
+│   ├── prds/                      [必要]
+│   │   └── prd-NNN.md
+│   ├── specs/                     [必要]
+│   ├── api-specs/                 [視需要]
+│   ├── ui-specs/                  [視需要]
+│   ├── schema/                    [視需要]
+│   ├── architecture/              [視需要]
+│   ├── features/                  [視需要]
 │   └── guideline/                 [視需要]
 │
 ├── project-frontend/              ← frontend code repo
@@ -261,7 +262,7 @@ workspace/
 
 | 角色 | 路徑 | 包含 |
 |------|------|------|
-| docs | . | docs/, guideline/ |
+| docs | . | prds/, api-specs/, ui-specs/, schema/, specs/, guideline/ |
 | frontend | ../project-frontend | src/, test/ |
 | backend | ../project-backend | src/, test/ |
 
@@ -289,7 +290,7 @@ workspace/
 
 | 角色 | 路徑 | 包含 |
 |------|------|------|
-| docs | ../project-docs | docs/, guideline/ |
+| docs | ../project-docs | api-specs/, ui-specs/, schema/, specs/, guideline/ |
 | frontend | . | src/, test/ |
 | backend | ../project-backend | src/, test/ |
 
@@ -329,7 +330,7 @@ workspace/
 
 | 角色 | 路徑 | 包含 |
 |------|------|------|
-| docs | ../project-docs | docs/, guideline/ |
+| docs | ../project-docs | api-specs/, ui-specs/, schema/, specs/, guideline/ |
 | frontend | ../project-frontend | src/, test/ |
 | backend | . | src/, test/ |
 

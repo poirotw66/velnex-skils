@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 # Phase 1 — UI Spec 頁面規格
@@ -97,11 +97,19 @@ metadata:
 
 **存放位置：** `docs/ui-specs/[module]/[page]/[name].md`
 
+## God Mode Override
+
+被 `/vif-god` 驅動時，以下行為變更：
+
+| 步驟 | 正常流程 | God Mode |
+|------|---------|----------|
+| Step 4 確認 | 呈現給 Human 確認 → commit | 自我審查通過 → 自動 commit（不等 Human） |
+
 ## Exit Criteria
 
 - [ ] 每個頁面的 UI Spec 已撰寫
 - [ ] 欄位、互動、API 呼叫都已定義
 - [ ] **自我審查通過（spec-auditor Pass 1+2）**
 - [ ] progress.md 已更新（UISpec 列標為完成 + 自審 ✓）
-- [ ] Human 已確認
+- [ ] Human 已確認（God Mode: 自動放行）
 - [ ] 已 commit

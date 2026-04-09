@@ -5,7 +5,7 @@ description: >-
   "product requirement", "問題定義", "需求文件", "要做什麼", "why build",
   "寫 PRD", "新需求".
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 # Phase 0 — PRD 產品探索
@@ -58,7 +58,7 @@ metadata:
 
 ### Step 3: Draft PRD
 
-使用 PRD 模板（`references/prd-template.md`），撰寫至 `docs/prd-NNN.md`：
+使用 PRD 模板（`references/prd-template.md`），撰寫至 `docs/prds/prd-NNN.md`：
 
 - 問題描述與證據
 - 預期成果（可衡量）
@@ -114,7 +114,7 @@ PRD approved 後，從 Section 6 的拆解建議展開 specs-overview：
 
 ## Exit Criteria
 
-- [ ] PRD 文件已建立（`docs/prd-NNN.md`）
+- [ ] PRD 文件已建立（`docs/prds/prd-NNN.md`）
 - [ ] 問題定義明確
 - [ ] Human 已 approve PRD
 - [ ] specs-overview.md 已展開（Section 6 → — (not-started)條目）

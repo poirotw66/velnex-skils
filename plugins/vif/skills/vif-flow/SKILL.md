@@ -4,9 +4,10 @@ description: >-
   AI-driven development flow orchestration. Trigger on: "dev flow", "開發流程",
   "phase", "階段", "新功能", "new feature", "ai-driven", "AI 開發",
   "哪個階段", "下一步", "flow overview", "流程總覽", "init", "初始化",
-  "setup", "專案設定", "對齊結構", "align structure".
+  "setup", "專案設定", "對齊結構", "align structure", "health check",
+  "健檢", "結構檢查", "檢查結構".
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 # vif (Velocity AI Flow) — AI-Driven Development Flow
@@ -27,20 +28,19 @@ AI 為主力開發，Human 為審查角色。一人驅動完整流程。
 **技術先行**（先定技術邊界再寫需求）：
 
 ```
-/vif-arch + /vif-uiux → /vif-prd → /vif-bdd → /vif-spec → /vif-prototype(可選) → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
+/vif-arch + /vif-uiux → /vif-prd → /vif-bdd → /vif-prototype(可選) → /vif-spec → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
 ```
 
 **產品先行**（先定需求再選技術）：
 
 ```
-/vif-prd → /vif-arch + /vif-uiux → /vif-bdd → /vif-spec → /vif-prototype(可選) → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
+/vif-prd → /vif-arch + /vif-uiux → /vif-bdd → /vif-prototype(可選) → /vif-spec → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
 ```
 
 > `/vif-arch` 會自動偵測是否已有 PRD，有的話會讀取作為技術選型的參考依據。
 >
-> `/vif-prototype` 可在 PRD 後或 Spec 後使用：
-> - PRD 後：探索視覺概念，幫助釐清需求再進入 Spec
-> - Spec 後：確認規格的畫面呈現，再進入 api-spec / ui-spec
+> `/vif-prototype` 屬於 Phase 0（探索），在 BDD 後、Spec 前使用：
+> - 用互動式 HTML 原型確認視覺概念與需求方向，再進入 Spec
 
 ### 模式二：輔助自動化（企業團隊）
 
@@ -114,7 +114,7 @@ vif 支援兩種 workspace 模式。沒有設定時預設為 monorepo。
 
 | 角色 | 路徑 | 包含 |
 |------|------|------|
-| docs | ../project-docs | docs/, guideline/ |
+| docs | ../project-docs | prds/, api-specs/, ui-specs/, schema/, specs/, guideline/ |
 | frontend | . | src/, test/ |
 | backend | ../project-backend | src/, test/ |
 
@@ -122,6 +122,7 @@ vif 支援兩種 workspace 模式。沒有設定時預設為 monorepo。
 ```
 
 > 路徑使用相對路徑（相對於當前 repo 根目錄）。每個 repo 的表格內容相同，只有路徑因 cwd 不同而不同。
+> `包含` 欄列出 repo 根目錄下的**實際子目錄**，路徑解析以此為準。
 
 ### 路徑解析規則
 
@@ -129,10 +130,23 @@ vif 支援兩種 workspace 模式。沒有設定時預設為 monorepo。
 
 | 語義路徑 | Monorepo | Multi-Repo |
 |---------|----------|------------|
-| `docs/specs/` | `./docs/specs/` | `{docs-repo}/docs/specs/` |
-| `docs/api-specs/` | `./docs/api-specs/` | `{docs-repo}/docs/api-specs/` |
+| `docs/specs/` | `./docs/specs/` | `{docs-repo}/specs/` |
+| `docs/api-specs/` | `./docs/api-specs/` | `{docs-repo}/api-specs/` |
+| `docs/ui-specs/` | `./docs/ui-specs/` | `{docs-repo}/ui-specs/` |
+| `docs/schema/` | `./docs/schema/` | `{docs-repo}/schema/` |
+| `docs/prds/prd-NNN.md` | `./docs/prds/prd-NNN.md` | `{docs-repo}/prds/prd-NNN.md` |
 | `guideline/` | `./guideline/` | `{docs-repo}/guideline/` |
 | `src/` | `./src/` | 當前 code repo 的 `src/` |
+
+**解析邏輯：** 語義路徑的 `docs/` prefix 在 multi-repo 下由 docs repo 根目錄**取代**（不是疊加）。因為 docs repo 本身就是 `docs/`，不需要再建一層。
+
+```
+語義路徑 docs/specs/NNN/spec.md
+├── Monorepo  → ./docs/specs/NNN/spec.md        （docs/ 是 repo 內的子目錄）
+└── Multi-Repo → {docs-repo}/specs/NNN/spec.md   （docs repo 根目錄 = docs/）
+```
+
+> 實際子目錄結構以 workspace mapping 的 `包含` 欄為準。例如 `包含: api-specs/, specs/` 表示這些目錄直接在 docs repo 根目錄下。
 
 ### 操作分界
 
@@ -226,7 +240,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 >
 > 📦 建議搬移：
 >   - guideline/db-schema.md → docs/schema/（VIF 累積型設計文件）
->   - docs/PRD.md → docs/prd-001.md（VIF 命名規範）
+>   - docs/PRD.md → docs/prds/prd-001.md（VIF 命名規範）
 >
 > ⏭ 視需要建立（目前不需要）：
 >   - docs/api-specs/（使用 /vif-api-spec 時自動建立）
@@ -248,6 +262,106 @@ code repo 路徑: /absolute/path/to/project-frontend
 > 全部存在 → 已設定，跳過 init。缺任一項 → 提示 init。
 >
 > Multi-repo 下，init 時額外詢問 workspace 角色配置。
+
+## Health Check
+
+對既有專案進行結構與內容健檢。使用者說「health check」、「健檢」、「結構檢查」時觸發。
+
+### 檢查項目
+
+**1. 目錄結構**
+
+依 workspace 模式（monorepo / multi-repo）解析 docs 位置，掃描：
+
+| 檢查 | 說明 |
+|------|------|
+| 必要目錄 | `prds/`、`specs/`、`specs/specs-overview.md` 存在 |
+| 視需要目錄 | `api-specs/`、`ui-specs/`、`schema/`、`architecture/`、`features/`、`guideline/` — 有內容但放錯位置？ |
+| 多餘巢狀 | docs repo 內不應有 `docs/` 子目錄（multi-repo 常見問題） |
+| 孤立檔案 | PRD 散在根目錄而非 `prds/` 內？設計文件不在對應目錄？ |
+
+**2. CLAUDE.md 設定**
+
+基礎設定：
+
+| 檢查 | 說明 |
+|------|------|
+| vif 設定區塊 | 是否有 `AI-Driven Development Flow` 區塊 |
+| Workspace 設定 | multi-repo 是否有 workspace 表？`包含` 欄是否與實際目錄一致？ |
+| 技術棧 / 專案指令 | 是否已填寫（空白 = `/vif-arch` 還沒跑？） |
+| 測試策略 | 是否已填寫？與技術棧一致？（例如 Python 專案不該用 Jest） |
+| Guideline 映射 | 有 `guideline/` 但沒設定映射？映射路徑指向的檔案/目錄存在？ |
+
+參數驗證：
+
+| 設定 | 合法值 | 檢查 |
+|------|--------|------|
+| `flow_mode` | `god` / `normal` / 未設定 | 值是否合法 |
+| `Code Quality` | `true` / 未設定 | — |
+| AI Cross-Review `mode` | `solo` / `team` | 啟用了 design/verify/review 但沒設定 mode？ |
+| AI Cross-Review `design` | CLI 名稱（如 `codex`） | 啟用了但 mode 未設定？ |
+| AI Cross-Review `verify` | CLI 名稱 | 同上 |
+| AI Cross-Review `review` | CLI 名稱 | 同上 |
+
+相依性檢查：
+
+| 條件 | 問題 |
+|------|------|
+| Cross-Review 有 `design`/`verify`/`review` 但沒 `mode` | 缺少 mode 設定，無法判斷觸發時機 |
+| Cross-Review 有 `mode` 但 design/verify/review 全未設定 | mode 已設但沒啟用任何階段，等於沒用 |
+| `flow_mode: god` 但缺少技術棧或專案指令 | God Mode 需要完整設定才能自動決策 |
+
+**3. 文件內容一致性**
+
+| 檢查 | 說明 |
+|------|------|
+| specs-overview vs 實際 | specs-overview 列出的 spec 是否都有對應的 `specs/NNN-name/` 目錄？反之亦然？ |
+| progress.md 狀態 | 設計文件表的路徑是否指向存在的檔案？ |
+| 設計文件 frontmatter | api-spec / ui-spec / schema 的 frontmatter 是否有基本 metadata？ |
+| PRD 編號連續性 | `prds/` 內的 PRD 編號是否連續？有無跳號？ |
+
+**4. 路徑解析驗證（multi-repo）**
+
+| 檢查 | 說明 |
+|------|------|
+| workspace 路徑可達 | 表中各 repo 路徑是否存在、是否為 git repo？ |
+| 各 repo CLAUDE.md | 各 code repo 是否有 workspace 設定？角色是否一致？ |
+
+### 報告格式
+
+```
+> vif Health Check Report
+>
+> 🏥 專案：[name]（[monorepo / multi-repo]）
+> 📅 日期：YYYY-MM-DD
+>
+> ❌ 問題（需修正）：
+>   1. docs repo 內有多餘的 docs/ 子目錄，內含 api-specs/、schema/ — 應搬到根目錄
+>   2. prd-001.md、prd-002.md 散在根目錄 — 應搬入 prds/
+>   3. specs-overview 列出 spec-003 但目錄不存在
+>
+> ⚠️ 建議（可選）：
+>   1. CLAUDE.md 缺少技術棧設定 — 建議執行 /vif-arch 或手動填寫
+>   2. guideline/ 有內容但未設定映射 — 建議加入 Guideline 映射
+>
+> ✅ 通過：
+>   - 目錄結構正確
+>   - workspace 路徑可達
+>   - specs-overview 與目錄一致
+>
+> 要修正上述問題嗎？可逐項確認。
+```
+
+### 修正模式
+
+使用者確認後，逐項執行修正：
+
+- **搬移檔案**：`git mv` 搬移到正確位置
+- **更新路徑引用**：搬移後掃描 spec.md / progress.md 內的路徑引用，同步更新
+- **補建缺少的檔案**：如 specs-overview.md
+- **更新 CLAUDE.md**：補上缺少的設定區塊
+
+> 每項修正都向使用者確認後才執行。修正完畢後自動重跑一次檢查，確認問題已解決。
 
 ## Skill Routing
 
@@ -328,7 +442,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 | 層 | 文件 | 問題 |
 |----|------|------|
-| 需求 | `docs/prd-NNN.md` | WHY + WHAT |
+| 需求 | `docs/prds/prd-NNN.md` | WHY + WHAT |
 | 行為 | `docs/features/**/*.feature` | HOW it behaves（可選） |
 | 規劃 | `docs/specs/NNN/spec.md` | WHAT to build |
 

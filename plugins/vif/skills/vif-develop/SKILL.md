@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 # Phase 2 — Develop TDD 開發
@@ -346,6 +346,18 @@ fix: address review feedback (spec-001)
 | 測試太複雜 | 設計太複雜，簡化介面 |
 | 什麼都要 mock | 耦合太高，用 dependency injection |
 | 測試 setup 很大 | 抽 helper。還是複雜？簡化設計 |
+
+## God Mode Override
+
+被 `/vif-god` 驅動時，以下行為變更：
+
+| 步驟 | 正常流程 | God Mode |
+|------|---------|----------|
+| Test Strategy 確認 | 產出策略後問 Human 確認 | CLAUDE.md 預設 > AI 自動分類，不問 Human |
+| TDD Exceptions | 需 Human 確認 | AI 自行判斷 |
+| BLOCKED（第 3 次） | escalate 給 Human | 中止 God Mode |
+| BLOCKED_BY_ENV / BLOCKED_BY_SPEC | escalate 給 Human | 立即中止 God Mode |
+| NEEDS_CONTEXT（第 2 次） | escalate 給 Human | 中止 God Mode |
 
 ## Exit Criteria
 

@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 # Phase 1 — API Spec 規格 + OpenAPI + DB Schema
@@ -141,6 +141,14 @@ metadata:
 - OpenAPI：`docs/api-specs/[module]/openapi.yaml`
 - Schema：`docs/schema/[domain].md`
 
+## God Mode Override
+
+被 `/vif-god` 驅動時，以下行為變更：
+
+| 步驟 | 正常流程 | God Mode |
+|------|---------|----------|
+| Step 6 確認 | 呈現給 Human 確認 → commit | 自我審查通過 → 自動 commit（不等 Human） |
+
 ## Exit Criteria
 
 - [ ] 每支 API 的 API Spec 已撰寫（含錯誤映射表）
@@ -149,5 +157,5 @@ metadata:
 - [ ] 既有 API/Schema 的修改已標記
 - [ ] **自我審查通過（spec-auditor Pass 1+2）**
 - [ ] progress.md 已更新（ApiSpec / Schema 列標為完成 + 自審 ✓）
-- [ ] Human 已確認
+- [ ] Human 已確認（God Mode: 自動放行）
 - [ ] 已 commit

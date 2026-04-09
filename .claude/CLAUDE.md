@@ -19,9 +19,9 @@ velnex/
 │   │   │   ├── vif-prd/              ← Phase 0: PRD 撰寫
 │   │   │   ├── vif-arch/             ← Phase 0: 架構決策 + ADR
 │   │   │   ├── vif-uiux/            ← Phase 0: UI/UX 設計基礎
+│   │   │   ├── vif-prototype/       ← Phase 0: HTML 原型（可選）
 │   │   │   ├── vif-bdd/             ← Phase 0: BDD Discovery（可選）
 │   │   │   ├── vif-spec/            ← Phase 1: 影響分析 + 技術規劃
-│   │   │   ├── vif-prototype/       ← Phase 1: HTML 原型（可選）
 │   │   │   ├── vif-api-spec/        ← Phase 1: API 規格 + openapi + dbschema
 │   │   │   ├── vif-ui-spec/         ← Phase 1: UI 頁面規格
 │   │   │   ├── vif-develop/         ← Phase 2: TDD 開發
@@ -94,12 +94,12 @@ plugin 和所有 skills 使用相同版本號（`plugin.json` 的 version = 所�
 
 技術先行（先定技術邊界再寫需求）：
 ```
-/vif-arch + /vif-uiux → /vif-prd → /vif-bdd → /vif-spec → /vif-prototype(可選) → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
+/vif-arch + /vif-uiux → /vif-prd → /vif-bdd → /vif-prototype(可選) → /vif-spec → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
 ```
 
 產品先行（先定需求再選技術）：
 ```
-/vif-prd → /vif-arch + /vif-uiux → /vif-bdd → /vif-spec → /vif-prototype(可選) → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
+/vif-prd → /vif-arch + /vif-uiux → /vif-bdd → /vif-prototype(可選) → /vif-spec → /vif-api-spec + /vif-ui-spec → /vif-develop → /vif-verify → /vif-review → /vif-close
 ```
 
 > vif-arch 會自動偵測是否已有 PRD，有的話會讀取作為技術選型的參考依據。

@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -227,16 +227,29 @@ Review 完成後，更新 `progress.md` 的 Phase 4 區塊：
 
 Human approve 後 **commit**（`docs: review spec-NNN APPROVED`），包含 review-report.md + progress.md。
 
+## God Mode Override
+
+被 `/vif-god` 驅動時，以下行為變更：
+
+| 步驟 | 正常流程 | God Mode |
+|------|---------|----------|
+| 🟡🟢 findings | Human 選修或跳 | AI 直接修復 → 重跑 verify → 重跑 review |
+| Manual Testing | Human 執行 | 列入 Results Report，由使用者最終驗測 |
+| Human approve | Human approve 後 commit | 全部 findings 已處理 → 自動 commit |
+| 修復循環上限 | max 3 次 | 同（max 3 次，仍有 🔴🟠 → 中止 God Mode） |
+
+> God Mode 的 🟡🟢 全部修復，修復記錄到 Results Report，供使用者最終確認。
+
 ## Exit Criteria
 
 - [ ] Stage 1 Spec + Design Compliance 通過
 - [ ] Stage 2 Code Quality 審查完成
 - [ ] 🔴🟠 findings 全部修復
-- [ ] 🟡🟢 findings 已呈現 Human 決定（修復或跳過）
+- [ ] 🟡🟢 findings 已呈現 Human 決定（修復或跳過）（God Mode: AI 直接修復）
 - [ ] Review Report 已儲存
 - [ ] **人工測試項目已列出**（reviewer 在 APPROVED 時產出 Manual Testing Checklist）
-- [ ] 呈現給 Human 做最終審查（含人工測試項目清單）
-- [ ] Human 完成人工測試並確認
+- [ ] 呈現給 Human 做最終審查（God Mode: 列入 Results Report）
+- [ ] Human 完成人工測試並確認（God Mode: 由使用者最終驗測）
 - [ ] progress.md Phase 4 已更新
-- [ ] Human approve 後已 commit
+- [ ] Human approve 後已 commit（God Mode: 自動 commit）
 - [ ] 進入 Phase 5（`/vif-close`）

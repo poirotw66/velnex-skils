@@ -21,7 +21,7 @@
 
 ### PRD → BDD / Spec
 
-- [ ] PRD 文件已建立（`docs/prd-NNN.md`）
+- [ ] PRD 文件已建立（`docs/prds/prd-NNN.md`）
 - [ ] 問題定義明確
 - [ ] Human 已 approve PRD
 - [ ] specs-overview.md 已更新

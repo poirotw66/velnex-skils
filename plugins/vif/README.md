@@ -92,9 +92,9 @@ progress.md 不只是追蹤文件 — 它就是 Phase Gate 的判斷依據。有
 | 0 — 探索 | `/vif-prd` | PRD 撰寫 |
 | 0 — 探索 | `/vif-arch` | 架構決策 + ADR 記錄 |
 | 0 — 探索 | `/vif-uiux` | UI/UX 設計基礎（色系、字型、元件規範） |
+| 0 — 探索 | `/vif-prototype` | HTML 原型（可選，無 Figma 時使用） |
 | 0 — 探索 | `/vif-bdd` | BDD Discovery → .feature（可選） |
 | 1 — 規劃與設計 | `/vif-spec` | 影響分析 + 技術規劃 |
-| 1 — 規劃與設計 | `/vif-prototype` | HTML 原型（可選，無 Figma 時使用） |
 | 1 — 規劃與設計 | `/vif-api-spec` | API 規格 + openapi.yaml + dbschema |
 | 1 — 規劃與設計 | `/vif-ui-spec` | UI 頁面規格 |
 | 2 — 開發 | `/vif-develop` | TDD 開發（含測試策略選擇） |
@@ -275,7 +275,7 @@ Architect    Designer              PD/PM              SA/SD             Frontend
 | **Architect** | `/vif-arch` | 架構需求 | `docs/architecture/adr-NNN.md` |
 | **Designer** | `/vif-uiux` | 產品領域 | `guideline/ui/ui-guideline.md` |
 | **Designer** | `/vif-prototype`（可選） | PRD + ui-guideline | `docs/prototypes/*.html` |
-| **PD/PM** | `/vif-prd` | 需求想法 | `docs/prd-NNN.md` |
+| **PD/PM** | `/vif-prd` | 需求想法 | `docs/prds/prd-NNN.md` |
 | **PD/PM** | `/vif-bdd`（可選） | PRD | `docs/features/**/*.feature` |
 | **SA/SD** | `/vif-spec` | PRD + Figma/Prototype | `docs/specs/NNN/spec.md` |
 | **Frontend** | `/vif-ui-spec` | Figma/Prototype + Spec | `docs/ui-specs/**/*.md` |
@@ -292,28 +292,19 @@ Architect    Designer              PD/PM              SA/SD             Frontend
 /vif-prd
     │ Human approve → commit
     ▼
-/vif-god ───────────────────────────── 全自動（無 Human 介入）
+/vif-god ───────────────────────────── 編排器（依序驅動各 skill）
     │
-    │  Phase 1: Spec + Design Docs
-    │    影響分析 → spec.md → progress.md
-    │    spec-auditor 自動審查（max 5 輪）
-    │    撰寫全部設計文件 → spec-auditor Pass 1+2+3
-    │    自動 commit
+    │  Phase 1: /vif-spec → /vif-api-spec + /vif-ui-spec
+    │    各 skill 照常執行，God Mode Override 自動放行
     │
-    │  Phase 2: Develop
-    │    測試策略自動決定
-    │    per-task TDD: test-writer → implementer → refactor
-    │    per-task 自動 commit
+    │  Phase 2: /vif-develop
+    │    TDD Loop 不變，測試策略自動決定
     │
-    │  Phase 3: Verify
-    │    verifier（Stage 1-7）+ security-reviewer
-    │    所有 findings（🔴🟠🟡🟢）AI 直接修復
-    │    自動 commit
-    │
-    │  Phase 4: Review
-    │    reviewer（Stage 1+2）
+    │  Phase 3: /vif-verify
     │    所有 findings AI 直接修復
-    │    自動 commit
+    │
+    │  Phase 4: /vif-review
+    │    所有 findings AI 直接修復
     │
     │  Results Report
     │    god-mode-report.md 彙整所有決策與修復紀錄
@@ -353,7 +344,8 @@ project/
 │
 ├── docs/
 │   ├── architecture/                  ← ADR 架構決策記錄
-│   ├── prd-NNN.md                     ← 需求規格（WHY + WHAT）
+│   ├── prds/                           ← 需求規格（WHY + WHAT）
+│   │   └── prd-NNN.md
 │   ├── features/                      ← BDD .feature（可選）
 │   │   └── [domain]/
 │   │       └── [name].feature
@@ -391,7 +383,7 @@ project/
 | 目錄 | 性質 | 誰產出 | 更新頻率 |
 |------|------|--------|---------|
 | `docs/architecture/` | 累積型 | Architect / SA | 少（重大決策時） |
-| `docs/prd-*.md` | per-feature | PD / PM | 寫完不改 |
+| `docs/prds/prd-*.md` | per-feature | PD / PM | 寫完不改 |
 | `docs/features/` | per-feature（可選） | PD / PM | 偶爾修正 |
 | `docs/specs/` | per-feature | SA / SD / AI | 開發中更新 |
 | `docs/api-specs/` | 累積型 | Backend / SA | 隨功能迭代 |

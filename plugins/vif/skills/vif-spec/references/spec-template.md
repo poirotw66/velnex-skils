@@ -3,7 +3,7 @@
 ## Meta
 - 類型：Feature / Workflow / Infra / Refactor
 - 狀態：draft / approved / in-progress / done
-- PRD：prd-NNN（如有）
+- PRD：prds/prd-NNN（如有）
 - 行為規格：features/[domain]/[name].feature（如有）
 - 參考畫面：[Figma link / 截圖路徑]（如有）
 - 依賴：spec-NNN, spec-NNN
