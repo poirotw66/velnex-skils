@@ -7,7 +7,7 @@ description: >-
   "setup", "專案設定", "對齊結構", "align structure", "health check",
   "健檢", "結構檢查", "檢查結構".
 metadata:
-  version: 3.1.0
+  version: 3.2.0
 ---
 
 # vif (Velocity AI Flow) — AI-Driven Development Flow

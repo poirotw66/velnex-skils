@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 3.1.0
+  version: 3.2.0
 ---
 
 # Phase 1 — API Spec 規格 + OpenAPI + DB Schema
@@ -24,8 +24,8 @@ metadata:
 
 ## 輸入
 
-- **必要**：PRD + Figma 畫面（或 Spec 的 API/DB 清單）
-- **參考**：Spec（`docs/specs/NNN-name/spec.md` — 如有）
+- **必要**：PRD（或 Spec 的 API/DB 清單）
+- **參考**：Spec（`docs/specs/NNN-name/spec.md` — 如有，含 UI 來源）
 - **參考**：.feature（`docs/features/` — 如有，對應行為規格）
 - **參考**：既有 openapi.yaml 和 schema（確認不 breaking）
 - **參考**：Guideline — 使用 `/vif-guideline`（context = `api-spec`）取得後端設計規範
@@ -35,7 +35,7 @@ metadata:
 ### Step 1: 讀取輸入與影響分析
 
 1. 讀取 PRD / Spec 的 API 和 DB 清單
-2. 讀取 Figma 畫面（確認需要什麼資料）
+2. **讀取 UI 來源** — 從 spec.md Meta 的「UI 來源」取得 Figma / Prototype / URL（如有）。有 UI 來源時，API 的 request/response 必須能支撐畫面所需的所有資料與互動
 3. **讀取 Guideline** — 使用 `/vif-guideline`（context = `api-spec`）取得相關規範，後續撰寫時遵循
 4. **掃描現有設計文件**（使用 frontmatter 快速比對）：
    ```

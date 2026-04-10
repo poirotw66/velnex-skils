@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 3.1.0
+  version: 3.2.0
 ---
 
 # Phase 1 — Spec 技術規劃與影響分析
@@ -40,7 +40,7 @@ metadata:
 ## 輸入
 
 - **必要**：PRD（`docs/prds/prd-NNN.md`）
-- **參考**：Figma 畫面（圖片 / MCP / 結構化描述）
+- **UI 來源**：Figma / Prototype / URL（如有，Step 1 確認後記入 spec.md，下游 skill 必須遵循）
 - **參考**：.feature（`docs/features/` — 如有，來自 `/vif-bdd`）
 - **參考**：既有設計文件（`docs/api-specs/`、`docs/ui-specs/`、`docs/schema/`）
 
@@ -56,18 +56,19 @@ Step 1            Step 2              Step 3             Step 4
 
 **這是 Spec 最重要的步驟。**
 
-1. 讀取 PRD + Figma + .feature（如有）
-2. **讀取既有程式碼** — 瀏覽 codebase，了解現有架構、既有的預設值、資料結構、生命週期
-3. **讀取相關文件** — 架構文件（ADR）、其他 spec、使用 `/vif-guideline` 取得相關規範
-4. **掃描現有設計文件**（使用 frontmatter 快速比對）：
+1. 讀取 PRD + .feature（如有）
+2. **確認 UI 來源** — 詢問是否有 Figma / Prototype / URL 需要遵循。有的話記入 spec.md Meta 的「UI 來源」欄位，後續所有 skill 必須讀取並遵循
+3. **讀取既有程式碼** — 瀏覽 codebase，了解現有架構、既有的預設值、資料結構、生命週期
+4. **讀取相關文件** — 架構文件（ADR）、其他 spec、使用 `/vif-guideline` 取得相關規範
+5. **掃描現有設計文件**（使用 frontmatter 快速比對）：
    ```
    a. Glob docs/api-specs/**/*.md + docs/ui-specs/**/*.md + docs/schema/**/*.md
    b. 讀取每個檔案的 frontmatter（--- 區塊內的 YAML metadata）
    c. 綜合判斷相關性（不限於同 domain/module，跨域關聯也要納入）
    d. Read 僅載入相關文件全文
    ```
-5. **確認新增 vs 修改**：比對 scan 結果，已存在同 path/route/table → 修改，不存在 → 新增
-6. **交叉驗證** — spec 中的假設（預設值、格式、行為）是否與既有程式碼和文件一致
+6. **確認新增 vs 修改**：比對 scan 結果，已存在同 path/route/table → 修改，不存在 → 新增
+7. **交叉驗證** — spec 中的假設（預設值、格式、行為）是否與既有程式碼和文件一致
 
 > **不要憑印象寫 spec。** 每一個預設值、資料格式、行為假設，都去 code 和文件裡確認。
 > 寫在 spec 裡的東西如果跟 code 矛盾，開發時就會出問題。

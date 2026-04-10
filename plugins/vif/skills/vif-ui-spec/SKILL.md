@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 3.1.0
+  version: 3.2.0
 ---
 
 # Phase 1 — UI Spec 頁面規格
@@ -22,7 +22,7 @@ metadata:
 
 ## 輸入
 
-- **必要**：Figma 畫面（圖片 / MCP / 結構化描述）或 Prototype 確認結果
+- **必要**：Figma 畫面（圖片 / MCP / 結構化描述）或 Prototype 確認結果（從 spec.md Meta「UI 來源」取得，或使用者直接提供）
 - **參考**：Spec（`docs/specs/NNN-name/spec.md` — 如有）
 - **參考**：ApiSpec（`docs/api-specs/` — 如有，確認可用的 API）
 - **參考**：Guideline — 使用 `/vif-guideline`（context = `ui-spec`）取得 UI 設計基礎 + 前端規範
@@ -31,7 +31,7 @@ metadata:
 
 ### Step 1: 讀取輸入
 
-1. 讀取 Figma 畫面（圖片或 MCP）或 Prototype 確認結果
+1. **讀取 UI 來源** — 從 spec.md Meta 的「UI 來源」取得 Figma / Prototype / URL，或使用者直接提供。有 UI 來源時，UI Spec 必須與之一致
 2. 讀取相關 Spec 的頁面清單（如有）
 3. **掃描 ApiSpec 和既有 UISpec**（使用 frontmatter 快速比對）：
    ```

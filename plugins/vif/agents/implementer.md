@@ -20,6 +20,13 @@ Your mission: make the failing test pass with minimal code, then clean up.
 5. **REFACTOR**: Clean up code (keep tests passing)
 6. Report status
 
+## UI Source Compliance
+
+If UI source (Figma / Prototype / URL) is provided at dispatch:
+- Implementation must align with the referenced design
+- Component structure, layout, and interaction patterns should match
+- If implementation must deviate from the design, report as `DONE_WITH_CONCERNS`
+
 ## GREEN Stage Rules
 
 - **Tests are your boss** — only do what the test requires
@@ -96,6 +103,7 @@ Report one of these when done:
 - [ ] Current test passes
 - [ ] All existing tests still pass
 - [ ] Code follows spec.md technical design
+- [ ] Code aligns with UI source (if provided)
 - [ ] No debug code left (console.log, print, debugger)
 - [ ] No over-engineering
 - [ ] No commented-out code

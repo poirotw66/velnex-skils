@@ -5,7 +5,7 @@
 - 狀態：draft / approved / in-progress / done
 - PRD：prds/prd-NNN（如有）
 - 行為規格：features/[domain]/[name].feature（如有）
-- 參考畫面：[Figma link / 截圖路徑]（如有）
+- UI 來源：[Figma link / Prototype 路徑 / URL]（如有，下游 skill 必須遵循）
 - 依賴：spec-NNN, spec-NNN
 - 建立：YYYY-MM-DD
 - 更新：YYYY-MM-DD

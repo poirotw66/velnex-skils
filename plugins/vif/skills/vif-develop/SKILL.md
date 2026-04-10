@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 3.1.0
+  version: 3.2.0
 ---
 
 # Phase 2 — Develop TDD 開發
@@ -82,7 +82,7 @@ metadata:
 
 | 操作 | 位置 |
 |------|------|
-| 讀取 spec.md、api-spec、ui-spec、.feature | docs repo |
+| 讀取 spec.md（含 UI 來源）、api-spec、ui-spec、.feature | docs repo |
 | 讀/寫 progress.md | docs repo |
 | 寫 test、寫 src | code repo（當前 repo） |
 | 執行 build、test、lint | code repo（當前 repo） |
@@ -128,6 +128,8 @@ metadata:
 ### 載入相關設計文件
 
 Entry Gate 通過後，分兩層載入設計文件：
+
+**UI 來源**：讀取 spec.md Meta 的「UI 來源」。有 Figma / Prototype / URL 時，dispatch implementer 需注入 UI 來源，實作結果必須與之吻合。
 
 **第一層（確定）**：讀取 progress.md 設計文件表中明確列出的檔案路徑，直接 Read 載入。這些是本 spec 確定需要的設計文件，不經過篩選。
 

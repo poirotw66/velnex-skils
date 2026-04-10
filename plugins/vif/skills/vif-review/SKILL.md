@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 3.1.0
+  version: 3.2.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -25,7 +25,7 @@ metadata:
 
 | 操作 | 位置 |
 |------|------|
-| 讀取 spec.md、api-spec、ui-spec、schema、.feature | docs repo |
+| 讀取 spec.md（含 UI 來源）、api-spec、ui-spec、schema、.feature | docs repo |
 | 讀取 implementation | code repo |
 | 執行 tests | code repo |
 
@@ -70,6 +70,7 @@ metadata:
 
 - [ ] API 實作與 `docs/api-specs/` 一致（欄位、型別、狀態碼、業務邏輯）
 - [ ] UI 實作與 `docs/ui-specs/` 一致（元件、狀態、互動行為）
+- [ ] UI 實作與 spec.md Meta 的 UI 來源一致（Figma / Prototype / URL，如有）
 - [ ] DB 實作與 `docs/schema/` 一致（表結構、欄位、關聯）
 - [ ] 實作行為與 `.feature` 描述一致（如有）
 - [ ] 無 breaking change（或已在 spec 中標註）
