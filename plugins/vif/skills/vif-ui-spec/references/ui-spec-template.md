@@ -4,10 +4,13 @@ description: [一行摘要]
 domain: [領域]
 module: [模組]
 spec: [spec-NNN]
+status: draft
 route: [/path]
 apis:
   - [METHOD /api/v1/path]
 ---
+
+> **status 生命週期**：`draft` → `approved` → `implemented` → `deprecated`（取代時加 `replaced-by` 和 `deprecated-spec`）
 
 # [頁面/元件名稱]
 
@@ -15,7 +18,6 @@ apis:
 
 - 頁面類型：search-page / form-page / detail-page / modal
 - 頁面檔名: `[Name]View.vue`（或對應框架）
-- 狀態：draft / approved / implemented
 - 建立：YYYY-MM-DD
 - 更新：YYYY-MM-DD
 

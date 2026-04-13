@@ -7,7 +7,7 @@ description: >-
   "setup", "專案設定", "對齊結構", "align structure", "health check",
   "健檢", "結構檢查", "檢查結構".
 metadata:
-  version: 3.2.0
+  version: 3.3.0
 ---
 
 # vif (Velocity AI Flow) — AI-Driven Development Flow
@@ -19,7 +19,7 @@ metadata:
 > **探索是思考時間，不是任務時間。** — OpenSpec
 > **沒有新鮮的驗證證據，就不能做出任何完成聲明。** — Superpowers
 
-## 兩種模式
+## 三種模式
 
 ### 模式一：完全自動化（Solo / 小團隊）
 
@@ -203,6 +203,49 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 讓 agent 知道去哪裡讀設計文件、去哪裡讀/寫程式碼。
 
+## Design Doc Lifecycle
+
+`docs/api-specs/`、`docs/ui-specs/`、`docs/schema/` 下的設計文件透過 frontmatter 的 `status` 欄位標示生命週期。所有跨 skill 的狀態判斷以此為準。
+
+### 四個狀態
+
+| 狀態 | 語意 | 由誰產生 |
+|------|------|---------|
+| `draft` | 剛由 template 建立，尚未通過自審 | `/vif-api-spec`、`/vif-ui-spec` 從 template 建檔 |
+| `approved` | 通過 spec-auditor Pass 1+2 自審 + Human 確認，待實作 | 設計 skill Step 4/6 最後一步（Human 確認後） |
+| `implemented` | 本 spec 範圍已完成實作並通過 Review | `/vif-close` Design Doc Sync 階段 |
+| `deprecated` | 已被其他設計文件取代 | 設計 skill 處理「取代」項目時 |
+
+### 狀態轉換
+
+```
+                     ┌──[後續 spec 修改]──┐
+                     │                    │
+                     ↓                    │
+draft ──[Human 確認]──→ approved ──[spec close]──→ implemented
+                     │                             │
+                     │ [被取代]                    │ [被取代]
+                     └──────────────┬──────────────┘
+                                    ↓
+                               deprecated
+```
+
+| 轉換 | 觸發點 | 由哪個 skill 執行 |
+|------|-------|----------------|
+| `draft → approved` | 設計文件 Human 確認後 | `/vif-api-spec` Step 6、`/vif-ui-spec` Step 4 |
+| `approved → implemented` | spec close 時對本 spec 範圍內文件統一升級 | `/vif-close` Design Doc Sync |
+| `implemented → approved` | 後續 spec 修改既有 implemented 文件（實作已與設計脫鉤，需重走 close 流程） | `/vif-api-spec`、`/vif-ui-spec`（Step 2 修改流程） |
+| `→ deprecated` | 新設計完全取代舊文件（來源可為 approved 或 implemented） | `/vif-api-spec`、`/vif-ui-spec`（Step 2 取代處理） |
+
+### deprecated 必要欄位
+
+`status: deprecated` 時 frontmatter 必須同時有：
+
+- `replaced-by: [新檔案路徑]` — 取代此文件的新設計
+- `deprecated-spec: spec-NNN` — 做此取代的 spec 編號
+
+缺任一欄位即視為結構破壞（Health Check 會標 BLOCK）。
+
 ## Project Init
 
 安裝 vif plugin 後的第一步：分析專案現況並對齊 VIF 結構。
@@ -217,7 +260,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 
 ### A. 全新專案
 
-按照 `references/project-setup.md` 建立完整結構。
+按照 `references/project-setup.md` 建立完整結構。建立完成後自動執行 Health Check（見下方），BLOCK = 0 才算 init 完成。
 
 ### B. 既有專案
 
@@ -226,6 +269,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 3. **Human 確認** — 讓使用者決定哪些要調整、哪些保留
 4. **執行調整** — 建立缺少的目錄/檔案、搬移既有文件
 5. **設定 CLAUDE.md** — 補上 vif 設定區塊
+6. **Health Check** — 自動執行 Health Check（見下方），BLOCK = 0 才算 init 完成
 
 **差異報告格式：**
 
@@ -263,93 +307,173 @@ code repo 路徑: /absolute/path/to/project-frontend
 >
 > Multi-repo 下，init 時額外詢問 workspace 角色配置。
 
+### Workspace 變化偵測
+
+已設定 vif 的專案，vif-flow 每次 routing 前做輕量驗證：
+
+- CLAUDE.md workspace 宣告 vs 實際目錄是否一致
+- multi-repo：宣告的 repo 路徑可達且為 git repo
+- 當前 repo 宣告角色的 `包含` 子目錄實際存在
+
+任一項不符 → 提示「⚠️ 偵測到 workspace 設定與實際結構不一致，建議先跑 Health Check（說『健檢』或『health check』）」後再進行 routing。
+
+> 目的：使用者手動改 CLAUDE.md 或切換 workspace mode 後，vif-flow 能主動察覺，不等某個 skill 執行失敗才發現。這是輕量驗證，完整結構檢查仍交給 Health Check。
+
 ## Health Check
 
-對既有專案進行結構與內容健檢。使用者說「health check」、「健檢」、「結構檢查」時觸發。
+專案結構健檢。確認專案是否準備好執行 vif 流程。
+
+### 觸發時機
+
+| 時機 | 方式 |
+|------|------|
+| Init 完成後 | **自動**（Init 結尾步驟，BLOCK = 0 才算 init 完成） |
+| 使用者說「health check」、「健檢」、「結構檢查」 | **手動** |
+| 搬移/重組專案結構後 | **手動**（建議） |
+| vif-flow 偵測 workspace 設定與實際結構不一致 | **自動提示**（見上方 Workspace 變化偵測） |
+
+> Health Check 檢查的是「專案結構是否符合 vif 執行條件」。各 Phase 的進入條件由 `references/phase-gates.md` 定義，不與結構健檢重複。
+
+### 判定模型
+
+| 等級 | 意義 | 影響 |
+|------|------|------|
+| **BLOCK** | 結構性缺失，vif 無法運作 | 不通過 |
+| **WARN** | 可以跑但有風險或效率問題 | 通過（附警告） |
+| **INFO** | 建議改善，不影響運作 | 通過 |
+
+**通過條件：BLOCK = 0**
 
 ### 檢查項目
 
-**1. 目錄結構**
+**1. Plugin 依賴**
 
-依 workspace 模式（monorepo / multi-repo）解析 docs 位置，掃描：
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| vex plugin 未安裝（git-commit agent 不可用） | **BLOCK** | commit 流程依賴 |
 
-| 檢查 | 說明 |
-|------|------|
-| 必要目錄 | `prds/`、`specs/`、`specs/specs-overview.md` 存在 |
-| 視需要目錄 | `api-specs/`、`ui-specs/`、`schema/`、`architecture/`、`features/`、`guideline/` — 有內容但放錯位置？ |
-| 多餘巢狀 | docs repo 內不應有 `docs/` 子目錄（multi-repo 常見問題） |
-| 孤立檔案 | PRD 散在根目錄而非 `prds/` 內？設計文件不在對應目錄？ |
+**2. Workspace 模式**
 
-**2. CLAUDE.md 設定**
+先判定模式：CLAUDE.md 有 `vif Workspace` 區塊 → multi-repo，否則 → monorepo（預設）。
+
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| multi-repo：repo 路徑不存在 | **BLOCK** | 找不到 docs / code |
+| multi-repo：repo 不是 git repo | **BLOCK** | commit 操作會失敗 |
+| multi-repo：目標 repo 沒有 CLAUDE.md workspace 區塊 | **BLOCK** | 路徑解析失敗 |
+| multi-repo：角色衝突（兩個 repo 宣告同一角色） | **BLOCK** | 不知道哪個是 docs |
+| multi-repo：`包含` 欄 vs 實際目錄不一致 | **WARN** | 路徑解析可能找錯位置 |
+| multi-repo：docs repo 內有多餘 `docs/` 巢狀 | **WARN** | 路徑解析會多一層 |
+
+**3. 必要結構**
+
+依 workspace 模式解析 docs 位置後掃描：
+
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| docs 根目錄不存在（或 multi-repo docs repo 不可達） | **BLOCK** | 所有文件操作失敗 |
+| CLAUDE.md 無 `AI-Driven Development Flow` 區塊 | **BLOCK** | skill 無法讀取設定 |
+| `prds/` 不存在 | **WARN** | /vif-prd 會自動建立，但表示 init 未完成 |
+| `specs/` 不存在 | **WARN** | /vif-spec 會自動建立，但表示 init 未完成 |
+| `specs-overview.md` 不存在 | **WARN** | /vif-prd 或 init 會建立 |
+| `specs-overview.md` 格式不正確（缺表格結構） | **WARN** | 後續 skill 無法正確解析 |
+
+**4. CLAUDE.md 設定**
 
 基礎設定：
 
-| 檢查 | 說明 |
-|------|------|
-| vif 設定區塊 | 是否有 `AI-Driven Development Flow` 區塊 |
-| Workspace 設定 | multi-repo 是否有 workspace 表？`包含` 欄是否與實際目錄一致？ |
-| 技術棧 / 專案指令 | 是否已填寫（空白 = `/vif-arch` 還沒跑？） |
-| 測試策略 | 是否已填寫？與技術棧一致？（例如 Python 專案不該用 Jest） |
-| Guideline 映射 | 有 `guideline/` 但沒設定映射？映射路徑指向的檔案/目錄存在？ |
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| 技術棧 / 專案指令 / 測試策略全空 | **WARN** | develop / verify 會缺指令 — 建議先執行 /vif-arch |
+| 無 Git 規範區塊 | **WARN** | commit subagent dispatch 缺資訊 |
+| 無 Skills 表 | **INFO** | 不影響執行，只是使用者參考 |
 
 參數驗證：
 
-| 設定 | 合法值 | 檢查 |
-|------|--------|------|
-| `flow_mode` | `god` / `normal` / 未設定 | 值是否合法 |
-| `Code Quality` | `true` / 未設定 | — |
-| AI Cross-Review `mode` | `solo` / `team` | 啟用了 design/verify/review 但沒設定 mode？ |
-| AI Cross-Review `design` | CLI 名稱（如 `codex`） | 啟用了但 mode 未設定？ |
-| AI Cross-Review `verify` | CLI 名稱 | 同上 |
-| AI Cross-Review `review` | CLI 名稱 | 同上 |
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| `flow_mode` 值不合法（非 god / normal） | **WARN** | fallback 到提示選擇 |
+| `flow_mode: god` 但缺技術棧或專案指令 | **WARN** | God Mode 需要完整設定才能自動決策 |
+| Cross-Review 有 `design`/`verify`/`review` 但沒 `mode` | **WARN** | 無法判斷觸發時機 |
+| Cross-Review 有 `mode` 但 3 個階段都沒啟用 | **INFO** | 等於沒用，提醒即可 |
 
-相依性檢查：
+Guideline：
 
-| 條件 | 問題 |
-|------|------|
-| Cross-Review 有 `design`/`verify`/`review` 但沒 `mode` | 缺少 mode 設定，無法判斷觸發時機 |
-| Cross-Review 有 `mode` 但 design/verify/review 全未設定 | mode 已設但沒啟用任何階段，等於沒用 |
-| `flow_mode: god` 但缺少技術棧或專案指令 | God Mode 需要完整設定才能自動決策 |
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| Guideline 映射路徑不存在 | **WARN** | guideline 注入會失敗 |
+| `guideline/` 有內容但沒映射 | **INFO** | 目錄慣例 fallback 可能匹配，建議明確設定 |
 
-**3. 文件內容一致性**
+**5. 結構錯位**
 
-| 檢查 | 說明 |
-|------|------|
-| specs-overview vs 實際 | specs-overview 列出的 spec 是否都有對應的 `specs/NNN-name/` 目錄？反之亦然？ |
-| progress.md 狀態 | 設計文件表的路徑是否指向存在的檔案？ |
-| 設計文件 frontmatter | api-spec / ui-spec / schema 的 frontmatter 是否有基本 metadata？ |
-| PRD 編號連續性 | `prds/` 內的 PRD 編號是否連續？有無跳號？ |
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| PRD 散在根目錄而非 `prds/` | **WARN** | /vif-prd 找不到 |
+| spec 文件不在 `specs/NNN-name/` 結構 | **WARN** | 後續 skill 路徑假設不成立 |
+| `guideline/` 放在 `docs/` 而非專案根 | **INFO** | 慣例不匹配，但可設映射 |
 
-**4. 路徑解析驗證（multi-repo）**
+**6. Spec 目錄完整性**（有 spec 時才檢查）
 
-| 檢查 | 說明 |
-|------|------|
-| workspace 路徑可達 | 表中各 repo 路徑是否存在、是否為 git repo？ |
-| 各 repo CLAUDE.md | 各 code repo 是否有 workspace 設定？角色是否一致？ |
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| `specs/NNN-name/` 存在但無 `spec.md` | **WARN** | 空殼目錄 |
+| `specs/NNN-name/` 有 `spec.md` 但無 `progress.md` | **WARN** | Phase 1 未完成 |
+| specs-overview 列出 spec 但目錄不存在 | **WARN** | 追蹤文件與實際不同步 |
+| 目錄存在但 specs-overview 沒列 | **WARN** | 追蹤文件與實際不同步 |
+| spec 編號跳號 | **INFO** | 不影響運作，可能是刻意 |
+
+**7. 設計文件 Frontmatter**（有設計文件時才檢查）
+
+掃描 `api-specs/`、`ui-specs/`、`schema/` 下所有 `.md` 檔案的 frontmatter：
+
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| 缺 `domain` / `module` / `spec` | **WARN** | 5 個 skill 依賴 frontmatter 做快速相關性掃描，缺欄位會導致判斷失準 |
+| `spec` 欄位指向不存在的 spec | **WARN** | 關聯斷裂，cross-check 無法追溯 |
+| 缺 `status` 欄位 | **BLOCK** | 無法判斷文件生命週期，status 轉換規則（draft→approved→implemented→deprecated）完全不適用 |
+| `status` 值不合法（非 draft / approved / implemented / deprecated） | **BLOCK** | 語意破壞，所有 skill 對狀態的判斷會混亂 |
+| `status: deprecated` 但缺 `replaced-by` 或 `deprecated-spec` | **BLOCK** | 取代鏈斷裂，使用者拿到 deprecated 文件卻不知該用哪份替代 |
+| `replaced-by` 指向不存在的檔案 | **WARN** | 取代鏈斷裂但仍有 status 標示 |
+
+> **WARN vs BLOCK 分界**：`domain`/`module`/`spec` 缺失仍 WARN，因為 vif-develop 有兩層載入保底（progress.md 路徑 → frontmatter scan），缺一仍能運作、只是掃描品質差。`status` 相關欄位升為 BLOCK，因為它決定整個 lifecycle（升降、實作對應、取代鏈），錯或缺就無法確定文件是否有效、該用哪個版本。
 
 ### 報告格式
 
+有 BLOCK 時：
+
 ```
-> vif Health Check Report
+> vif Structural Health Check
 >
 > 🏥 專案：[name]（[monorepo / multi-repo]）
 > 📅 日期：YYYY-MM-DD
 >
-> ❌ 問題（需修正）：
->   1. docs repo 內有多餘的 docs/ 子目錄，內含 api-specs/、schema/ — 應搬到根目錄
->   2. prd-001.md、prd-002.md 散在根目錄 — 應搬入 prds/
->   3. specs-overview 列出 spec-003 但目錄不存在
+> ─── 結果：❌ BLOCK (N) ───
 >
-> ⚠️ 建議（可選）：
->   1. CLAUDE.md 缺少技術棧設定 — 建議執行 /vif-arch 或手動填寫
->   2. guideline/ 有內容但未設定映射 — 建議加入 Guideline 映射
+> ❌ BLOCK（必須修正，否則 vif 無法運作）：
+>   1. [問題描述]
+>   2. [問題描述]
 >
-> ✅ 通過：
->   - 目錄結構正確
->   - workspace 路徑可達
->   - specs-overview 與目錄一致
+> ⚠️ WARN (N)：
+>   1. [問題描述] — [修正建議]
+>
+> ℹ️ INFO (N)：
+>   1. [問題描述] — [修正建議]
+>
+> ✅ 通過（M/N 項）：
+>   - [類別] ✓
 >
 > 要修正上述問題嗎？可逐項確認。
+```
+
+BLOCK = 0 時：
+
+```
+> ─── 結果：✅ PASS ───
+>
+> ⚠️ WARN (N)：
+>   1. [問題描述] — [修正建議]
+>
+> ✅ 全部結構檢查通過（M/N 項），可正常執行 vif 流程。
 ```
 
 ### 修正模式
@@ -360,6 +484,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 - **更新路徑引用**：搬移後掃描 spec.md / progress.md 內的路徑引用，同步更新
 - **補建缺少的檔案**：如 specs-overview.md
 - **更新 CLAUDE.md**：補上缺少的設定區塊
+- **補齊 frontmatter**：掃描設計文件，補上缺少的 `domain` / `module` / `spec` 欄位
 
 > 每項修正都向使用者確認後才執行。修正完畢後自動重跑一次檢查，確認問題已解決。
 
@@ -385,7 +510,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 ## Core Principles
 
 1. **行為先於設計** — 先理解「系統該做什麼」再設計「怎麼做到」
-2. **影響分析是核心** — 判斷新增 vs 修改既有，修改比新增更危險
+2. **影響分析是核心** — 判斷新增 / 修改 / 取代 / 參考，修改和取代比新增更危險
 3. **TDD 硬性約束** — 沒有失敗測試就不寫 production code
 4. **Spec 先行** — 沒有 approved spec 不寫程式
 5. **驗證即誠實** — 每一個聲明都要有新鮮的證據支撐
@@ -412,14 +537,15 @@ code repo 路徑: /absolute/path/to/project-frontend
 | 5 | Spec 展開選擇 | `/vif-spec` | 選擇展開哪些設計文件 |
 | 6 | 原型範圍 | `/vif-prototype` | 確認要做原型的頁面 |
 | 7 | 原型確認 | `/vif-prototype` | 看畫面、給回饋 |
-| 8 | API Spec 確認 | `/vif-api-spec` | 確認 API 規格 |
-| 9 | UI Spec 確認 | `/vif-ui-spec` | 確認頁面規格 |
-| 10 | 測試策略 | `/vif-develop` | 確認測試策略 |
-| 11 | TDD 例外 | `/vif-develop` | 確認是否可不走 TDD |
-| 12 | 🟡🟢 Findings Review | `/vif-verify` | 選擇 🟡🟢 findings 要修或跳過 |
-| 13 | 🟡🟢 Findings Review | `/vif-review` | 選擇 🟡🟢 findings 要修或跳過 |
-| 14 | 手動測試 | `/vif-review` | 執行 reviewer 產出的手動測試清單 |
-| 15 | Escalation | 所有 skill | 3 次失敗後 Human 決定 |
+| 8 | 設計偏差核准 | `/vif-api-spec`, `/vif-ui-spec` | 偏差偵測後選擇核准/逐項/拒絕 |
+| 9 | API Spec 確認 | `/vif-api-spec` | 確認 API 規格 |
+| 10 | UI Spec 確認 | `/vif-ui-spec` | 確認頁面規格 |
+| 11 | 測試策略 | `/vif-develop` | 確認測試策略 |
+| 12 | TDD 例外 | `/vif-develop` | 確認是否可不走 TDD |
+| 13 | 🟡🟢 Findings Review | `/vif-verify` | 選擇 🟡🟢 findings 要修或跳過 |
+| 14 | 🟡🟢 Findings Review | `/vif-review` | 選擇 🟡🟢 findings 要修或跳過 |
+| 15 | 手動測試 | `/vif-review` | 執行 reviewer 產出的手動測試清單 |
+| 16 | Escalation | 所有 skill | 3 次失敗後 Human 決定 |
 
 ## AI Cross-Review Trigger Points
 
@@ -444,7 +570,7 @@ code repo 路徑: /absolute/path/to/project-frontend
 |----|------|------|
 | 需求 | `docs/prds/prd-NNN.md` | WHY + WHAT |
 | 行為 | `docs/features/**/*.feature` | HOW it behaves（可選） |
-| 規劃 | `docs/specs/NNN/spec.md` | WHAT to build |
+| 規劃 | `docs/specs/NNN-name/spec.md` | WHAT to build |
 
 ### 累積型設計文件
 

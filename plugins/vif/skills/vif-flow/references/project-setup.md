@@ -203,7 +203,13 @@ your-project/
 - 測試策略
 ```
 
-### 6. 開始使用
+### 6. Health Check
+
+Init 完成後自動執行 Structural Health Check（見 `/vif-flow` Health Check）。**BLOCK = 0 才算 init 完成。**
+
+有 WARN / INFO 項目時列出供使用者參考，不阻擋流程。
+
+### 7. 開始使用
 
 **模式一（完全自動化）：**
 ```
@@ -362,3 +368,9 @@ workspace/
 ```
 
 > 初始化追蹤文件（specs-overview）只在 docs repo 建立。
+
+### Health Check
+
+Multi-repo init 完成後同樣自動執行 Structural Health Check（見 `/vif-flow` Health Check）。**BLOCK = 0 才算 init 完成。**
+
+Multi-repo 特有的 BLOCK 項目：各 repo 路徑可達、都是 git repo、CLAUDE.md workspace 區塊存在且角色不衝突。

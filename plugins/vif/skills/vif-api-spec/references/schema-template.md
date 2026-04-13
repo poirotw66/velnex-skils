@@ -4,15 +4,17 @@ description: [一行摘要]
 domain: [領域]
 module: [模組]
 spec: [spec-NNN]
+status: draft
 tables:
   - [table_name]
 ---
+
+> **status 生命週期**：`draft` → `approved` → `implemented` → `deprecated`（取代時加 `replaced-by` 和 `deprecated-spec`）
 
 # [Domain] Schema
 
 ## Meta
 - Database: [database-name]
-- 狀態：draft / approved / implemented
 - 建立：YYYY-MM-DD
 - 更新：YYYY-MM-DD
 

@@ -25,19 +25,32 @@
 
 ## 4. 涉及範圍
 
+> **動作定義（三張表共用）：**
+> - **新增**：全新項目，撰寫完整設計文件
+> - **修改**：既有項目需調整，更新既有設計文件
+> - **取代**：既有項目不適用需重設計（拆分/合併/重寫），撰寫新設計文件 + 標記舊文件 deprecated
+> - **參考**：既有項目不需改動，開發時直接引用，不納入設計文件追蹤
+>
+> **progress.md 追蹤範圍**：僅「新增」「修改」「取代」項目納入 progress.md 設計文件表。
+> 「參考」項目不需要撰寫，不進入追蹤。
+
 ### 頁面清單
 
-| 動作 | 頁面 | 說明 | 參考 | UISpec |
-|------|------|------|------|--------|
-| 新增 | | | Figma# | docs/ui-specs/... 或「待撰寫」 |
-| 修改 | | | | docs/ui-specs/...（既有） |
+| 動作 | 頁面 | 說明 | 設計來源 | UISpec |
+|------|------|------|---------|--------|
+| 新增 | | | Figma# | docs/ui-specs/.../[name].md（待撰寫） |
+| 修改 | | | | docs/ui-specs/.../[name].md（既有） |
+| 取代 | | | [原因 + 原頁面 ref] | docs/ui-specs/.../[name].md（待撰寫） |
+| 參考 | | | | docs/ui-specs/.../[name].md（既有，不需撰寫） |
 
 ### API 清單
 
 | 動作 | API | Method | Path | 說明 | ApiSpec |
 |------|-----|--------|------|------|---------|
-| 新增 | | | | | docs/api-specs/... 或「待撰寫」 |
-| 修改 | | | | | docs/api-specs/...（既有） |
+| 新增 | | | | | docs/api-specs/.../[name].md（待撰寫） |
+| 修改 | | | | | docs/api-specs/.../[name].md（既有） |
+| 取代 | | | | [原因 + 原 API ref] | docs/api-specs/.../[name].md（待撰寫） |
+| 參考 | | | | | docs/api-specs/.../[name].md（既有，不需撰寫） |
 
 > Request/Response 定義於 /vif-api-spec，此處僅列清單與路由。
 
@@ -45,8 +58,10 @@
 
 | 動作 | Table | 說明 | Schema |
 |------|-------|------|--------|
-| 新增 | | | docs/schema/... 或「待撰寫」 |
-| 修改 | | [變更說明] | docs/schema/...（既有） |
+| 新增 | | | docs/schema/[domain].md（待撰寫） |
+| 修改 | | [變更說明] | docs/schema/[domain].md（既有） |
+| 取代 | | [原因 + 原 Table ref] | docs/schema/[domain].md（待撰寫） |
+| 參考 | | | docs/schema/[domain].md（既有，不需撰寫） |
 
 > UISpec / ApiSpec / Schema 欄位：已產出 → 填入路徑；待撰寫 → 標記「待撰寫」
 

@@ -34,7 +34,7 @@ You are a **reviewer, not a fixer**. Identify issues and report them. Do not fix
 
 #### 1-1. Acceptance Criteria Check
 
-Read spec.md Section 4 acceptance criteria. Verify each one against implementation and tests:
+Read spec.md Section 7 acceptance criteria. Verify each one against implementation and tests:
 
 - [ ] Every acceptance criterion has corresponding implementation
 - [ ] Every acceptance criterion has test coverage (or .feature scenario)
@@ -49,6 +49,7 @@ Using spec.md Section 4 referenced design docs, perform structural + semantic co
 - [ ] API implementation matches `docs/api-specs/` (fields, types, status codes, business logic)
 - [ ] UI implementation matches `docs/ui-specs/` (components, states, interactions)
 - [ ] DB implementation matches `docs/schema/` (tables, columns, relations)
+- [ ] UI implementation matches spec.md Meta UI source (Figma / Prototype / URL, if provided)
 - [ ] Implementation behavior matches `.feature` descriptions (if any)
 - [ ] No breaking changes (or explicitly noted in spec)
 

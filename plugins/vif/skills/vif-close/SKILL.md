@@ -5,7 +5,7 @@ description: >-
   "收尾", "結案", "wrap up", "finish", "done", "closing checklist",
   "merge ready".
 metadata:
-  version: 3.2.0
+  version: 3.3.0
 ---
 
 # Phase 5 — Close 完成
@@ -34,8 +34,12 @@ metadata:
 - [ ] `docs/api-specs/` — API 實作如有偏離原設計，更新 api-spec 和 openapi.yaml
 - [ ] `docs/ui-specs/` — UI 實作如有偏離原設計，更新 ui-spec
 - [ ] `docs/schema/` — DB 實作如有偏離原設計，更新 schema
+- [ ] 「取代」項目的舊設計文件已標記 `status: deprecated`（如未在設計階段完成）
+- [ ] 本 spec 範圍內的設計文件 frontmatter `status` 從 `approved` 更新為 `implemented` — 範圍 = progress.md 設計文件表列出且狀態為「完成」的 ApiSpec / UISpec / Schema
 
 > 目標不是讓設計文件完美，而是讓下一個讀到它的人不會被誤導。
+>
+> **若 Design Doc Sync 修改了設計文件內容**（非純格式/typo 修正），必須重跑 spec-auditor Pass 1+2 + Pass 3，確保一致性未被破壞。
 
 ## Completion Checklist
 

@@ -5,7 +5,7 @@ description: >-
   "code review", "程式碼審查", "review code", "PR review", "審查程式碼",
   "code quality", "review feedback".
 metadata:
-  version: 3.2.0
+  version: 3.3.0
 ---
 
 # Phase 4 — Code Review 兩階段程式碼審查
@@ -80,6 +80,7 @@ metadata:
 - [ ] 影響檔案與 spec.md 列表一致
 - [ ] 沒有超出 spec 範圍的變更（scope creep）
 - [ ] spec.md 的技術設計被正確遵循
+- [ ] progress.md 備註欄標記的偏差項目 — 確認偏差核准的項目已正確實作，且未因偏差引入不一致
 
 ### Stage 2: Code Quality
 

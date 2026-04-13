@@ -2,12 +2,14 @@
 
 ## 設計文件
 
-| 類型 | 名稱 | 路徑 | 自審 (Pass 1+2) | 狀態 |
-|------|------|------|:---:|------|
-| Feature | [name].feature | docs/features/[domain]/[name].feature | — | 完成 |
-| ApiSpec | [API 名稱] | docs/api-specs/[module]/[domain]/[name].md | ⬜ | 待撰寫 |
-| Schema | [domain] | docs/schema/[domain].md | ⬜ | 待撰寫 |
-| UISpec | [頁面名稱] | docs/ui-specs/[module]/[page]/[name].md | ⬜ | 待撰寫 |
+| 類型 | 名稱 | 路徑 | 自審 (Pass 1+2) | 狀態 | 備註 |
+|------|------|------|:---:|------|------|
+| Feature | [name].feature | docs/features/[domain]/[name].feature | — | 完成 | — |
+| ApiSpec | [API 名稱] | docs/api-specs/[module]/[domain]/[name].md | ⬜ | 待撰寫 | — |
+| Schema | [domain] | docs/schema/[domain].md | ⬜ | 待撰寫 | — |
+| UISpec | [頁面名稱] | docs/ui-specs/[module]/[page]/[name].md | ⬜ | 待撰寫 | — |
+
+> 備註欄用途：記錄偏差來源（如「設計階段新增」「取代 PRJ-INT-10」）。正常按計畫執行的項目填「—」。
 
 ### 交叉比對 (Pass 3)
 - [ ] spec-auditor Pass 3

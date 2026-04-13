@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 3.2.0
+  version: 3.3.0
 ---
 
 # Phase 1 — API Spec 規格 + OpenAPI + DB Schema
@@ -34,18 +34,22 @@ metadata:
 
 ### Step 1: 讀取輸入與影響分析
 
-1. 讀取 PRD / Spec 的 API 和 DB 清單
-2. **讀取 UI 來源** — 從 spec.md Meta 的「UI 來源」取得 Figma / Prototype / URL（如有）。有 UI 來源時，API 的 request/response 必須能支撐畫面所需的所有資料與互動
-3. **讀取 Guideline** — 使用 `/vif-guideline`（context = `api-spec`）取得相關規範，後續撰寫時遵循
-4. **掃描現有設計文件**（使用 frontmatter 快速比對）：
+1. **確認工作範圍** — 工作範圍 = `progress.md` 設計文件表中狀態為「待撰寫」的 ApiSpec + Schema 項目。
+   - Spec Section 4 標為「參考」的 API → 僅作為上下文閱讀，不撰寫、不修改、不取代
+   - 不在 progress.md 中的 API → 不主動撰寫
+   - 發現需要偏離工作範圍 → 走第 8 步偏差上報
+2. 讀取 PRD / Spec 的 API 和 DB 清單
+3. **讀取 UI 來源** — 從 spec.md Meta 的「UI 來源」取得 Figma / Prototype / URL（如有）。有 UI 來源時，API 的 request/response 必須能支撐畫面所需的所有資料與互動
+4. **讀取 Guideline** — 使用 `/vif-guideline`（context = `api-spec`）取得相關規範，後續撰寫時遵循
+5. **掃描現有設計文件**（使用 frontmatter 快速比對）：
    ```
    a. Glob docs/api-specs/**/*.md + docs/schema/**/*.md
    b. 讀取每個檔案的 frontmatter（--- 區塊內的 YAML metadata）
    c. 綜合判斷相關性（不限於同 domain/module，跨域關聯也要納入）
    d. Read 僅載入相關文件全文
    ```
-5. **確認新增 vs 修改**：以 Spec Section 4 的規劃為主，用 scan 結果交叉驗證（如 spec 標示新增但 scan 發現同 path 已存在 → 提醒衝突）
-6. 列出影響清單：
+6. **交叉驗證**：以 Spec Section 4 的規劃為主，用 scan 結果交叉驗證（如 spec 標示新增但 scan 發現同 path 已存在 → 提醒衝突）
+7. 列出影響清單：
 
 ```
 ### API
@@ -61,7 +65,42 @@ metadata:
 | 修改 | users（加欄位）| docs/schema/iam-auth.md |
 ```
 
+8. **偏差偵測與上報** — 將交叉驗證結果與 progress.md 工作範圍比對，識別偏差：
+
+   | 偏差類型 | 定義 |
+   |---------|------|
+   | 需要取代 | Spec 標「參考/修改」，但實際需要全面重設計 |
+   | 計畫外新增 | progress.md 未列出，但業務邏輯分析後發現需要 |
+   | 計畫不可行 | progress.md 列出的 API，但分析後認為不需要或應合併 |
+
+   **無偏差** → 直接進入 Step 2
+
+   **有偏差** → 彙整偏差清單，呈報使用者：
+
+   ```
+   > ⚠️ API Spec 影響分析發現以下偏差：
+   >
+   > **需要取代（N 項）：**
+   > - [既有 API] → 建議 [處理方式]。原因：[具體原因]
+   >
+   > **計畫外新增（M 項）：**
+   > - [API 名稱]。原因：[具體原因]
+   >
+   > 選擇處理方式：
+   >   A. 核准全部偏差 → 更新 Spec Section 4 + progress.md → 繼續
+   >   B. 逐項確認
+   >   C. 拒絕偏差 → 嚴格按原計畫執行
+   ```
+
+   使用者核准 → **先更新 Spec Section 4 和 progress.md**（新增列、更新動作類型、補上檔案路徑）→ 再進入 Step 2
+   使用者拒絕 → 按 progress.md 原計畫執行 Step 2
+
 ### Step 2: 撰寫 API Spec
+
+**檔案路徑約束**：每支 API Spec 的檔案路徑必須完全按照 Spec Section 4 ApiSpec 欄 / progress.md 路徑欄建立。
+- 禁止自行命名檔案
+- 禁止為同一 API 建立第二個檔案
+- 禁止同一目錄混用兩種命名風格
 
 使用 `references/api-spec-template.md` 模板，每支 API 包含：
 
@@ -71,6 +110,11 @@ metadata:
 - 業務規則
 - 邊界條件
 - 範例（curl + response）
+
+**取代項目處理**：當處理 Spec 標為「取代」的項目時：
+1. 撰寫新設計文件（依 progress.md 路徑）
+2. 更新舊設計文件的 frontmatter：加入 `status: deprecated`、`replaced-by: [新檔案路徑]`、`deprecated-spec: spec-NNN`
+3. 舊檔案不刪除，保留作為歷史參考
 
 **錯誤映射表（每支 API 必須）：**
 
@@ -85,6 +129,7 @@ metadata:
 - 使用 **OpenAPI 3.0.3**（工具生態相容性最佳，Swagger UI / codegen / VS Code 擴充套件皆支援）
 - 新增的 API → 加入 paths
 - 修改的 API → 更新對應 path
+- 取代的 API → 舊 path 標記 `deprecated: true`，加入新 path
 - 新增的 schema → 加入 components/schemas
 - 確認不破壞既有 API（breaking change 需在 Spec 中標註）
 
@@ -125,16 +170,23 @@ metadata:
 
 > solo mode 的設計文件 Cross-Review 在 Pass 3 完成後統一觸發（見 `/vif-spec`）。
 
-### Step 6: 確認、更新 Progress 與 Commit
+### Step 6: 驗證、確認、更新 Progress 與 Commit
 
-1. 呈現自我審查結果 + 文件內容給 Human 確認
-2. 回填 Spec Section 4 的 ApiSpec/Schema 路徑（如有 Spec）
-3. **更新 progress.md** — 將對應的 ApiSpec / Schema 列更新：
+1. **完成驗證** — 比對實際產出與 progress.md：
+   - progress.md 中每項「待撰寫」的 ApiSpec/Schema 都已撰寫？
+   - 沒有 progress.md 以外的檔案被建立？
+   - 檔案名稱與 progress.md 路徑欄一致？
+   - 有不一致 → 修正後再繼續
+2. 呈現自我審查結果 + 文件內容給 Human 確認
+3. 回填 Spec Section 4 的 ApiSpec/Schema 路徑（如有 Spec）
+4. **更新 progress.md** — 將對應的 ApiSpec / Schema 列更新：
    - 自審欄：`⬜` → `✓`
    - 狀態欄：`待撰寫` → `完成`
    - 路徑欄：填入實際路徑
+   - 備註欄：偏差流程核准的新增項目 → 填「設計階段新增」；取代項目 → 填「取代 [舊檔案名稱]」；正常項目 → 維持「—」
    - **如果是更新既有設計文件**（修改，非首次撰寫）→ 重置 Pass 3 checkbox 為未勾選
-4. **commit**（`docs: add/update api-spec [module]/[domain]`）
+5. **更新 frontmatter status** — Human 確認後，將本次撰寫/修改的 api-spec + schema 檔案 frontmatter 的 `status` 更新為 `approved`（不論原值為 `draft` 或 `implemented`；修改既有 implemented 文件即代表實作已與設計脫鉤，需降回 approved 重新走 close 流程）
+6. **commit**（`docs: add/update api-spec [module]/[domain]`）
 
 **存放位置：**
 - API Spec：`docs/api-specs/[module]/[domain]/[name].md`
@@ -147,6 +199,7 @@ metadata:
 
 | 步驟 | 正常流程 | God Mode |
 |------|---------|----------|
+| Step 1 偏差上報 | 呈報使用者確認 | 偏差 ≤ 原計畫 50% → 自動核准（記入 Decisions Made）；偏差 > 50% → 暫停 God Mode，呈報使用者 |
 | Step 6 確認 | 呈現給 Human 確認 → commit | 自我審查通過 → 自動 commit（不等 Human） |
 
 ## Exit Criteria
