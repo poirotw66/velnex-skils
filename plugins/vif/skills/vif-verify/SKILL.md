@@ -5,7 +5,7 @@ description: >-
   "verification", "pipeline", "驗證流水線", "跑驗證", "品質檢查",
   "build check", "pre-review check".
 metadata:
-  version: 3.3.0
+  version: 3.3.1
 ---
 
 # Phase 3 — Verify 自動化驗證

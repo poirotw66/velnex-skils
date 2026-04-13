@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 3.3.0
+  version: 3.3.1
 ---
 
 # Phase 1 — Spec 技術規劃與影響分析
@@ -14,7 +14,7 @@ metadata:
 
 ## Hard Gate
 
-**Spec 未 approved，不進入開發。**
+**Spec 未 approved，不進入設計文件撰寫（api-spec / ui-spec / schema）、不進入開發。**
 
 > 規格不服務程式碼，程式碼服務規格。
 > 跳過 spec 寫出來的程式碼，是在回答一個沒人問過的問題。

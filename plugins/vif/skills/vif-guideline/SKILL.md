@@ -5,7 +5,7 @@ description: >-
   "guideline", "規範", "開發規範", "coding standard", "convention",
   "resolve guideline", "讀取規範".
 metadata:
-  version: 3.3.0
+  version: 3.3.1
 ---
 
 # Guideline — 專案規範解析

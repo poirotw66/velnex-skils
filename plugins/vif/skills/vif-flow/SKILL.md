@@ -7,7 +7,7 @@ description: >-
   "setup", "專案設定", "對齊結構", "align structure", "health check",
   "健檢", "結構檢查", "檢查結構".
 metadata:
-  version: 3.3.0
+  version: 3.3.1
 ---
 
 # vif (Velocity AI Flow) — AI-Driven Development Flow
@@ -512,7 +512,7 @@ BLOCK = 0 時：
 1. **行為先於設計** — 先理解「系統該做什麼」再設計「怎麼做到」
 2. **影響分析是核心** — 判斷新增 / 修改 / 取代 / 參考，修改和取代比新增更危險
 3. **TDD 硬性約束** — 沒有失敗測試就不寫 production code
-4. **Spec 先行** — 沒有 approved spec 不寫程式
+4. **Spec 先行** — 沒有 approved spec 不寫設計文件（api-spec / ui-spec / schema）、不寫程式
 5. **驗證即誠實** — 每一個聲明都要有新鮮的證據支撐
 6. **最多重試 3 次** — 超過就 escalate 給 Human
 
@@ -523,7 +523,7 @@ BLOCK = 0 時：
 | Gate | Skill | Human 行為 |
 |------|-------|-----------|
 | PRD → Spec | `/vif-prd` | Approve PRD |
-| Spec → Develop | `/vif-spec` | Approve Spec |
+| Spec → Design Docs / Develop | `/vif-spec` | Approve Spec（一次 approve 解鎖 Phase 1 設計文件撰寫 + Phase 2 開發） |
 | Review → Close | `/vif-review` | Approve Code |
 
 ### 互動點（需要 Human 回應）

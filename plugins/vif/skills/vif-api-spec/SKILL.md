@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 3.3.0
+  version: 3.3.1
 ---
 
 # Phase 1 — API Spec 規格 + OpenAPI + DB Schema
@@ -21,6 +21,13 @@ metadata:
 - openapi.yaml 是機器可讀的 source of truth — API Spec 的 markdown 是給人看的補充
 
 > **每個錯誤都有名字。** `rescue StandardError` 永遠是壞味道。列出每支 API 可能的具體錯誤。
+
+## Prerequisites
+
+- [ ] Spec 已 approved（`docs/specs/NNN-name/spec.md` 存在且 Meta `狀態: approved`，或 `progress.md` 的 `Phase 1: Spec approved` 已勾選）
+- [ ] `progress.md` 存在，且設計文件表已列出本次要撰寫的 ApiSpec / Schema 範圍
+
+> 未滿足時：提示使用者先完成 `/vif-spec`。沒 approved spec 就寫 api-spec = 偏差偵測失準、frontmatter `spec` 關聯指向未確定的 spec、lifecycle 從源頭錯。
 
 ## 輸入
 

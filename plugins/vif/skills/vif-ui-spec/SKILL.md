@@ -5,7 +5,7 @@ description: >-
   "頁面規格", "畫面規格", "UI 設計", "page spec", "寫 UI spec",
   "前端規格", "Figma to spec".
 metadata:
-  version: 3.3.0
+  version: 3.3.1
 ---
 
 # Phase 1 — UI Spec 頁面規格
@@ -19,6 +19,13 @@ metadata:
 - Figma 告訴你「長什麼樣」，UI Spec 告訴你「怎麼運作」
 - 每個互動都要回答：觸發什麼？呼叫哪支 API？成功/失敗怎麼處理？
 - 不要假設前端工程師看得到 Figma — 寫到「只看這份文件就能開發」的程度
+
+## Prerequisites
+
+- [ ] Spec 已 approved（`docs/specs/NNN-name/spec.md` 存在且 Meta `狀態: approved`，或 `progress.md` 的 `Phase 1: Spec approved` 已勾選）
+- [ ] `progress.md` 存在，且設計文件表已列出本次要撰寫的 UISpec 範圍
+
+> 未滿足時：提示使用者先完成 `/vif-spec`。沒 approved spec 就寫 ui-spec = 偏差偵測失準、frontmatter `spec` 關聯指向未確定的 spec、lifecycle 從源頭錯。
 
 ## 輸入
 
