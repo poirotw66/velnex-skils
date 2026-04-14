@@ -5,7 +5,7 @@ description: >-
   "product requirement", "問題定義", "需求文件", "要做什麼", "why build",
   "寫 PRD", "新需求".
 metadata:
-  version: 3.3.1
+  version: 3.3.2
 ---
 
 # Phase 0 — PRD 產品探索
@@ -33,7 +33,23 @@ metadata:
 
 ## Workflow
 
-### Step 1: Pre-check
+### Step 0: 來源判斷
+
+先決定走哪條路徑：
+
+| 情境 | 路徑 | 說明 |
+|------|------|------|
+| 從零開始，要與 Human 對話產出 PRD | **New Mode**（走 Step 1 → 5） | 完整 Problem Exploration |
+| Human 已有外部 PRD（PM 產出、其他工具撰寫、過往文件） | **Import Mode**（跳到 Step 3.5）| 驗證 + 補齊 Section 6 + 展開 specs-overview |
+
+**Import Mode 判斷依據：**
+- Human 明確說「已經有 PRD」「這是現有需求文件」
+- 提供了外部檔案路徑、連結、貼上完整需求內容
+- `docs/prds/` 已有 Human 手動放入的 PRD 檔
+
+Import Mode **不可省略** Step 5（展開 specs-overview）。specs-overview 是整個流程的骨幹，任何進入 Phase 1 的路徑都必須先經過它。
+
+### Step 1: Pre-check（New Mode）
 
 - 檢查 `docs/` 是否已有相關 PRD 或 spec
 - 瀏覽 codebase 了解現狀，把討論建立在現實基礎上
@@ -66,22 +82,52 @@ metadata:
 - 不在範圍內
 - Feature/Spec 拆解建議
 
+### Step 3.5: Import 驗證（Import Mode 專用）
+
+**僅 Import Mode 執行。** New Mode 跳過此步。
+
+**唯一目的：補出 Spec 拆解（Section 6），讓 Step 5 能展開 specs-overview。**
+不做模板對齊、不 normalize 現有章節、不重寫內容——**尊重外部 PRD 的原樣**。
+
+1. **收容外部 PRD**：若檔案不在 `docs/prds/prd-NNN.md`，協助放入並依現有編號規則命名；保留原始來源引用（可附在 PRD 頂部或 appendix）
+2. **補出 Spec 拆解**（本步唯一實質工作）：
+   - 外部 PRD 已有明確的 spec 清單 + 拆解理由 → 直接進入 Step 4
+   - 沒有 / 只有模糊描述 → 與 Human 協作補出，追加一段 `## 6. 拆解為 Feature / Spec`：
+     ```
+     - spec-NNN [名稱] — [一句話摘要]
+     - spec-NNN [名稱] — [一句話摘要]
+
+     拆解理由：[為什麼這樣切]
+     ```
+   - **Section 6 不寫 metadata**（領域、依賴、狀態）→ 留到 Step 5 寫入 specs-overview
+3. **不重做探索 / 不動既有章節**：問題、證據、方案選項等段落不重跑、不調整格式，信任外部 PRD 的產出
+
+> Import Mode 只關心一件事：**外部 PRD 能不能接上 specs-overview**。其他章節是否符合本流程的模板不重要——PRD 已 approved 的結構就是事實。
+
 ### Step 4: Deliver & Approve
 
 - 呈現 PRD 給 Human 審查
 - Human 要求修改 → 修改後重新呈現
 - Human approve → 更新狀態為 `approved`
 
-### Step 5: 展開 Spec 清單
+### Step 5: 展開 Spec 清單（關鍵步驟）
 
-PRD approved 後，從 Section 6 的拆解建議展開 specs-overview：
+**PRD 的 Section 6 只是 pointer + 拆解理由，真正的 spec metadata（領域、依賴、狀態、PRD 追溯）在這一步輸入到 `docs/specs/specs-overview.md`——這是全專案 spec 的 single source of truth。**
 
-1. 讀取 PRD Section 6 的 spec 清單與依賴關係
-2. 將所有 spec 以 — (not-started)狀態寫入 `docs/specs/specs-overview.md`
-3. 呈現 specs-overview 給 Human 確認：
+> 這一步是整個流程的命脈。Section 6 的 spec-NNN 條目若沒進到 specs-overview，後續 `/vif-spec` 的 Entry Gate 會擋下、`/vif-god` 也取不到待辦 spec。
+
+**引導步驟（AI 主動協助 Human 填補 metadata）：**
+
+1. **讀取 Section 6 的 spec 清單**（名稱 + 摘要）
+2. **對每個 spec 逐一補齊 specs-overview 欄位**（Section 6 不會寫這些，要在對話中與 Human 確認）：
+   - **領域（module/domain）** — 看 codebase 既有目錄慣例；不確定時直接詢問 Human
+   - **依賴（spec-NNN 或外部 spec）** — 從 PRD Section 7「依賴與影響」推導，不清楚就問
+   - **備註** — 一句話摘要（可直接抄 Section 6）
+3. **呈現填好的表格給 Human 確認**：
 
 ```
-> PRD 已 approved。以下是拆解的 Spec 清單：
+> PRD 已 approved。依 Section 6 的拆解與我們剛才確認的 metadata，
+> specs-overview 更新如下：
 >
 > | # | 名稱 | 領域 | 狀態 | PRD | 依賴 | 備註 |
 > |---|------|------|------|-----|------|------|
@@ -89,14 +135,20 @@ PRD approved 後，從 Section 6 的拆解建議展開 specs-overview：
 > | 002 | [名稱] | [領域] | — | prd-NNN | 001 | [摘要] |
 >
 > 請確認：
->   1. Spec 拆分是否合理？
+>   1. 領域分類是否符合專案慣例？
 >   2. 依賴關係是否正確？
->   3. 命名與領域分類是否恰當？
+>   3. 是否有遺漏的 spec 或順序問題？
 ```
 
 4. Human 確認（可調整後再確認）
+5. 寫入 `docs/specs/specs-overview.md`，append 到 Spec 清單表格尾端
 
-> 如果 `specs-overview.md` 尚未建立（未執行 `/vif-flow` init），在此步驟一併建立。
+**重要原則：**
+
+- **metadata 只寫在 specs-overview**，不回頭補到 PRD Section 6（PRD 凍結為快照，specs-overview 才是活的）
+- **缺資訊就問，不要亂猜** — 領域分類錯會影響後續 `/vif-guideline` 注入錯規範；依賴寫錯會影響 `/vif-god` 的執行順序
+- **如果 Section 6 只有摘要沒有明確 spec-NNN 名稱** → 回到 Step 4 請 Human 先確認 spec 粒度再來 Step 5
+- 如果 `specs-overview.md` 尚未建立（未執行 `/vif-flow` init），在此步驟一併建立
 
 ### Step 6: Commit & Next
 
@@ -110,7 +162,9 @@ PRD approved 後，從 Section 6 的拆解建議展開 specs-overview：
 - Bug fix（< 1 人天）
 - 技術債清理
 - Config 變更
-- Human 已提供完整需求文件
+
+> **「Human 已提供完整需求文件」不是 skip，而是走 Import Mode。**
+> 即便 PRD 來自外部，Step 5（展開 specs-overview）仍必須執行——這是進入 Phase 1 的唯一入口。
 
 ## Exit Criteria
 

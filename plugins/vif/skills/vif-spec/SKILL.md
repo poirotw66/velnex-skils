@@ -5,7 +5,7 @@ description: >-
   "設計", "寫規格", "spec design", "技術設計", "技術規劃", "impact analysis",
   "影響分析", "scope planning".
 metadata:
-  version: 3.3.1
+  version: 3.3.2
 ---
 
 # Phase 1 — Spec 技術規劃與影響分析
@@ -40,9 +40,29 @@ metadata:
 ## 輸入
 
 - **必要**：PRD（`docs/prds/prd-NNN.md`）
+- **必要**：`docs/specs/specs-overview.md` 已存在且列出目標 spec（見 Entry Gate）
 - **UI 來源**：Figma / Prototype / URL（如有，Step 1 確認後記入 spec.md，下游 skill 必須遵循）
 - **參考**：.feature（`docs/features/` — 如有，來自 `/vif-bdd`）
 - **參考**：既有設計文件（`docs/api-specs/`、`docs/ui-specs/`、`docs/schema/`）
+
+## Entry Gate
+
+**執行 Workflow 之前必須檢查 specs-overview，否則立即中止並引導回 `/vif-prd`。**
+
+檢查順序：
+
+1. **specs-overview.md 存在？**
+   - 否 → 中止：「specs-overview 不存在，先執行 `/vif-prd`（New 或 Import Mode）展開 spec 清單」
+2. **Spec 清單表格不為空？**
+   - 是空表格（只有標題列，沒有 spec 條目）→ 中止：「specs-overview 尚未展開。PRD approved 後需執行 `/vif-prd` Step 5 展開 spec 清單」
+3. **目標 spec 在清單中？**
+   - 否 → 中止：「目標 spec 不在 specs-overview 清單中。若為新需求，先回 `/vif-prd` 補入 Section 6 + 展開；若是既有 PRD 的 spec，檢查編號是否正確」
+4. **目標 spec 狀態允許進入 Phase 1？**
+   - 狀態 `—` (not-started) 或 `📋` (draft) → 通過
+   - 狀態 `✅` (approved) → 警告：「此 spec 已 approved，確認是否要覆寫？」
+   - 狀態 `🚧` (in-progress) / `✔️` (done) → 中止，提醒 Human 狀態衝突
+
+> 此 gate 確保 specs-overview 是進入 Phase 1 的唯一合法入口。沒有 specs-overview，spec 就是孤兒——後續的 God Mode / close / 追蹤全部會失準。
 
 ## Workflow
 

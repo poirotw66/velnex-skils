@@ -32,8 +32,20 @@
 
 ## 6. 拆解為 Feature / Spec
 
+> 本 PRD 產生以下 spec（狀態、依賴、PRD 追溯等 metadata 由 `/vif-prd` Step 5 展開至 `docs/specs/specs-overview.md`，此處不重複維護）。
+
+**Spec 清單：**
+
+- spec-NNN [名稱] — [一句話摘要]
+- spec-NNN [名稱] — [一句話摘要]
+
+**拆解理由：**
+
+[為什麼這樣切？粒度考量、部署風險、團隊分工、技術邊界…任何有助於後人理解拆解意圖的論述。]
+
+**Feature（BDD 使用，可選）：**
+
 - [ ] features/[domain]/[name].feature
-- [ ] spec-NNN: [子功能]
 
 ## 7. 依賴與影響
 

@@ -5,7 +5,7 @@ description: >-
   Trigger on: "god mode", "god", "一鍵開發", "全自動開發", "auto run",
   "自動跑完", "PRD 到 Review", "直接開發到完", "一路做到底".
 metadata:
-  version: 3.3.1
+  version: 3.3.2
 ---
 
 # God Mode — PRD-to-Review 全自動開發

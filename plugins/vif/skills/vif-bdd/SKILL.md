@@ -6,7 +6,7 @@ description: >-
   "Example Mapping", "三視角", "discovery", "Gherkin", "寫 feature",
   "行為規格".
 metadata:
-  version: 3.3.1
+  version: 3.3.2
 ---
 
 # Phase 0 — BDD Discovery 行為驅動探索
