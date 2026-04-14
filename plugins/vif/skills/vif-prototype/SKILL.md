@@ -5,7 +5,7 @@ description: >-
   "原型", "mockup", "wireframe", "畫面原型", "HTML prototype", "頁面原型",
   "先出畫面看看", "做個原型".
 metadata:
-  version: 3.3.2
+  version: 3.4.0
 ---
 
 # Phase 0 — Prototype HTML 原型
@@ -37,15 +37,15 @@ metadata:
 使用 `/vif-guideline`（context = `prototype`）取得 UI 設計基礎：
 
 - **有結果** → 讀取，套用色系、字型、元件風格
-- **無結果**（guideline 不存在） → 引導先執行 `/vif-uiux` 建立設計基礎
+- **無結果**（guideline 不存在） → **必須先執行 `/vif-uiux`**，完成後自動回到此步驟繼續
 
 ```
 > 尚未建立 UI/UX 設計基礎。
-> 建議先執行 /vif-uiux 定義色系、字型、元件規範，再產出原型。
-> 要先建立嗎？
->   A. 是，先執行 /vif-uiux
->   B. 不用，用預設風格產出原型
+> 先執行 /vif-uiux 定義色系、字型、元件規範後，回到此步驟繼續產出原型。
+> 即將呼叫 /vif-uiux...
 ```
+
+> **為什麼不提供「用預設風格」的選項**：vif-uiux 的 Intent First 與 Signature Test 是為了避免通用 AI 風格；若原型允許「預設風格」捷徑，會讓原型與最終產品視覺脫節，Human 看原型做的確認在正式開發時失效。寧願多花時間做 uiux，也不要做出會被丟棄的原型。
 
 ### Step 1: 確認範圍
 
@@ -84,19 +84,21 @@ metadata:
 
 ### Step 4: 產出轉化
 
-原型確認後：
-- 如果還沒有 UI Spec → 根據確認的原型撰寫 UI Spec（`/vif-ui-spec`）
-- 如果已有 UI Spec → 根據 Human 回饋更新 UI Spec
-- 原型檔案**不需要保留**（可選擇存在 `docs/prototypes/` 作為參考）
+原型確認後回到主流程 Phase 1（**不直接進 `/vif-ui-spec`**）：
+
+1. **下一步：`/vif-spec`** — 將確認的原型路徑記入 spec.md Meta 的「UI 來源」欄位。下游 `/vif-ui-spec` 會依 Spec + 原型一起撰寫 UI 規格
+2. 原型檔案**不需要保留**（可選擇存在 `docs/prototypes/` 作為參考）
+
+> **不論微調或大改，一律經 `/vif-spec`。** `/vif-ui-spec` 的 Entry Gate 要求 Spec approved，直接跳過會被擋下。「只改一個小地方」的心態常導致影響範圍被低估。
 
 ## 產出
 
 - `docs/prototypes/[name].html` — HTML 原型檔案（可選保留）
-- Human 確認的回饋 → 輸入給 `/vif-ui-spec`
+- Human 確認的原型 → 記入 spec.md Meta 的「UI 來源」，作為 `/vif-spec` 和下游 `/vif-ui-spec` 的設計依據
 
 ## Exit Criteria
 
 - [ ] 原型頁面已產出
 - [ ] Human 已確認畫面和互動
 - [ ] 回饋已記錄
-- [ ] 準備進入 `/vif-ui-spec` 或直接開發
+- [ ] 準備進入 `/vif-spec`（原型作為 UI 來源，下游 `/vif-ui-spec` 會再依 Spec 展開）

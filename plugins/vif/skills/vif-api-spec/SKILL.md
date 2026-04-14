@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 3.3.2
+  version: 3.4.0
 ---
 
 # Phase 1 — API Spec 規格 + OpenAPI + DB Schema
@@ -78,6 +78,7 @@ metadata:
    |---------|------|
    | 需要取代 | Spec 標「參考/修改」，但實際需要全面重設計 |
    | 計畫外新增 | progress.md 未列出，但業務邏輯分析後發現需要 |
+   | 參考轉修改 | Spec 標「參考」（僅引用），但分析後發現需調整既有設計 |
    | 計畫不可行 | progress.md 列出的 API，但分析後認為不需要或應合併 |
 
    **無偏差** → 直接進入 Step 2
@@ -93,13 +94,27 @@ metadata:
    > **計畫外新增（M 項）：**
    > - [API 名稱]。原因：[具體原因]
    >
+   > **參考轉修改（K 項）：**
+   > - [既有 API] → 建議調整 [欄位/邏輯]。原因：[具體原因]
+   >
+   > **計畫不可行（L 項）：**
+   > - [API 名稱] → 建議取消。原因：[具體原因，如：可用既有 X 達成]
+   >
    > 選擇處理方式：
-   >   A. 核准全部偏差 → 更新 Spec Section 4 + progress.md → 繼續
+   >   A. 核准全部偏差 → 依下表更新 Spec Section 4 + progress.md → 繼續
    >   B. 逐項確認
    >   C. 拒絕偏差 → 嚴格按原計畫執行
    ```
 
-   使用者核准 → **先更新 Spec Section 4 和 progress.md**（新增列、更新動作類型、補上檔案路徑）→ 再進入 Step 2
+   **使用者核准後，依偏差類型分別處理 Spec Section 4 和 progress.md：**
+
+   | 偏差類型 | Spec Section 4 動作 | progress.md 動作 |
+   |---------|-------------------|-----------------|
+   | 需要取代 | 動作欄改為「取代」，補原因與舊檔案參照 | 對應列動作改為「取代」，狀態=待撰寫，備註=「取代 [舊檔]」 |
+   | 計畫外新增 | 新增列，動作=新增 | 新增列，動作=新增，狀態=待撰寫，備註=「設計階段新增」 |
+   | 參考轉修改 | 動作欄從「參考」改為「修改」 | 新增列，動作=修改，狀態=待撰寫，備註=「設計階段參考轉修改」 |
+   | 計畫不可行 | 動作欄改為「取消」，補原因 | **從設計文件表移除該列**（若曾列入）；此項 Step 2 不撰寫 |
+
    使用者拒絕 → 按 progress.md 原計畫執行 Step 2
 
 ### Step 2: 撰寫 API Spec
@@ -109,7 +124,7 @@ metadata:
 - 禁止為同一 API 建立第二個檔案
 - 禁止同一目錄混用兩種命名風格
 
-使用 `references/api-spec-template.md` 模板，每支 API 包含：
+使用 API spec 模板（[模板解析](#模板解析) → `api-spec`，預設 `references/api-spec-template.md`），每支 API 包含：
 
 - Method、Path、說明
 - Request（Headers、Parameters、Body + 驗證規則）
@@ -142,7 +157,7 @@ metadata:
 
 ### Step 4: 撰寫 DB Schema
 
-使用 `references/schema-template.md` 模板，每個 domain 包含：
+使用 schema 模板（[模板解析](#模板解析) → `schema`，預設 `references/schema-template.md`），每個 domain 包含：
 
 - Table 定義（欄位、型別、nullable、default）
 - 索引（PK、UNIQUE、INDEX — 含查詢情境說明）
@@ -193,7 +208,7 @@ metadata:
    - 備註欄：偏差流程核准的新增項目 → 填「設計階段新增」；取代項目 → 填「取代 [舊檔案名稱]」；正常項目 → 維持「—」
    - **如果是更新既有設計文件**（修改，非首次撰寫）→ 重置 Pass 3 checkbox 為未勾選
 5. **更新 frontmatter status** — Human 確認後，將本次撰寫/修改的 api-spec + schema 檔案 frontmatter 的 `status` 更新為 `approved`（不論原值為 `draft` 或 `implemented`；修改既有 implemented 文件即代表實作已與設計脫鉤，需降回 approved 重新走 close 流程）
-6. **commit**（`docs: add/update api-spec [module]/[domain]`）
+6. **commit**（`docs: add/update api-spec [module]/[domain] (spec-NNN)`）
 
 **存放位置：**
 - API Spec：`docs/api-specs/[module]/[domain]/[name].md`
@@ -219,3 +234,14 @@ metadata:
 - [ ] progress.md 已更新（ApiSpec / Schema 列標為完成 + 自審 ✓）
 - [ ] Human 已確認（God Mode: 自動放行）
 - [ ] 已 commit
+
+## 模板解析
+
+撰寫 API Spec 與 Schema 前先解析要用哪一份模板：
+
+1. 讀取 CLAUDE.md 的 `Templates` 區塊是否有 `api-spec → <path>` 或 `schema → <path>` 設定
+   - **Monorepo** → 讀當前 repo 的 `.claude/CLAUDE.md`
+   - **Multi-repo** → 讀 **docs repo** 的 `.claude/CLAUDE.md`
+2. **有且檔案存在** → 使用該專案模板，但仍需保留本 skill 要求的核心資訊（API: Method/Path/Request/Response/錯誤映射表；Schema: Table/索引/關聯/Migration）
+3. **指定但檔案不存在** → 警告 Human 後 fallback 到內建模板
+4. **未設定** → 使用 plugin 內建 `references/api-spec-template.md` / `references/schema-template.md`

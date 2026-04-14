@@ -6,7 +6,7 @@ description: >-
   "Example Mapping", "三視角", "discovery", "Gherkin", "寫 feature",
   "行為規格".
 metadata:
-  version: 3.3.2
+  version: 3.4.0
 ---
 
 # Phase 0 — BDD Discovery 行為驅動探索
@@ -109,4 +109,7 @@ Feature: [功能名稱]
 - [ ] Example Mapping 完成（🔴 = 0）
 - [ ] .feature 檔案已建立
 - [ ] Human 已確認 .feature 內容
+- [ ] **下游可發現 .feature**（至少滿足其中一項）：
+  - 對應的 spec.md 已存在 → spec.md Meta 的「行為規格」欄位指向本 .feature（不一致則更新）
+  - spec.md 尚未存在 → PRD Section 6 的「Feature」子清單已列出本 .feature 路徑（缺則補上，Section 6 其他章節不動）
 - [ ] 已 commit（`docs: add feature [domain]/[name]`）

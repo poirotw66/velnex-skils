@@ -7,7 +7,7 @@ description: >-
   "setup", "專案設定", "對齊結構", "align structure", "health check",
   "健檢", "結構檢查", "檢查結構".
 metadata:
-  version: 3.3.2
+  version: 3.4.0
 ---
 
 # vif (Velocity AI Flow) — AI-Driven Development Flow
@@ -394,7 +394,7 @@ draft ──[Human 確認]──→ approved ──[spec close]──→ impleme
 |------|------|------|
 | `flow_mode` 值不合法（非 god / normal） | **WARN** | fallback 到提示選擇 |
 | `flow_mode: god` 但缺技術棧或專案指令 | **WARN** | God Mode 需要完整設定才能自動決策 |
-| Cross-Review 有 `design`/`verify`/`review` 但沒 `mode` | **WARN** | 無法判斷觸發時機 |
+| Cross-Review 啟用 `design` 但沒 `mode` | **WARN** | design 的觸發時機需要 mode（solo = 統一審查、team = 個別審查） |
 | Cross-Review 有 `mode` 但 3 個階段都沒啟用 | **INFO** | 等於沒用，提醒即可 |
 
 Guideline：
@@ -403,6 +403,14 @@ Guideline：
 |------|------|------|
 | Guideline 映射路徑不存在 | **WARN** | guideline 注入會失敗 |
 | `guideline/` 有內容但沒映射 | **INFO** | 目錄慣例 fallback 可能匹配，建議明確設定 |
+
+Templates：
+
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| Templates 映射路徑不存在 | **WARN** | skill 會 fallback 到內建，但表示設定有錯 |
+| Templates 指向的檔案存在但格式異常（非 markdown、空檔） | **INFO** | 能讀但可能產生奇怪結果 |
+| Multi-Repo 下 code repo 的 CLAUDE.md 有 Templates 區塊 | **WARN** | 設定會被忽略（skill 只讀 docs repo 的 Templates）— 屬設計限制，見 project-setup R4 |
 
 **5. 結構錯位**
 
@@ -422,7 +430,23 @@ Guideline：
 | 目錄存在但 specs-overview 沒列 | **WARN** | 追蹤文件與實際不同步 |
 | spec 編號跳號 | **INFO** | 不影響運作，可能是刻意 |
 
-**7. 設計文件 Frontmatter**（有設計文件時才檢查）
+**7. PRD ↔ Specs-Overview 對齊**（有 PRD 時才檢查）
+
+掃描 `prds/` 下所有 `prd-*.md` 的 Meta 狀態與 Section 6 spec 清單，比對 specs-overview：
+
+| 檢查 | 等級 | 理由 |
+|------|------|------|
+| PRD 狀態為 `approved` 但 specs-overview 沒對應任何 spec 條目 | **WARN** | 孤兒 PRD——Import Mode 忘跑 Step 5、或 New Mode 中斷於 Step 4 後 |
+| PRD 狀態為 `approved`、Section 6 列出 N 個 spec，specs-overview 只有 M 個（M < N）| **WARN** | 部分展開——Step 5 中斷或手動漏填 |
+| specs-overview 某條目的 `PRD` 欄指向不存在的 PRD 編號 | **WARN** | 追蹤斷鏈，可能是 PRD 被刪或編號誤填 |
+| specs-overview 某條目的 `PRD` 欄對應的 **approved** PRD Section 6 沒有此 spec | **WARN** | 反向不一致——spec 被加入但 PRD 沒更新，或編號錯誤 |
+| PRD 狀態為 `proposal` 但 specs-overview 已有對應條目 | **INFO** | 可能是提前展開，也可能是狀態忘記更新（proposal PRD 的 Section 6 不一致不額外 WARN，由此項 INFO 統一表達） |
+
+> **對齊檢查的兩個方向**：PRD → specs-overview（每個 approved PRD 的 Section 6 spec 都要在 overview）、specs-overview → PRD（每個 overview 條目的 PRD 欄要能回查到 PRD Section 6）。任一方向不一致都是 WARN。
+>
+> 孤兒 PRD 是 Import Mode 最容易發生的問題：外部 PRD 直接放進 `docs/prds/`，但沒跑 `/vif-prd` → Step 5 不會觸發 → specs-overview 永遠不會有這條 → `/vif-spec` Entry Gate 會擋下，但使用者可能搞不清楚為什麼。Health Check 提早暴露這個狀態。
+
+**8. 設計文件 Frontmatter**（有設計文件時才檢查）
 
 掃描 `api-specs/`、`ui-specs/`、`schema/` 下所有 `.md` 檔案的 frontmatter：
 
@@ -587,6 +611,23 @@ BLOCK = 0 時：
 |------|------|
 | `docs/specs/specs-overview.md` | Spec 索引 |
 
+## 狀態系統對應表
+
+vif 有四套平行的狀態標記，各自管理不同生命週期。以下為對應關係與同步規則：
+
+| 層級 | 檔案位置 | 值域 | 由誰更新 |
+|------|---------|------|---------|
+| 全專案 spec 索引 | `specs-overview.md` 狀態欄 | `—` / `📋` / `✅` / `🚧` / `✔️` | vif-prd（`—` 建立）→ vif-spec（`✅`）→ vif-develop（`🚧`，首個 task 啟動時）→ vif-close（`✔️`） |
+| 單一 spec 流程 | `spec.md` Meta 狀態 | `draft` / `approved` / `in-progress` / `done` | vif-spec（`approved`）→ vif-develop（`in-progress`）→ vif-close（`done`） |
+| 單一 spec 進度 | `progress.md` 設計文件表狀態欄 | `待撰寫` / `完成` | vif-api-spec、vif-ui-spec（Step 6 / Step 4 改為「完成」） |
+| 個別設計文件生命週期 | 設計文件 frontmatter `status` | `draft` / `approved` / `implemented` / `deprecated` | 設計 skill（`draft` 建立、`approved` Human 確認後）→ vif-close（`implemented`）→ 取代流程（`deprecated`） |
+
+**同步規則：**
+
+- **specs-overview ↔ spec.md Meta**：兩者狀態語意一對一對應（`📋` ↔ `draft`、`✅` ↔ `approved`、`🚧` ↔ `in-progress`、`✔️` ↔ `done`）。特殊值 `—`（not-started）僅用於 specs-overview，表示 spec.md 尚未建立。任一方更新時必須同步另一方。
+- **progress.md ↔ frontmatter status**：`progress.md` 的「完成」對應 frontmatter `approved`（設計階段結束）或 `implemented`（close 後）。設計修改導致 implemented 降回 approved 時，progress.md 仍維持「完成」，僅 Pass 3 checkbox 重置。
+- **任一層級的不同步** 由 Health Check 偵測並以 WARN 標示（見 vif-flow Health Check）。
+
 ## Commit Points
 
 | 時機 | 內容 | Message 範例 | 類型 |
@@ -594,7 +635,7 @@ BLOCK = 0 時：
 | PRD approved | PRD 文件 | `docs: add prd-001 user-login` | Human 確認後 |
 | BDD 完成 | .feature 文件 | `docs: add feature iam/user-login` | Human 確認後 |
 | Spec approved | spec.md + progress.md | `docs: add spec-001 user-login` | Human approve 後 |
-| 設計文件完成 | api-spec / ui-spec / schema | `docs: add api-spec iam/auth/login` | Human 確認後 |
+| 設計文件完成 | api-spec / ui-spec / schema | `docs: add api-spec iam/auth/login (spec-001)` | Human 確認後 |
 | 開發 per-task | test + implementation + progress.md | `feat: implement login API (spec-001)` | 自動 |
 | Verify 完成 | verification-report.md + progress.md | `docs: verify spec-001 PASS` | 自動 |
 | Review APPROVED | review-report.md + progress.md | `docs: review spec-001 APPROVED` | Human approve 後 |

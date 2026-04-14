@@ -5,7 +5,7 @@ description: >-
   "收尾", "結案", "wrap up", "finish", "done", "closing checklist",
   "merge ready".
 metadata:
-  version: 3.3.2
+  version: 3.4.0
 ---
 
 # Phase 5 — Close 完成
@@ -26,6 +26,9 @@ metadata:
 ## Prerequisites
 
 - [ ] Phase 4 Code Review — Human approved
+  > **God Mode**：同時滿足以下兩條視為已 approved：
+  > - `god-mode-report.md` 存在且 Status = `COMPLETED`（`ESCALATED` 不算，須先處理未竟事項）
+  > - 使用者主動觸發 `/vif-close`（代表已檢視 Results Report）
 
 ## Design Doc Sync
 
@@ -38,8 +41,29 @@ metadata:
 - [ ] 本 spec 範圍內的設計文件 frontmatter `status` 從 `approved` 更新為 `implemented` — 範圍 = progress.md 設計文件表列出且狀態為「完成」的 ApiSpec / UISpec / Schema
 
 > 目標不是讓設計文件完美，而是讓下一個讀到它的人不會被誤導。
->
-> **若 Design Doc Sync 修改了設計文件內容**（非純格式/typo 修正），必須重跑 spec-auditor Pass 1+2 + Pass 3，確保一致性未被破壞。
+
+### Re-audit 觸發
+
+**觸發條件**：Design Doc Sync 修改了設計文件內容（非純格式/typo 修正）。純排版、錯字、空白調整不觸發。
+
+依 `spec-auditor` 的 scope 規則（一次 dispatch 只跑一個 scope），分兩次派遣：
+
+**第 1 次派遣 — `design-review`（Pass 1+2）：**
+
+- scope: `design-review`
+- targets: 本次 Sync 實際修改的 api-spec / ui-spec / schema 檔案
+- 目的：確認修改本身的內部一致性與完整性
+
+**第 2 次派遣 — `cross-check`（Pass 3）：**
+
+- scope: `cross-check`
+- targets: 本 spec 範圍內 progress.md 列出的全部設計文件（含未修改的）
+- 目的：確認修改沒破壞跨文件的交叉一致性
+
+**結果處理（任一次派遣適用）：**
+
+- APPROVED → 進入下一次派遣，或繼續下方 Completion Checklist
+- NEEDS_REVISION → 修正後重跑該次派遣（最多 3 次迭代，超過產出 Escalation Report，見 `/vif-flow` Escalation Protocol）
 
 ## Completion Checklist
 
@@ -60,7 +84,8 @@ metadata:
   - 設計文件表：所有狀態為「完成」、自審全部 ✓、Pass 3 ✓
   - Phase 1-5：全部 `[x]`
   - 決策紀錄已記錄
-- [ ] `docs/specs/specs-overview.md` — spec 狀態更新為 ✔️ done，領域正確
+- [ ] `docs/specs/specs-overview.md` — spec 狀態更新為 `✔️` done，領域正確
+- [ ] `docs/specs/NNN-name/spec.md` Meta 狀態更新為 `done`（與 specs-overview `✔️` 同步，見 `/vif-flow` 狀態系統對應表）
 - [ ] 設計文件已同步（見上方 Design Doc Sync）
 - [ ] 設計文件 frontmatter 一致性：每份設計文件的 `spec` 欄位指向正確的 spec
 

@@ -5,7 +5,7 @@ description: >-
   "product requirement", "問題定義", "需求文件", "要做什麼", "why build",
   "寫 PRD", "新需求".
 metadata:
-  version: 3.3.2
+  version: 3.4.0
 ---
 
 # Phase 0 — PRD 產品探索
@@ -16,8 +16,10 @@ metadata:
 
 **PRD 未 approved，不進入 Phase 1。**
 
-> 每個專案都需要問題定義。Todo list、單一函式工具、config 變更 — 全部。
+> 每個「新增功能」都需要問題定義。Todo list、單一函式工具 — 全部。
 > 「簡單」的專案正是未經檢驗的假設造成最多浪費的地方。
+>
+> 維護性工作（修 bug、重構、調 config）見本 SKILL 下方「例外情境」。
 
 ## Stance
 
@@ -74,7 +76,7 @@ Import Mode **不可省略** Step 5（展開 specs-overview）。specs-overview 
 
 ### Step 3: Draft PRD
 
-使用 PRD 模板（`references/prd-template.md`），撰寫至 `docs/prds/prd-NNN.md`：
+使用 PRD 模板（[模板解析](#模板解析) → `prd`，預設 `references/prd-template.md`），撰寫至 `docs/prds/prd-NNN.md`：
 
 - 問題描述與證據
 - 預期成果（可衡量）
@@ -101,6 +103,11 @@ Import Mode **不可省略** Step 5（展開 specs-overview）。specs-overview 
      ```
    - **Section 6 不寫 metadata**（領域、依賴、狀態）→ 留到 Step 5 寫入 specs-overview
 3. **不重做探索 / 不動既有章節**：問題、證據、方案選項等段落不重跑、不調整格式，信任外部 PRD 的產出
+4. **編號衝突處理**：外部 PRD 若已標 `spec-NNN`，但 `specs-overview.md` 已有同編號（屬其他 PRD 的 spec）：
+   - 以 **specs-overview 為權威**（不更動已存在的 spec 編號）
+   - 將外部 PRD 的 `spec-NNN` 重新分配為下一個可用編號
+   - 在 Section 6 附註原編號（例：`spec-005 [名稱] — ...（外部 PRD 原編 spec-001，因專案內已存在而重號）`）
+   - Human 確認重號結果後，才寫入 specs-overview（Step 5）
 
 > Import Mode 只關心一件事：**外部 PRD 能不能接上 specs-overview**。其他章節是否符合本流程的模板不重要——PRD 已 approved 的結構就是事實。
 
@@ -155,15 +162,17 @@ Import Mode **不可省略** Step 5（展開 specs-overview）。specs-overview 
 - **commit**（`docs: add prd-NNN [名稱]`）
 - 進入 Phase 1（`/vif-spec`）
 
-## Skip Conditions
+## 例外情境（可跳過 Phase 0）
 
-以下情境可跳過 Phase 0：
+以下維護性工作不需要走 Phase 0，可直接進入 Phase 1 或 Phase 2。每條都附「為什麼可以跳」的判斷依據，AI 在 edge case 時據此判斷：
 
-- Bug fix（< 1 人天）
-- 技術債清理
-- Config 變更
+- **Bug fix（< 1 人天）** — 修復壞掉的東西，不是新增功能。問題已被觀察到，不需要再做問題探索。
+- **技術債清理** — 重構既有邏輯，行為不變。目標是改善既有，不是回答新問題。
+- **Config 變更** — 純設定調整（環境變數、旗標、部署參數），無程式碼行為變化。
 
-> **「Human 已提供完整需求文件」不是 skip，而是走 Import Mode。**
+> 判斷原則：若改動**會產生新的使用者可觀察行為**，就不是例外，仍需 PRD。例如「調高 timeout 閾值」若使用者會感受到差異（原本錯誤現在成功），仍屬行為變更，不能跳。
+>
+> **「Human 已提供完整需求文件」不是例外，而是走 Import Mode。**
 > 即便 PRD 來自外部，Step 5（展開 specs-overview）仍必須執行——這是進入 Phase 1 的唯一入口。
 
 ## Exit Criteria
@@ -174,3 +183,26 @@ Import Mode **不可省略** Step 5（展開 specs-overview）。specs-overview 
 - [ ] specs-overview.md 已展開（Section 6 → — (not-started)條目）
 - [ ] Human 已確認 specs-overview
 - [ ] 已 commit
+
+## 模板解析
+
+撰寫 PRD 前先解析要用哪一份模板：
+
+1. 讀取 CLAUDE.md 的 `Templates` 區塊是否有 `prd → <path>` 設定
+   - **Monorepo** → 讀當前 repo 的 `.claude/CLAUDE.md`
+   - **Multi-repo** → 讀 **docs repo** 的 `.claude/CLAUDE.md`（PRD 寫在 docs repo，Templates 設定亦放在該處）
+2. **有且檔案存在** → 使用該專案模板（章節可能不同、缺某些），此時仍需確保產出包含本 skill 要求的核心資訊（對應內建 `prd-template.md` 的章節）：
+   - Meta（提案人、日期、狀態）
+   - 1. 問題描述
+   - 2. 證據
+   - 3. 預期成果（可衡量）
+   - 4. 方案選項（2-3 個，含比較表）
+   - 5. 不在範圍內
+   - **6. 拆解為 Feature / Spec** — 這是下游 specs-overview 展開的唯一輸入
+   - 7. 依賴與影響
+
+   專案模板缺哪項就補哪項，不重寫已有的
+3. **指定但檔案不存在** → 警告 Human 後 fallback 到內建模板
+4. **未設定** → 使用 plugin 內建 `references/prd-template.md`
+
+> Import Mode 跳過模板解析——外部 PRD 的章節結構就是事實，不依模板去強行對齊；僅驗證「有無 Section 6」即可。

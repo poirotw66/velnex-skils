@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 3.3.2
+  version: 3.4.0
 ---
 
 # Phase 2 — Develop TDD 開發
@@ -147,10 +147,12 @@ Entry Gate 通過後，分兩層載入設計文件：
 
 每個 task dispatch agent 前，使用 `/vif-guideline` 取得與 task 相關的 guideline：
 
-- task 的 `spec ref` 為 `api-spec` → context = `api-spec`
-- task 的 `spec ref` 為 `ui-spec` → context = `ui-spec`
-- task 的 `spec ref` 為 `schema` → context = `schema`
-- test-writer → 額外加入 context = `testing`
+- task 的 `spec ref` 指向 api-spec → context = `api-spec`
+- task 的 `spec ref` 指向 ui-spec → context = `ui-spec`
+- task 的 `spec ref` 指向 schema → context = `schema`
+- test-writer → 在上述 context 上**額外附加** `testing`（不取代）
+
+> 「指向」依 spec ref 路徑推導：路徑含 `api-specs/` → api-spec；含 `ui-specs/` → ui-spec；含 `schema/` → schema。
 
 將取得的 guideline 內容注入 agent dispatch prompt。
 
@@ -181,8 +183,9 @@ For each task:
 ### Task Execution Order
 
 1. 讀取 spec.md 任務清單和依賴圖（如有）
-2. 依序逐一執行（依賴圖決定順序，無依賴的任務可任意排序）
-3. 每完成一個任務，更新 progress.md（含 TDD 紀錄）→ 自動 commit
+2. **首個 task 啟動前**：更新 `specs-overview.md` 該 spec 狀態欄為 `🚧` in-progress，同步更新 spec.md Meta 狀態為 `in-progress`，commit（`docs: spec-NNN start develop`）
+3. 依序逐一執行（依賴圖決定順序，無依賴的任務可任意排序）
+4. 每完成一個任務，更新 progress.md（含 TDD 紀錄）→ 自動 commit
 
 ### RED Stage
 
