@@ -5,7 +5,7 @@ description: >-
   "收尾", "結案", "wrap up", "finish", "done", "closing checklist",
   "merge ready".
 metadata:
-  version: 3.4.0
+  version: 3.5.0
 ---
 
 # Phase 5 — Close 完成

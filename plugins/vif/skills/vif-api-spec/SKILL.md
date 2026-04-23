@@ -5,7 +5,7 @@ description: >-
   "ApiSpec", "API 規格", "openapi", "swagger", "寫 API spec", "dbschema",
   "DB schema", "資料庫設計", "寫 API", "後端規格".
 metadata:
-  version: 3.4.0
+  version: 3.5.0
 ---
 
 # Phase 1 — API Spec 規格 + OpenAPI + DB Schema
@@ -155,6 +155,8 @@ metadata:
 - 新增的 schema → 加入 components/schemas
 - 確認不破壞既有 API（breaking change 需在 Spec 中標註）
 
+> **這是 develop 階段的必讀 contract。** `vif-develop` 會自動載入 `docs/api-specs/**/openapi.yaml`，作為 test-writer 寫 contract test、implementer 生成 types/client 時的契約來源。openapi.yaml 與 api-spec markdown 若不同步，develop 會被 block（`BLOCKED_BY_SPEC`）。Step 5 的 spec-auditor 審查必須比對兩者一致性。
+
 ### Step 4: 撰寫 DB Schema
 
 使用 schema 模板（[模板解析](#模板解析) → `schema`，預設 `references/schema-template.md`），每個 domain 包含：
@@ -177,6 +179,7 @@ metadata:
 - 內部一致性：命名、值、描述 vs 表格
 - 完整性：欄位定義、錯誤映射、邊界條件
 - API 專屬 checklist：HTTP Status 合理性、Request/Response schema 完整性、命名慣例一致性
+- **OpenAPI 同步檢查**：openapi.yaml 與 api-spec markdown 的 path / method / request / response / 錯誤碼逐項比對，不一致視為 Blocker
 
 **結果處理：**
 - APPROVED → Step 6（AI Cross-Review 如啟用，已與 spec-auditor 平行完成）
@@ -227,7 +230,8 @@ metadata:
 ## Exit Criteria
 
 - [ ] 每支 API 的 API Spec 已撰寫（含錯誤映射表）
-- [ ] openapi.yaml 已更新
+- [ ] openapi.yaml 已更新（paths / schemas / deprecated 標記）
+- [ ] **openapi.yaml 與新增/修改的 api-spec markdown 內容一致**（path、method、request/response schema、錯誤碼）
 - [ ] DB Schema 已撰寫/更新
 - [ ] 既有 API/Schema 的修改已標記
 - [ ] **自我審查通過（spec-auditor Pass 1+2）**

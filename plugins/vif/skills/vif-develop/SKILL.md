@@ -5,7 +5,7 @@ description: >-
   "implement", "實作", "coding", "寫程式", "task", "任務", "execute plan",
   "開始開發", "RED GREEN REFACTOR".
 metadata:
-  version: 3.4.0
+  version: 3.5.0
 ---
 
 # Phase 2 — Develop TDD 開發
@@ -127,9 +127,16 @@ metadata:
 
 ### 載入相關設計文件
 
-Entry Gate 通過後，分兩層載入設計文件：
+Entry Gate 通過後，分三層載入設計文件：
 
 **UI 來源**：讀取 spec.md Meta 的「UI 來源」。有 Figma / Prototype / URL 時，dispatch implementer 需注入 UI 來源，實作結果必須與之吻合。
+
+**Contract 層（必載、read-only during develop）**：若 task 涉及 API，載入所有 `docs/api-specs/**/openapi.yaml`。
+- openapi.yaml 是 API contract 的 **machine-readable source of truth**（通常由 `/vif-api-spec` 撰寫，也可能來自手動編輯或工具產生）
+- test-writer 寫 contract test、implementer 生成 types / client 時，**以 openapi.yaml 為準**，api-spec markdown 僅作為 Request/Response/錯誤映射/業務規則的人類可讀補充
+- **只讀、不寫**：`/vif-develop` 執行期間（含 dispatch 的 test-writer / implementer），禁止寫入或修改 `docs/api-specs/**/openapi.yaml`。發現缺失、矛盾、不完整 → escalate `BLOCKED_BY_SPEC` → 回 `/vif-api-spec` 修正，不得自補
+- 禁止在 `docs/api-specs/` 以外的位置建立第二份 openapi.yaml 作為 source of truth；工具鏈產物（如 `src/generated/openapi.yaml`）不算，但必須來自 codegen、不可手改
+- 此限制僅作用於 develop 階段；其他 skill / phase / 手動編輯透過正規流程修改 openapi.yaml 不受限
 
 **第一層（確定）**：讀取 progress.md 設計文件表中明確列出的檔案路徑，直接 Read 載入。這些是本 spec 確定需要的設計文件，不經過篩選。
 
@@ -141,7 +148,7 @@ Entry Gate 通過後，分兩層載入設計文件：
 4. Read 僅載入相關文件全文
 ```
 
-> 第一層保證本 spec 的設計文件一定被載入（即使 frontmatter 不完整）。第二層發現跨域關聯。
+> Contract 層保證 openapi.yaml 一定被載入（不論是否列入 progress.md）。第一層保證本 spec 的設計文件一定被載入（即使 frontmatter 不完整）。第二層發現跨域關聯。
 
 ## Guideline 注入
 
@@ -191,7 +198,7 @@ For each task:
 
 派遣 `test-writer` agent：
 
-1. 讀取任務的 `spec ref` 對應的設計文件（api-spec / ui-spec）和 `feature ref`（如有）
+1. 讀取任務的 `spec ref` 對應的設計文件（api-spec / ui-spec）和 `feature ref`（如有）。**spec ref 指向 api-spec 時，同時附上對應的 openapi.yaml 路徑**，contract test 以 openapi schema 為基準
 2. 將規格轉化為測試程式碼（依測試策略決定層級）
 3. 執行**目標測試檔案**，確認失敗（RED）。不要跑全部測試，不要用 `run_in_background`
 4. 驗證 RED 有效性：
@@ -313,15 +320,29 @@ fix: address review feedback (spec-001)
 
 ## Failure Handling
 
+### Stop-the-Line Protocol
+
+當 test 失敗、build 壞掉、或出現非預期行為時：
+
+```
+1. STOP        — 停止新增功能、停止繼續改
+2. PRESERVE    — 保留 error output / logs / repro 步驟（貼到 progress.md 或暫存區）
+3. DIAGNOSE    — 依下方 Systematic Debugging 找根因
+4. FIX         — 修復根因（非症狀）
+5. GUARD       — 加測試防止 regression；必要時加 lint rule / type constraint
+```
+
+> **鐵律**：不 preserve 就 diagnose = 猜。不 guard 就 fix = 下次還會發生。
+
 ### Systematic Debugging
 
-當測試無法通過時：
+在 DIAGNOSE 階段執行：
 
 1. **Root Cause Investigation** — 追溯呼叫鏈找到原始觸發點，不要猜
 2. **Pattern Analysis** — 這是個別問題還是系統性問題？
 3. **Hypothesis Testing** — 形成假設 → 驗證 → 修復
 
-**鐵律：先找根因，再修復。3 次以上修復失敗 → 質疑架構設計。**
+**3 次以上修復失敗 → 質疑架構設計，走 Escalation。**
 
 ### Escalation
 

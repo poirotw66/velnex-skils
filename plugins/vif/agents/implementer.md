@@ -51,6 +51,29 @@ async function retryOperation<T>(
 ): Promise<T> { /* YAGNI */ }
 ```
 
+## Framework / Library API Usage
+
+When implementing framework-specific patterns (React hooks, Vue composables, Rails models,
+Next.js routing, ORM queries, etc.):
+
+**If the pattern is covered by guidelines → follow the guideline. Stop here.**
+Guidelines are authoritative. Don't second-guess them against external docs, don't
+"verify" them, don't flag differences between guideline and official docs as Concerns —
+the guideline is the project's deliberate choice (often encoding trade-offs, legacy
+constraints, or team conventions that won't appear in official docs).
+
+**If the pattern is NOT covered by guidelines**, prefer verified sources over memory:
+1. Existing patterns in the codebase (look for reference usages first)
+2. Official docs via `context7` MCP if available (`mcp__context7__resolve-library-id`
+   then `mcp__context7__query-docs`)
+3. If still unsure → report `NEEDS_CONTEXT` with category `MISSING_CONTEXT`
+
+**Do NOT verify** — basic language constructs, well-established patterns, or anything
+already encoded in guidelines or codebase style.
+
+When documenting a non-obvious pattern **not in guidelines**, add a brief source
+comment (`// Next.js App Router: parallel routes`) or flag under `Concerns`.
+
 ## Verify GREEN — MANDATORY
 
 After implementing, you **must run tests** — do not skip:
