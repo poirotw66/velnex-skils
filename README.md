@@ -51,6 +51,52 @@ npx skills add /path/to/velnex -a cursor -y
 | 專案 | （預設） | `.agents/skills/` |
 | 全域 | `-g` | `~/.cursor/skills/` |
 
+#### 解除安裝（Cursor）
+
+先確認已安裝的 skills：
+
+```bash
+npx skills list -g -a cursor    # 全域
+npx skills list -a cursor       # 專案內（在該專案目錄執行）
+```
+
+透過 CLI 解除（需當初以 `npx skills add` 安裝，lock 檔有登記）：
+
+```bash
+# 移除單一 skill
+npx skills remove vif-prd -a cursor -g -y
+
+# 移除多個 velnex skills
+npx skills remove \
+  vif-arch vif-bdd vif-prd vif-spec vif-develop vif-verify vif-review vif-close \
+  vif-flow vif-guideline vif-god vif-api-spec vif-ui-spec vif-uiux vif-prototype \
+  vul-analyze vul-decision vul-fix vul-pr vul-cleanup \
+  -a cursor -g -y
+
+# 專案內安裝則省略 -g
+npx skills remove vif-prd -a cursor -y
+```
+
+若 `skills remove` 回報 `No matching skills found`，但 `skills list` 仍看得到 vif/vul，代表當初是手動 symlink 或未寫入 lock，改用手動刪除連結即可（不會刪除本 repo 原始檔）：
+
+```bash
+# 全域
+rm ~/.cursor/skills/vif-* ~/.cursor/skills/vul-*
+
+# 專案內
+rm -rf .agents/skills/vif-* .agents/skills/vul-*
+```
+
+刪除後重開 Cursor 或新開 Agent 對話即生效。
+
+#### 解除安裝（Claude Code）
+
+```text
+/plugin uninstall vif@velnex
+/plugin uninstall vul@velnex
+/plugin uninstall vex@velnex
+```
+
 ## Plugins
 
 ### vif (Velocity AI Flow)
