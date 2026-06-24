@@ -12,6 +12,10 @@ metadata:
 
 確保程式碼符合 spec 且品質達標。先驗合規再看品質，兩階段分離。
 
+## Agent Dispatch (Cursor & Codex)
+
+Dispatch `reviewer` via Task (Cursor) or spawn custom agent (Codex). See `plugins/vif/references/cursor-subagent-dispatch.md` and `codex-subagent-dispatch.md`.
+
 ## The Review Principle
 
 > **不要信任報告。親自驗證。**

@@ -12,6 +12,10 @@ metadata:
 
 根據 Figma 畫面（或其他設計稿）撰寫 UI 頁面規格，定義每個頁面的欄位、操作、邏輯。
 
+## Agent Dispatch (Cursor & Codex)
+
+Dispatch `spec-auditor` (`design-review`) via Task (Cursor) or spawn custom agent (Codex).
+
 ## Stance
 
 **UI Spec 是前端的施工藍圖，不是 Figma 的文字複述。**

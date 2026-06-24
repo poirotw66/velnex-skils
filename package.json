@@ -1,0 +1,24 @@
+{
+  "name": "velnex-skils",
+  "version": "1.0.0",
+  "description": "Install Velnex Agent Skills and subagents for Cursor and Codex via npx",
+  "type": "module",
+  "bin": {
+    "velnex-skils": "./bin/velnex-install.mjs",
+    "velnex-install": "./bin/velnex-install.mjs",
+    "velnex-cursor": "./bin/velnex-install.mjs"
+  },
+  "files": [
+    "bin",
+    "plugins/vif/agents",
+    "plugins/vex/agents"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/poirotw66/velnex-skils.git"
+  },
+  "license": "MIT"
+}

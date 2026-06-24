@@ -19,6 +19,16 @@ metadata:
 > **探索是思考時間，不是任務時間。** — OpenSpec
 > **沒有新鮮的驗證證據，就不能做出任何完成聲明。** — Superpowers
 
+## Cursor & Codex Setup
+
+`npx skills add` installs skills only. Install subagents for both platforms:
+
+```bash
+npx github:poirotw66/velnex-skils -g
+```
+
+Dispatch rules: `plugins/vif/references/cursor-subagent-dispatch.md`, `codex-subagent-dispatch.md`
+
 ## 三種模式
 
 ### 模式一：完全自動化（Solo / 小團隊）

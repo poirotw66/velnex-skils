@@ -30,10 +30,19 @@ vif 支援兩種 workspace 模式，擇一使用：
 
 ### A.1 安裝 vif plugin
 
+**Claude Code:**
+
 ```bash
 /plugin marketplace add [velnex-repo-path-or-url]
 /plugin install vif@velnex
 /plugin install vex@velnex        # git-commit agent（vif 依賴）
+```
+
+**Cursor & Codex** (skills + subagents):
+
+```bash
+npx github:poirotw66/velnex-skils -g
+# or local clone: npx . -g
 ```
 
 ### A.2 建立目錄結構

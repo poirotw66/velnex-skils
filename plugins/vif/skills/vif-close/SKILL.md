@@ -12,6 +12,10 @@ metadata:
 
 確認所有工作項目完成，同步設計文件，更新追蹤文件，標記完成。
 
+## Agent Dispatch (Cursor & Codex)
+
+Dispatch `spec-auditor` twice (`design-review`, `cross-check`) via Task (Cursor) or spawn custom agent (Codex).
+
 ## Workspace
 
 > Multi-repo 下，所有 `docs/` 路徑透過 workspace 設定解析。見 `/vif-flow` Workspace Mode。

@@ -12,6 +12,14 @@ metadata:
 
 按 spec.md 任務清單（或自行拆解的任務），逐任務執行 TDD，直到所有任務完成。
 
+## Agent Dispatch (Cursor & Codex)
+
+Install subagents: `npx github:poirotw66/velnex-skils agents -g`. Dispatch `test-writer` / `implementer` via **Task** (Cursor) or **spawn custom agent** (Codex) — never inline RED/GREEN/REFACTOR.
+
+- Cursor: `plugins/vif/references/cursor-subagent-dispatch.md`
+- Codex: `plugins/vif/references/codex-subagent-dispatch.md`
+- Context: `plugins/vif/skills/vif-flow/references/dispatch-contract.md`
+
 ## Test Strategy
 
 開發前依據驗收條件決定測試策略，不要盲選。

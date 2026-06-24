@@ -2,6 +2,8 @@
 
 派遣 agent 時的標準 context block。確保 handoff 不遺漏關鍵資訊。
 
+> **Cursor / Codex**: Task or spawn subagent per `plugins/vif/references/cursor-subagent-dispatch.md` and `codex-subagent-dispatch.md`.
+
 ## Context Block
 
 ```

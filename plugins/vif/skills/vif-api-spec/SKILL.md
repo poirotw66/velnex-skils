@@ -12,6 +12,10 @@ metadata:
 
 撰寫 API 完整規格（Request/Response/檢核/商業邏輯），維護 openapi.yaml，設計 DB Schema。
 
+## Agent Dispatch (Cursor & Codex)
+
+Dispatch `spec-auditor` (`design-review`) via Task (Cursor) or spawn custom agent (Codex).
+
 ## Stance
 
 **API Spec 不是 endpoint 清單，是後端的完整施工藍圖。**

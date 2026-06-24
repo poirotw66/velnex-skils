@@ -12,6 +12,10 @@ metadata:
 
 分析需求的技術影響範圍，規劃需要的 API、頁面、DB Table，產出 spec.md 作為開發的作戰計畫。
 
+## Agent Dispatch (Cursor & Codex)
+
+Dispatch `spec-auditor` via Task (Cursor) or spawn custom agent (Codex). See `plugins/vif/references/cursor-subagent-dispatch.md` and `codex-subagent-dispatch.md`.
+
 ## Hard Gate
 
 **Spec 未 approved，不進入設計文件撰寫（api-spec / ui-spec / schema）、不進入開發。**

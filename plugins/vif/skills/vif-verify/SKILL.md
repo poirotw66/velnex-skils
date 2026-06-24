@@ -12,6 +12,10 @@ metadata:
 
 全面驗證程式碼品質，產出 Verification Report。
 
+## Agent Dispatch (Cursor & Codex)
+
+Dispatch `verifier` and `security-reviewer` via Task (Cursor) or spawn custom agents (Codex). Skip `/simplify` on Codex. See dispatch reference docs in `plugins/vif/references/`.
+
 ## The Verification Principle
 
 > **沒有新鮮的驗證證據，就不能做出任何完成聲明。**
