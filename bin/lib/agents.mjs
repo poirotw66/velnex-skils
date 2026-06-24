@@ -11,7 +11,7 @@ export const AGENT_DIRS = [
 ];
 
 export const VELNEX_AGENT_PATH_RE =
-  /\/velnex(?:-skils)?\/plugins\/(?:vif|vex)\/agents\//;
+  /\/velnex(?:-skills|-skils)?\/plugins\/(?:vif|vex)\/agents\//;
 
 export function listAgentMarkdownFiles() {
   const files = [];

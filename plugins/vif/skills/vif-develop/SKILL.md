@@ -14,7 +14,7 @@ metadata:
 
 ## Agent Dispatch (Cursor & Codex)
 
-Install subagents: `npx github:poirotw66/velnex-skils agents -g`. Dispatch `test-writer` / `implementer` via **Task** (Cursor) or **spawn custom agent** (Codex) — never inline RED/GREEN/REFACTOR.
+Install subagents: `npx github:poirotw66/velnex-skills agents -g`. Dispatch `test-writer` / `implementer` via **Task** (Cursor) or **spawn custom agent** (Codex) — never inline RED/GREEN/REFACTOR.
 
 - Cursor: `plugins/vif/references/cursor-subagent-dispatch.md`
 - Codex: `plugins/vif/references/codex-subagent-dispatch.md`

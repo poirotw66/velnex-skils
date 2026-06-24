@@ -16,8 +16,21 @@
 
 ## 安裝
 
+### Claude Code
+
 ```bash
+/plugin marketplace add poirotw66/velnex-skills
 /plugin install vex@velnex
+```
+
+### Cursor & Codex
+
+`git-commit` agent 會隨 vif 一併安裝（`velnex-install` 包含 `plugins/vex/agents/`）：
+
+```bash
+npx github:poirotw66/velnex-skills agents -g
+# 或完整安裝（vif skills + 全部 subagents）
+npx github:poirotw66/velnex-skills -g
 ```
 
 ## 使用方式

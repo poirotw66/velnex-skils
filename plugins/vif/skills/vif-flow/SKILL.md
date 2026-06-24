@@ -24,7 +24,7 @@ metadata:
 `npx skills add` installs skills only. Install subagents for both platforms:
 
 ```bash
-npx github:poirotw66/velnex-skils -g
+npx github:poirotw66/velnex-skills -g
 ```
 
 Dispatch rules: `plugins/vif/references/cursor-subagent-dispatch.md`, `codex-subagent-dispatch.md`

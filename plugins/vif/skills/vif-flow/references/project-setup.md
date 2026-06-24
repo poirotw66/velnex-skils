@@ -41,7 +41,7 @@ vif 支援兩種 workspace 模式，擇一使用：
 **Cursor & Codex** (skills + subagents):
 
 ```bash
-npx github:poirotw66/velnex-skils -g
+npx github:poirotw66/velnex-skills -g
 # or local clone: npx . -g
 ```
 

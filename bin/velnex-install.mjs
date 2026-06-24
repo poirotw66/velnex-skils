@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /**
  * Install Velnex skills (npx skills add) and platform subagents (Cursor + Codex).
- * Run: npx github:poirotw66/velnex-skils -g
+ * Run: npx github:poirotw66/velnex-skills -g
  */
 import { spawnSync } from "node:child_process";
 import { PACKAGE_ROOT } from "./lib/agents.mjs";
 import { PLATFORMS, installPlatformAgents, uninstallPlatformAgents } from "./lib/platforms.mjs";
 
-const SKILLS_SOURCE = process.env.VELNEX_SKILLS_SOURCE ?? "poirotw66/velnex-skils";
+const SKILLS_SOURCE = process.env.VELNEX_SKILLS_SOURCE ?? "poirotw66/velnex-skills";
 
 function usage() {
-  console.log(`Usage: npx github:poirotw66/velnex-skils [command] [options] [-- extra skills add args]
+  console.log(`Usage: npx github:poirotw66/velnex-skills [command] [options] [-- extra skills add args]
 
 Commands:
   install     Install skills + subagents (default)
@@ -29,10 +29,10 @@ Options:
 By default, install targets both Cursor and Codex.
 
 Examples:
-  npx github:poirotw66/velnex-skils -g
-  npx github:poirotw66/velnex-skils install -g --codex-only
-  npx github:poirotw66/velnex-skils agents -g --cursor-only
-  npx github:poirotw66/velnex-skils install -g -- --skill vif-develop
+  npx github:poirotw66/velnex-skills -g
+  npx github:poirotw66/velnex-skills install -g --codex-only
+  npx github:poirotw66/velnex-skills agents -g --cursor-only
+  npx github:poirotw66/velnex-skills install -g -- --skill vif-develop
 `);
 }
 

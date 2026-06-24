@@ -5,9 +5,9 @@ Use this reference when running vif in **OpenAI Codex** (skills installed via `n
 Codex custom agents are **TOML files** in `~/.codex/agents/` (not Markdown like Cursor). Install them with:
 
 ```bash
-npx github:poirotw66/velnex-skils -g
+npx github:poirotw66/velnex-skills -g
 # Codex only:
-npx github:poirotw66/velnex-skils agents -g --codex-only
+npx github:poirotw66/velnex-skills agents -g --codex-only
 # Local clone:
 node bin/velnex-install.mjs agents -g --codex-only
 ```
@@ -61,12 +61,12 @@ Same dispatch points as Cursor — see `cursor-subagent-dispatch.md` for the sta
 
 ## Failure Handling
 
-1. Agent not found → run `npx github:poirotw66/velnex-skils agents -g --codex-only` and restart Codex.
+1. Agent not found → run `npx github:poirotw66/velnex-skills agents -g --codex-only` and restart Codex.
 2. Parent inlined work → stop and re-run with explicit spawn instruction.
 3. `BLOCKED` / `BLOCKED_BY_SPEC` → escalate per vif-flow; do not fix inline.
 
 ## Uninstall
 
 ```bash
-npx github:poirotw66/velnex-skils uninstall -g --codex-only
+npx github:poirotw66/velnex-skills uninstall -g --codex-only
 ```

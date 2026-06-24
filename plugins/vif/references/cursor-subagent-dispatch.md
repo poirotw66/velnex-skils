@@ -8,10 +8,10 @@ Claude Code loads agents from the plugin automatically. Cursor requires agents u
 
 ```bash
 # One command (skills + agents for Cursor and Codex)
-npx github:poirotw66/velnex-skils -g
+npx github:poirotw66/velnex-skills -g
 
 # Cursor agents only
-npx github:poirotw66/velnex-skils agents -g --cursor-only
+npx github:poirotw66/velnex-skills agents -g --cursor-only
 
 # Local clone
 node bin/velnex-install.mjs agents -g --cursor-only
@@ -96,10 +96,10 @@ Build the **Dispatch Context** block per `plugins/vif/skills/vif-flow/references
 
 1. Wrong invocation (bad prompt shape, wrong `subagent_type`) → fix and retry **once** immediately.
 2. Subagent `BLOCKED` / `BLOCKED_BY_SPEC` → parent escalates per vif-flow Escalation Protocol; do not inline.
-3. Subagent unavailable (Task errors: unknown agent) → run `npx github:poirotw66/velnex-skils agents -g --cursor-only` and restart Cursor.
+3. Subagent unavailable (Task errors: unknown agent) → run `npx github:poirotw66/velnex-skills agents -g --cursor-only` and restart Cursor.
 
 ## Uninstall
 
 ```bash
-npx github:poirotw66/velnex-skils uninstall -g --cursor-only
+npx github:poirotw66/velnex-skills uninstall -g --cursor-only
 ```
