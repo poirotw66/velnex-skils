@@ -21,6 +21,7 @@ Commands:
 Options:
   -g, --global       Global scope
   -p, --project      Project scope (cwd)
+  -l, --local        Use this repo as skills source (local clone)
   --cursor-only      Cursor only (skills + .md agents)
   --codex-only       Codex only (skills + .toml agents)
   -h, --help         Show this help
@@ -42,6 +43,7 @@ function parseArgs(argv) {
     project: false,
     cursorOnly: false,
     codexOnly: false,
+    useLocal: false,
     skillsArgs: [],
   };
 
@@ -62,6 +64,8 @@ function parseArgs(argv) {
       result.cursorOnly = true;
     } else if (arg === "--codex-only") {
       result.codexOnly = true;
+    } else if (arg === "-l" || arg === "--local") {
+      result.useLocal = true;
     } else if (arg === "-h" || arg === "--help") {
       result.command = "help";
     } else if (arg === "--") {
@@ -91,8 +95,9 @@ function resolvePlatforms(options) {
 }
 
 function installSkills(platforms, options) {
-  const skillsSource =
-    options.skillsArgs.includes("--local") || options.skillsArgs.includes("-l")
+  const skillsSource = options.useLocal
+    || options.skillsArgs.includes("--local")
+    || options.skillsArgs.includes("-l")
       ? PACKAGE_ROOT
       : SKILLS_SOURCE;
 

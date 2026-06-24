@@ -20,5 +20,8 @@
     "type": "git",
     "url": "https://github.com/poirotw66/velnex-skils.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/**/*.test.mjs"
+  }
 }

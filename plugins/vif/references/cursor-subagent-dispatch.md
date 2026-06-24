@@ -2,7 +2,7 @@
 
 Use this reference when running vif in **Cursor** (skills installed via `npx skills add`).
 
-Claude Code loads agents from the plugin automatically. Cursor requires agents under `~/.cursor/agents/` or `.cursor/agents/` — run `scripts/cursor/install-agents.sh` first.
+Claude Code loads agents from the plugin automatically. Cursor requires agents under `~/.cursor/agents/` or `.cursor/agents/`.
 
 ## Prerequisite
 
@@ -10,9 +10,11 @@ Claude Code loads agents from the plugin automatically. Cursor requires agents u
 # One command (skills + agents for Cursor and Codex)
 npx github:poirotw66/velnex-skils -g
 
-# Platform-specific agents only
-npx github:poirotw66/velnex-skils agents -g --codex-only
+# Cursor agents only
 npx github:poirotw66/velnex-skils agents -g --cursor-only
+
+# Local clone
+node bin/velnex-install.mjs agents -g --cursor-only
 ```
 
 ## Iron Rule
@@ -94,10 +96,10 @@ Build the **Dispatch Context** block per `plugins/vif/skills/vif-flow/references
 
 1. Wrong invocation (bad prompt shape, wrong `subagent_type`) → fix and retry **once** immediately.
 2. Subagent `BLOCKED` / `BLOCKED_BY_SPEC` → parent escalates per vif-flow Escalation Protocol; do not inline.
-3. Subagent unavailable (Task errors: unknown agent) → tell user to run `./scripts/cursor/install-agents.sh -g` and restart Cursor.
+3. Subagent unavailable (Task errors: unknown agent) → run `npx github:poirotw66/velnex-skils agents -g --cursor-only` and restart Cursor.
 
 ## Uninstall
 
 ```bash
-./scripts/cursor/uninstall-agents.sh -g
+npx github:poirotw66/velnex-skils uninstall -g --cursor-only
 ```

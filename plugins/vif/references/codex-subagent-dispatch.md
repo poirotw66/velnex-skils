@@ -7,7 +7,9 @@ Codex custom agents are **TOML files** in `~/.codex/agents/` (not Markdown like 
 ```bash
 npx github:poirotw66/velnex-skils -g
 # Codex only:
-npx github:poirotw66/velnex-skils install -g --codex-only
+npx github:poirotw66/velnex-skils agents -g --codex-only
+# Local clone:
+node bin/velnex-install.mjs agents -g --codex-only
 ```
 
 ## Iron Rule
